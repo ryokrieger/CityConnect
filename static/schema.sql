@@ -23,6 +23,8 @@ CREATE TABLE User (
     password VARCHAR(100) NOT NULL,
     city_code INT,
     postal_code INT,
+    is_admin BOOLEAN DEFAULT FALSE,
+    is_restricted BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (city_code) REFERENCES City(city_code),
     FOREIGN KEY (postal_code) REFERENCES Neighborhood(postal_code)
 );
@@ -144,6 +146,3 @@ CREATE TABLE User_Rating (
     FOREIGN KEY (rater_ID) REFERENCES User(userID),
     FOREIGN KEY (ratee_ID) REFERENCES User(userID)
 );
-
-ALTER TABLE User ADD COLUMN is_admin BOOLEAN DEFAULT FALSE;
-ALTER TABLE User ADD COLUMN is_restricted BOOLEAN DEFAULT FALSE;
