@@ -46,12 +46,6 @@ CityConnect is a community-centric social web application designed to help users
 
 ---
 
-## License
-
-[MIT License](LICENSE)
-
----
-
 ## Contact
 
 For questions, suggestions, or contributions, please open an issue or contact [@ryokrieger](https://github.com/ryokrieger).
