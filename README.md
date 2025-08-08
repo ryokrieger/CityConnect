@@ -1,0 +1,106 @@
+# CityConnect
+
+CityConnect is a community-centric social web application designed to help users connect, interact, and engage within their local cities and neighborhoods. It provides a platform for residents to build meaningful connections, join interest-based groups, organize local events, share information, and review one another.
+
+---
+
+## Features
+
+### 👤 User Profiles
+- Each user has a profile with their username, email, city, and neighborhood.
+- Users can list their interests and receive ratings and reviews from others.
+- View your own profile or visit profiles of other users.
+
+### 🏠 City & Neighborhood Connections
+- Connect with people from your city or neighborhood.
+- Join or create interest-based groups tied to geographic locations.
+
+### 👥 Groups & Events
+- Create or join groups based on interests, activities, or causes.
+- Share posts and participate in group discussions.
+- Organize and attend local events within groups, specifying city and neighborhood.
+
+### 👫 Friend System
+- Send, receive, and manage friend requests.
+- Maintain a list of friends and manage pending requests.
+
+### 📝 Posts & Discussions
+- Post messages within groups and comment on posts to interact with other members.
+
+### ⭐ Ratings & Reviews
+- Rate and review users you interact with.
+- View average ratings and individual reviews on user profiles.
+
+### 🛠️ Admin Dashboard
+- Admins can manage users, posts, and events.
+- Oversee content and user activity for community safety and engagement.
+
+---
+
+## Technologies Used
+
+- **Backend:** Python (Flask)
+- **Frontend:** HTML, CSS (custom and inline styling)
+- **Database:** Relational database (e.g., MySQL or compatible)
+- **Session Management:** Flask Sessions
+
+---
+
+## Getting Started
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/ryokrieger/CityConnect.git
+   cd CityConnect
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Set up your database:**
+   - Configure your database connection in `cityconnect.py`.
+   - Run the provided SQL scripts to set up tables (if available).
+
+4. **Run the application:**
+   ```bash
+   flask run
+   ```
+
+5. **Access the application:**
+   - Open your browser and go to `http://localhost:5000`.
+
+---
+
+## Folder Structure
+
+```
+cityconnect.py            # Main Flask application
+/templates/               # HTML template files for pages and components
+/static/                  # (If present) Static files like CSS, JS, images
+README.md                 # Project readme (this file)
+requirements.txt          # Python dependencies
+```
+
+---
+
+## Contributing
+
+1. Fork the repository.
+2. Create your feature branch (`git checkout -b feature/YourFeature`).
+3. Commit your changes (`git commit -am 'Add some feature'`).
+4. Push to the branch (`git push origin feature/YourFeature`).
+5. Open a Pull Request.
+
+---
+
+## License
+
+[MIT License](LICENSE)
+
+---
+
+## Contact
+
+For questions, suggestions, or contributions, please open an issue or contact [@ryokrieger](https://github.com/ryokrieger).
