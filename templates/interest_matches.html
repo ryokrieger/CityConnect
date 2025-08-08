@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Users with Similar Interests - CityConnect</title>
+
+    <style>
+        /* Body styling */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Top navigation bar */
+        .top-bar {
+            background-color: #0077cc;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-bar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .top-bar a:hover {
+            color: #cce4ff;
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            color: #0077cc;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #0077cc;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f1f9ff;
+        }
+
+        /* Shared interests */
+        .shared-interests {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .interest-count {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 4px;
+        }
+
+        /* Action buttons container */
+        .actions-cell {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            font-size: 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            height: 40px;
+            min-width: 120px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #0077cc;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #005fa3;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .no-users {
+            text-align: center;
+            font-style: italic;
+            color: #777;
+            margin-top: 40px;
+        }
+
+        /* Pagination styling */
+        .pagination {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pagination a, .pagination span {
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            background-color: #0077cc;
+            color: white;
+            height: 40px;
+            min-width: 60px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease;
+        }
+
+        .pagination a:hover {
+            background-color: #005fa3;
+        }
+
+        .pagination .disabled {
+            background-color: #a3c0e8;
+            cursor: default;
+        }
+
+        .pagination span:not(.disabled) {
+            background-color: #005fa3;
+            min-width: auto;
+            white-space: nowrap;
+        }
+
+        form.action-form {
+            display: inline;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<div class="top-bar">
+    <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+</div>
+
+<!-- Main Content -->
+<div class="container">
+    <h1>Users in Your Neighborhood with Similar Interests</h1>
+
+    {% if matches %}
+    <!-- Table of matched users -->
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Shared Interests</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in matches %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    <div class="shared-interests">
+                        {{ user.shared_interests | join(', ') }}
+                        <span class="interest-count">({{ user.shared_interests | length }} shared)</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="actions-cell">
+                        <a href="{{ url_for('view_profile', profile_user_id=user.userID) }}" class="btn btn-primary">View Profile</a>
+
+                        {% set status = request_status.get(user.userID) %}
+                        {% if status == 'pending' %}
+                        <form method="POST" action="{{ url_for('cancel_friend_request', receiver_id=user.userID) }}" class="action-form">
+                            <button type="submit" class="btn btn-danger">Cancel Request</button>
+                        </form>
+                        {% else %}
+                        <form method="POST" action="{{ url_for('send_friend_request', receiver_id=user.userID) }}" class="action-form">
+                            <button type="submit" class="btn btn-primary">Send Request</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination Controls -->
+    <div class="pagination">
+        <!-- Previous button -->
+        {% if page > 1 %}
+            <a href="{{ url_for('users_with_similar_interests', page=page-1) }}">← Previous</a>
+        {% else %}
+            <span class="disabled">← Previous</span>
+        {% endif %}
+
+        <!-- Pagination window logic -->
+        {% set max_pages_to_show = 7 %}
+        {% set half_window = max_pages_to_show // 2 %}
+        {% set start_page = page - half_window if page - half_window > 0 else 1 %}
+        {% set end_page = start_page + max_pages_to_show - 1 %}
+        {% if end_page > total_pages %}
+            {% set end_page = total_pages %}
+            {% set start_page = end_page - max_pages_to_show + 1 if end_page - max_pages_to_show + 1 > 0 else 1 %}
+        {% endif %}
+
+        <!-- First page and ellipsis -->
+        {% if start_page > 1 %}
+            <a href="{{ url_for('users_with_similar_interests', page=1) }}">1</a>
+            {% if start_page > 2 %}
+                <span>…</span>
+            {% endif %}
+        {% endif %}
+
+        <!-- Page number buttons -->
+        {% for p in range(start_page, end_page + 1) %}
+            {% if p == page %}
+                <span>{{ p }}</span>
+            {% else %}
+                <a href="{{ url_for('users_with_similar_interests', page=p) }}">{{ p }}</a>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Last page and ellipsis -->
+        {% if end_page < total_pages %}
+            {% if end_page < total_pages - 1 %}
+                <span>…</span>
+            {% endif %}
+            <a href="{{ url_for('users_with_similar_interests', page=total_pages) }}">{{ total_pages }}</a>
+        {% endif %}
+
+        <!-- Next button -->
+        {% if page < total_pages %}
+            <a href="{{ url_for('users_with_similar_interests', page=page+1) }}">Next →</a>
+        {% else %}
+            <span class="disabled">Next →</span>
+        {% endif %}
+    </div>
+
+    {% else %}
+        <!-- No matches message -->
+        <p class="no-users">No users found with matching interests in your neighborhood.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - CityConnect</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Top navigation bar */
+        .top-bar {
+            background-color: #0077cc;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Links in the top bar */
+        .top-bar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Hover effect for top bar links */
+        .top-bar a:hover {
+            color: #cce4ff;
+        }
+
+        /* Main container layout */
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Main heading style */
+        h1 {
+            color: #0077cc;
+            margin-bottom: 30px;
+            font-size: 32px;
+            text-align: center;
+        }
+
+        /* Grid layout for admin option cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        /* Individual card styling */
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-align: center;
+        }
+
+        /* Card hover animation */
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+        }
+
+        /* Links inside cards */
+        .card a {
+            display: block;
+            color: #007bff;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        /* Hover effect for card links */
+        .card a:hover {
+            color: #0056b3;
+        }
+
+        /* Icon styling inside cards */
+        .icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            color: #0077cc;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar with navigation link -->
+    <div class="top-bar">
+        <div>
+            <!-- Back button link to main dashboard -->
+            <a href="{{ url_for('dashboard') }}">← Back to Main Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Main content container -->
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+
+        <!-- Grid of admin option cards -->
+        <div class="card-grid">
+            
+            <!-- Card: Manage Users -->
+            <div class="card">
+                <div class="icon">👤</div>
+                <a href="{{ url_for('admin_users') }}">Manage Users</a>
+            </div>
+            
+            <!-- Card: Manage Groups -->
+            <div class="card">
+                <div class="icon">👥</div>
+                <a href="{{ url_for('admin_groups') }}">Manage Groups</a>
+            </div>
+            
+            <!-- Card: Manage Posts -->
+            <div class="card">
+                <div class="icon">📝</div>
+                <a href="{{ url_for('admin_posts') }}">Manage Posts</a>
+            </div>
+            
+            <!-- Card: Manage Events -->
+            <div class="card">
+                <div class="icon">📅</div>
+                <a href="{{ url_for('admin_events') }}">Manage Events</a>
+            </div>
+            
+            <!-- Card: Manage Ratings -->
+            <div class="card">
+                <div class="icon">⭐</div>
+                <a href="{{ url_for('admin_ratings') }}">Manage Ratings</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

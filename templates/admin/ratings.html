@@ -1,0 +1,240 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin - Ratings - CityConnect</title>
+
+    <style>
+        /* General page layout and background */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Top navigation bar */
+        .top-bar {
+            background-color: #0077cc;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .top-bar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .top-bar a:hover {
+            color: #cce4ff;
+        }
+
+        /* Content container */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Page heading */
+        h1 {
+            color: #0077cc;
+            margin-bottom: 30px;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            vertical-align: middle;
+        }
+        th {
+            background-color: #0077cc;
+            color: white;
+            font-weight: 600;
+        }
+        tr:hover {
+            background-color: #f1f9ff;
+        }
+
+        /* Delete action form styling */
+        .action-form {
+            display: inline-block;
+            margin: 0;
+        }
+        button.delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            height: 40px;
+            min-width: 80px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease;
+        }
+        button.delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* Pagination styling */
+        .pagination {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .pagination a, .pagination span {
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            background-color: #0077cc;
+            color: white;
+            height: 40px;
+            min-width: 60px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease;
+        }
+        .pagination a:hover {
+            background-color: #005fa3;
+        }
+        .pagination .disabled {
+            background-color: #a3c0e8;
+            cursor: default;
+        }
+        .pagination span:not(.disabled) {
+            background-color: #005fa3;
+            min-width: auto;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Top bar with back link -->
+<div class="top-bar">
+    <div>
+        <a href="{{ url_for('admin_dashboard') }}">← Back to Admin Dashboard</a>
+    </div>
+</div>
+
+<!-- Main content container -->
+<div class="container">
+    <h1>User Ratings</h1>
+
+    <!-- If there are ratings, display them -->
+    {% if ratings %}
+    <table>
+        <thead>
+            <tr>
+                <th>Rater ID</th>
+                <th>Ratee ID</th>
+                <th>Ratee Username</th>
+                <th>Rating</th>
+                <th>Comments</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through ratings list -->
+            {% for rating in ratings %}
+            <tr>
+                <td>{{ rating.rater_ID }}</td>
+                <td>{{ rating.ratee_ID }}</td>
+                <td>{{ rating.username }}</td>
+                <td>{{ rating.rating }}</td>
+                <td>{{ rating.comments or '-' }}</td>
+                <td>
+                    <!-- Delete rating button -->
+                    <form method="POST"
+                          action="{{ url_for('admin_delete_rating', rater_id=rating.rater_ID, ratee_id=rating.ratee_ID) }}"
+                          class="action-form"
+                          onsubmit="return confirm('Are you sure you want to delete this rating?');">
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination controls -->
+    <div class="pagination">
+        <!-- Previous page link -->
+        {% if page > 1 %}
+            <a href="{{ url_for('admin_ratings', page=page-1) }}">← Previous</a>
+        {% else %}
+            <span class="disabled">← Previous</span>
+        {% endif %}
+
+        {# Pagination window calculation #}
+        {% set max_pages_to_show = 7 %}
+        {% set half_window = max_pages_to_show // 2 %}
+        {% set start_page = page - half_window if page - half_window > 0 else 1 %}
+        {% set end_page = start_page + max_pages_to_show - 1 %}
+        {% if end_page > total_pages %}
+            {% set end_page = total_pages %}
+            {% set start_page = end_page - max_pages_to_show + 1 if end_page - max_pages_to_show + 1 > 0 else 1 %}
+        {% endif %}
+
+        {# First page and ellipsis #}
+        {% if start_page > 1 %}
+            <a href="{{ url_for('admin_ratings', page=1) }}">1</a>
+            {% if start_page > 2 %}
+                <span>…</span>
+            {% endif %}
+        {% endif %}
+
+        {# Page links #}
+        {% for p in range(start_page, end_page + 1) %}
+            {% if p == page %}
+                <span>{{ p }}</span>
+            {% else %}
+                <a href="{{ url_for('admin_ratings', page=p) }}">{{ p }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {# Ellipsis and last page #}
+        {% if end_page < total_pages %}
+            {% if end_page < total_pages - 1 %}
+                <span>…</span>
+            {% endif %}
+            <a href="{{ url_for('admin_ratings', page=total_pages) }}">{{ total_pages }}</a>
+        {% endif %}
+
+        <!-- Next page link -->
+        {% if page < total_pages %}
+            <a href="{{ url_for('admin_ratings', page=page+1) }}">Next →</a>
+        {% else %}
+            <span class="disabled">Next →</span>
+        {% endif %}
+    </div>
+
+    <!-- If no ratings found -->
+    {% else %}
+        <p>No ratings found.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

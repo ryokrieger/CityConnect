@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Profile - CityConnect</title>
+    <style>
+        /* Reset margins and paddings */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Page body styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #f4f7fa;
+            line-height: 1.6;
+            color: #334155;
+        }
+
+        /* Header bar */
+        .header {
+            background-color: #0077cc;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Header link */
+        .header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Hover color for header link */
+        .header a:hover {
+            color: #cce4ff;
+        }
+
+        /* Page container */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Alert box base style */
+        .alert {
+            padding: 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Error alert style */
+        .error-alert {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
+        }
+
+        /* Success alert style */
+        .success-alert {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        /* Profile header text */
+        .profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        /* Main title */
+        h1 {
+            color: #1e293b;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        /* Card styling for each section */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        /* Section titles */
+        h3 {
+            color: #1e293b;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        /* Info rows inside Basic Information */
+        .info-row {
+            display: flex;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        /* Remove border for last info row */
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        /* Info label styling */
+        .info-label {
+            font-weight: 500;
+            color: #64748b;
+            min-width: 120px;
+        }
+
+        /* Info value text */
+        .info-value {
+            color: #1e293b;
+        }
+
+        /* Interests container layout */
+        .interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        /* Individual interest badge */
+        .interest-tag {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Rating summary box */
+        .rating-box {
+            text-align: center;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        /* Large rating number */
+        .rating-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #0ea5e9;
+            margin-bottom: 4px;
+        }
+
+        /* Star rating display */
+        .stars {
+            color: #fbbf24;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        /* Form group container */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        /* Form labels */
+        label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        /* Select dropdown styling */
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            color: #374151;
+        }
+
+        /* Focus state for select */
+        select:focus {
+            outline: none;
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+
+        /* Textarea styling */
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Focus state for textarea */
+        textarea:focus {
+            outline: none;
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+
+        /* Primary button */
+        .btn {
+            background: #0ea5e9;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        /* Hover for primary button */
+        .btn:hover {
+            background: #0284c7;
+        }
+
+        /* Delete button */
+        .btn-delete {
+            background: #ef4444;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        /* Hover for delete button */
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+
+        /* Review item */
+        .review {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 3px solid #0ea5e9;
+        }
+
+        /* Review header layout */
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        /* Reviewer name */
+        .reviewer-name {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        /* Rating text */
+        .review-rating {
+            color: #0ea5e9;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* Review comment text */
+        .review-comment {
+            color: #475569;
+            font-style: italic;
+        }
+
+        /* Empty state message */
+        .empty-message {
+            text-align: center;
+            color: #94a3b8;
+            padding: 20px;
+        }
+
+        /* Actions container for form buttons */
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 640px) {
+            .container {
+                padding: 0 16px;
+                margin: 20px auto;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .info-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .info-label {
+                min-width: auto;
+                font-size: 14px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn, .btn-delete {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with back link -->
+    <div class="header">
+        <a href="javascript:history.back()">← Back to Previous Page</a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="{{ url_for('users_in_same_city') }}">People in City</a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="{{ url_for('users_with_similar_interests') }}">Similar Interest</a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="{{ url_for('view_friends') }}">Friends</a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="{{ url_for('manage_friend_requests') }}">Manage Requests</a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+    </div>
+
+    <div class="container">
+
+        <!-- Error alert for "not friends" -->
+        {% if request.args.get('error') == 'not_friends' %}
+            <div class="alert error-alert">
+                You need to be friends to give a rating
+            </div>
+        {% endif %}
+
+        <!-- Profile title -->
+        <div class="profile-header">
+            <h1>{{ profile.username or 'User Profile' }}</h1>
+        </div>
+
+        <!-- Basic Information section -->
+        <div class="card">
+            <h3>Basic Information</h3>
+            <div class="info-row">
+                <span class="info-label">Email:</span>
+                <span class="info-value">{{ profile.email or 'Not specified' }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">City:</span>
+                <span class="info-value">{{ profile.city_name or 'Not specified' }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Neighborhood:</span>
+                <span class="info-value">{{ profile.area_name or 'Not specified' }}</span>
+            </div>
+        </div>
+
+        <!-- Interests section -->
+        <div class="card">
+            <h3>Interests</h3>
+            {% if interests %}
+                <div class="interests">
+                    {% for interest in interests %}
+                        <span class="interest-tag">{{ interest }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="empty-message">This user has not selected any interests.</p>
+            {% endif %}
+        </div>
+
+        <!-- Community Rating section -->
+        <div class="card">
+            <h3>Community Rating</h3>
+            <div class="rating-box">
+                <div class="rating-number">{{ avg_rating or '0.0' }}</div>
+                <div class="stars">
+                    {% set rating = avg_rating|float if avg_rating else 0 %}
+                    {% for i in range(5) %}
+                        {% if i < rating %}★{% else %}☆{% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Rating form section -->
+        <div class="card">
+            <h3>Your Rating</h3>
+            <form method="POST" action="{{ url_for('rate_user', profile_user_id=profile_user_id) }}">
+                <div class="form-group">
+                    <label for="rating">Rate (1–5):</label>
+                    <select name="rating" id="rating" required>
+                        {% for i in range(1, 6) %}
+                            <option value="{{ i }}" {% if your_rating and your_rating.rating == i %}selected{% endif %}>{{ i }} Star{{ 's' if i != 1 else '' }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="comment">Comment:</label>
+                    <textarea name="comment" id="comment" placeholder="Share your experience with this user...">{{ your_rating.comments if your_rating else '' }}</textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn">
+                        {% if your_rating %}Update Rating{% else %}Submit Rating{% endif %}
+                    </button>
+                </div>
+            </form>
+
+            <!-- Delete rating button if a rating exists -->
+            {% if your_rating %}
+                <form method="POST" action="{{ url_for('delete_rating', profile_user_id=profile_user_id) }}" style="margin-top: 12px;">
+                    <button type="submit" class="btn btn-delete">Delete Your Rating</button>
+                </form>
+            {% endif %}
+        </div>
+
+        <!-- All reviews section -->
+        <div class="card">
+            <h3>All Reviews</h3>
+            {% if reviews %}
+                {% for review in reviews %}
+                    <div class="review">
+                        <div class="review-header">
+                            <span class="reviewer-name">{{ review.username }}</span>
+                            <span class="review-rating">{{ review.rating }}/5</span>
+                        </div>
+                        {% if review.comments %}
+                            <div class="review-comment">"{{ review.comments }}"</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="empty-message">No reviews yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

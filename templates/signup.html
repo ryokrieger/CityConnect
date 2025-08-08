@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up - CityConnect</title>
+    <style>
+        /* Basic styling for the page body */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f9fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header styling with background and layout */
+        .header {
+            background-color: #0077cc;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Container for the signup form */
+        .container {
+            max-width: 500px;
+            margin: 80px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Heading style inside container */
+        h2 {
+            color: #0077cc;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        /* Labels styling for form fields */
+        form label {
+            font-weight: bold;
+        }
+
+        /* Input fields and selects styling */
+        form input[type="text"],
+        form input[type="email"],
+        form input[type="password"],
+        form select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin: 8px 0 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        /* Submit button style */
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            background-color: #0077cc;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Hover effect for submit button */
+        .btn-submit:hover {
+            background-color: #005fa3;
+        }
+
+        /* Container for login link below the form */
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        /* Login link styling */
+        .login-link a {
+            color: #0077cc;
+            text-decoration: none;
+        }
+
+        /* Flash messages container styling */
+        .flash-message {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        /* Success message text color */
+        .flash-success {
+            color: green;
+        }
+
+        /* Error message text color */
+        .flash-error {
+            color: red;
+        }
+    </style>
+
+    <script>
+        // Dynamically filters neighborhood options based on selected city
+        function filterNeighborhoods() {
+            // Get selected city code from city dropdown
+            const cityCode = document.getElementById("city").value;
+            // Parse neighborhoods JSON passed from backend
+            const allNeighborhoods = JSON.parse('{{ neighborhoods_json | tojson | safe }}');
+            // Get the neighborhood select element
+            const neighborhoodSelect = document.getElementById("neighborhood");
+
+            // Clear neighborhood dropdown and add default placeholder option
+            neighborhoodSelect.innerHTML = "<option disabled selected value=''>Select Neighborhood</option>";
+
+            // Filter neighborhoods belonging to selected city and add them as options
+            allNeighborhoods
+                .filter(n => n.city_code == cityCode)
+                .forEach(n => {
+                    const option = document.createElement("option");
+                    option.value = n.postal_code;
+                    option.text = n.area_name;
+                    neighborhoodSelect.appendChild(option);
+                });
+        }
+    </script>
+</head>
+
+<body onload="filterNeighborhoods()">
+    <!-- Header with site title -->
+    <div class="header">
+        <div><strong>CityConnect</strong></div>
+        <div></div>
+    </div>
+
+    <!-- Main container holding the sign up form -->
+    <div class="container">
+        <h2>Sign Up</h2>
+
+        <!-- Sign up form -->
+        <form method="POST">
+            <!-- Username input field -->
+            <label>Username:</label>
+            <input type="text" name="username" required>
+
+            <!-- Email input field -->
+            <label>Email:</label>
+            <input type="email" name="email" required>
+
+            <!-- Gender selection dropdown -->
+            <label>Gender:</label>
+            <select name="gender" required>
+                <option disabled selected value="">Select</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+            </select>
+
+            <!-- City selection dropdown, triggers neighborhood filter on change -->
+            <label>City:</label>
+            <select name="city" id="city" onchange="filterNeighborhoods()" required>
+                <option disabled selected value="">Select City</option>
+                {% for city in cities %}
+                    <option value="{{ city.city_code }}">{{ city.city_name }}</option>
+                {% endfor %}
+            </select>
+
+            <!-- Neighborhood dropdown, options filled dynamically via JS -->
+            <label>Neighborhood:</label>
+            <select name="neighborhood" id="neighborhood" required>
+                <!-- Options added dynamically by filterNeighborhoods() -->
+            </select>
+
+            <!-- Password input field -->
+            <label>Password:</label>
+            <input type="password" name="password" required>
+
+            <!-- Submit button -->
+            <input type="submit" value="Sign Up" class="btn-submit">
+        </form>
+
+        <!-- Link to login page for existing users -->
+        <div class="login-link">
+            <p>Already have an account? <a href="{{ url_for('login') }}">Log in here</a>.</p>
+        </div>
+
+        <!-- Flash messages to display success or error feedback -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ 'flash-success' if category == 'success' else 'flash-error' }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+    </div>
+</body>
+</html>

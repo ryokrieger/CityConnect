@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - CityConnect</title>
+    <style>
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f9fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header styling */
+        .header {
+            background-color: #0077cc;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Container for the login form */
+        .container {
+            max-width: 400px;
+            margin: 80px auto; /* centers container vertically and horizontally */
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* subtle shadow effect */
+        }
+
+        /* Heading style inside the form */
+        h2 {
+            color: #0077cc;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        /* Form labels */
+        form label {
+            font-weight: bold;
+        }
+
+        /* Input fields (username, password) */
+        form input[type="text"],
+        form input[type="password"] {
+            width: 100%; /* full width inputs */
+            padding: 10px;
+            font-size: 16px;
+            margin: 8px 0 20px; /* spacing around inputs */
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        /* Submit button styling */
+        .btn-submit {
+            width: 100%; /* full width button */
+            padding: 12px;
+            font-size: 16px;
+            background-color: #0077cc;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Hover effect for submit button */
+        .btn-submit:hover {
+            background-color: #005fa3;
+        }
+
+        /* Container for signup link */
+        .signup-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        /* Signup link style */
+        .signup-link a {
+            color: #0077cc;
+            text-decoration: none;
+        }
+
+        /* Container for flash messages */
+        .flash-message {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        /* Styling for error flash messages */
+        .flash-error {
+            color: red;
+        }
+
+        /* Container for profile link */
+        .profile-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Profile link styling */
+        .profile-link a {
+            color: #0077cc;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with site name -->
+    <div class="header">
+        <div><strong>CityConnect</strong></div>
+        <div></div> <!-- Empty div for flex spacing -->
+    </div>
+
+    <!-- Main container holding the login form -->
+    <div class="container">
+        <h2>Log In</h2>
+
+        <!-- Login form with POST method -->
+        <form method="POST">
+            <label>Username:</label>
+            <input type="text" name="username" required> <!-- Username input -->
+
+            <label>Password:</label>
+            <input type="password" name="password" required> <!-- Password input -->
+
+            <input type="submit" value="Log In" class="btn-submit"> <!-- Submit button -->
+        </form>
+
+        <!-- Link to signup page for new users -->
+        <div class="signup-link">
+            <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up here</a>.</p>
+        </div>
+
+        <!-- Flash messages for feedback like errors -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash-message flash-error">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <!-- Show profile/dashboard link if user is logged in -->
+        {% if session.user_id %}
+            <div class="profile-link">
+                <a href="{{ url_for('dashboard', user_id=session.user_id) }}">Go to Profile</a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

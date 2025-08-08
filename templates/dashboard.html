@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CityConnect Dashboard</title>
+    <style>
+        /* Base styles for body */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Top navigation bar styling */
+        .top-bar {
+            background-color: #0077cc;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Links inside the top bar */
+        .top-bar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Hover effect for top bar links */
+        .top-bar a:hover {
+            color: #cce4ff;
+        }
+
+        /* Container for main content with max width and horizontal padding */
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Heading styling */
+        h1 {
+            color: #0077cc;
+            margin-bottom: 30px;
+            font-size: 32px;
+            text-align: center;
+        }
+
+        /* Paragraph styling below heading */
+        p {
+            text-align: center;
+            font-size: 18px;
+            color: #444;
+            margin-bottom: 40px;
+        }
+
+        /* Grid layout for cards, responsive with minimum card width */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        /* Individual card styling */
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-align: center;
+        }
+
+        /* Card hover effect: raise and stronger shadow */
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+        }
+
+        /* Links inside cards */
+        .card a {
+            display: block;
+            color: #007bff;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        /* Card link hover effect */
+        .card a:hover {
+            color: #0056b3;
+        }
+
+        /* Icon styling for card icons */
+        .icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            color: #0077cc;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar with app name and logout link -->
+    <div class="top-bar">
+        <div><strong>CityConnect</strong></div>
+        <div>
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <a href="{{ url_for('logout') }}">Logout</a>
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+        </div>
+    </div>
+
+    <!-- Main content container -->
+    <div class="container">
+        <!-- Greeting with username -->
+        <h1>Hello, {{ username }}!</h1>
+        <!-- Showing current city -->
+        <p>You're currently in <strong>{{ city_name }}</strong></p>
+
+        <!-- Grid of dashboard cards with links to different features -->
+        <div class="card-grid">
+
+            <!-- Admin dashboard card shown only if user is admin -->
+            {% if is_admin %}
+            <div class="card">
+                <div class="icon">🛠️</div>
+                <a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
+            </div>
+            {% endif %}
+
+            <!-- Card to view own profile -->
+            <div class="card">
+                <div class="icon">🙋</div>
+                <a href="{{ url_for('view_own_profile') }}">View My Profile</a>
+            </div>
+
+            <!-- Card to edit profile, using current user ID -->
+            <div class="card">
+                <div class="icon">✏️</div>
+                <a href="{{ url_for('profile', user_id=session['user_id']) }}">Edit Profile</a>
+            </div>            
+
+            <!-- Card to see people in the same city -->
+            <div class="card">
+                <div class="icon">🏙️</div>
+                <a href="{{ url_for('users_in_same_city') }}">People in Your City</a>
+            </div>
+
+            <!-- Card for users with similar interests -->
+            <div class="card">
+                <div class="icon">💬</div>
+                <a href="{{ url_for('users_with_similar_interests') }}">Similar Interests</a>
+            </div>
+
+            <!-- Card to view user's friends -->
+            <div class="card">
+                <div class="icon">🤝</div>
+                <a href="{{ url_for('view_friends') }}">My Friends</a>
+            </div>
+
+            <!-- Card to view all groups -->
+            <div class="card">
+                <div class="icon">👥</div>
+                <a href="{{ url_for('list_groups') }}">View All Groups</a>
+            </div>
+
+            <!-- Card to manage friend requests -->
+            <div class="card">
+                <div class="icon">📨</div>
+                <a href="{{ url_for('manage_friend_requests') }}">Friend Requests</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

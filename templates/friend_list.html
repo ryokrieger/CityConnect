@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>My Friends - CityConnect</title>
+
+    <style>
+        /* Base styles for the page */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Top navigation bar styling */
+        .top-bar {
+            background-color: #0077cc;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Links inside top bar */
+        .top-bar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Hover effect for top bar links */
+        .top-bar a:hover {
+            color: #cce4ff;
+        }
+
+        /* Container holding the friends content */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Main page heading */
+        h1 {
+            color: #0077cc;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        /* Table cells styling */
+        th, td {
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            vertical-align: middle;
+        }
+
+        /* Table header styling */
+        th {
+            background-color: #0077cc;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Row hover effect */
+        tr:hover {
+            background-color: #f1f9ff;
+        }
+
+        /* Container for action buttons within a cell */
+        .actions-cell {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* General button styling */
+        .btn {
+            padding: 10px 16px;
+            font-size: 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            height: 40px;
+            min-width: 120px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Primary button style (blue) */
+        .btn-primary {
+            background-color: #0077cc;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #005fa3;
+        }
+
+        /* Secondary primary button style (green) */
+        .btn-primary1 {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-primary1:hover {
+            background-color: #218838;
+        }
+
+        /* Danger button style (red) */
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        /* Message shown when user has no friends */
+        .no-friends {
+            text-align: center;
+            font-style: italic;
+            color: #777;
+            margin-top: 40px;
+        }
+
+        /* Pagination container styling */
+        .pagination {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Pagination links and spans styling */
+        .pagination a, .pagination span {
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            background-color: #0077cc;
+            color: white;
+            height: 40px;
+            min-width: 60px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Hover effect for pagination links */
+        .pagination a:hover {
+            background-color: #005fa3;
+        }
+
+        /* Disabled pagination button styling */
+        .pagination .disabled {
+            background-color: #a3c0e8;
+            cursor: default;
+        }
+
+        /* Current active page styling */
+        .pagination span:not(.disabled) {
+            background-color: #005fa3;
+            min-width: auto;
+            white-space: nowrap;
+        }
+
+        /* Inline form styling for remove friend button */
+        form.action-form {
+            display: inline;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Top bar with back to dashboard link -->
+<div class="top-bar">
+    <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+</div>
+
+<!-- Main container for friends list -->
+<div class="container">
+    <h1>My Friends</h1>
+
+    <!-- Check if the user has any friends -->
+    {% if friends %}
+    <!-- Table listing friends -->
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through each friend -->
+            {% for friend in friends %}
+            <tr>
+                <!-- Friend's username -->
+                <td>{{ friend.username }}</td>
+                <!-- Friend's email -->
+                <td>{{ friend.email }}</td>
+                <!-- Action buttons: view profile, message, remove friend -->
+                <td>
+                    <div class="actions-cell">
+                        <!-- Link to view friend's profile -->
+                        <a href="{{ url_for('view_profile', profile_user_id=friend.userID) }}" class="btn btn-primary">View Profile</a>
+                        <!-- Link to start chat with friend -->
+                        <a href="{{ url_for('chat', friend_id=friend.userID) }}" class="btn btn-primary1">Message</a>
+                        <!-- Form to remove friend with confirmation -->
+                        <form method="POST" action="{{ url_for('remove_friend', friend_id=friend.userID) }}" class="action-form" onsubmit="return confirm('Are you sure you want to remove this friend?');">
+                            <button type="submit" class="btn btn-danger">Remove Friend</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination controls (styled like ratings.html) -->
+    <div class="pagination">
+        <!-- Previous page link -->
+        {% if page > 1 %}
+            <a href="{{ url_for('view_friends', page=page-1) }}">← Previous</a>
+        {% else %}
+            <span class="disabled">← Previous</span>
+        {% endif %}
+
+        {# Pagination window calculation #}
+        {% set max_pages_to_show = 7 %}
+        {% set half_window = max_pages_to_show // 2 %}
+        {% set start_page = page - half_window if page - half_window > 0 else 1 %}
+        {% set end_page = start_page + max_pages_to_show - 1 %}
+        {% if end_page > total_pages %}
+            {% set end_page = total_pages %}
+            {% set start_page = end_page - max_pages_to_show + 1 if end_page - max_pages_to_show + 1 > 0 else 1 %}
+        {% endif %}
+
+        {# First page and ellipsis #}
+        {% if start_page > 1 %}
+            <a href="{{ url_for('view_friends', page=1) }}">1</a>
+            {% if start_page > 2 %}
+                <span>…</span>
+            {% endif %}
+        {% endif %}
+
+        {# Page links #}
+        {% for p in range(start_page, end_page + 1) %}
+            {% if p == page %}
+                <span>{{ p }}</span>
+            {% else %}
+                <a href="{{ url_for('view_friends', page=p) }}">{{ p }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {# Ellipsis and last page #}
+        {% if end_page < total_pages %}
+            {% if end_page < total_pages - 1 %}
+                <span>…</span>
+            {% endif %}
+            <a href="{{ url_for('view_friends', page=total_pages) }}">{{ total_pages }}</a>
+        {% endif %}
+
+        <!-- Next page link -->
+        {% if page < total_pages %}
+            <a href="{{ url_for('view_friends', page=page+1) }}">Next →</a>
+        {% else %}
+            <span class="disabled">Next →</span>
+        {% endif %}
+    </div>
+
+    {% else %}
+        <!-- Message displayed if user has no friends -->
+        <p class="no-friends">You have no friends yet. Try sending some friend requests!</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

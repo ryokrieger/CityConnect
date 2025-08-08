@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile - CityConnect</title>
+    <style>
+        /* Reset margin/padding and use border-box for consistent sizing */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* General body styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #f4f7fa;
+            line-height: 1.6;
+            color: #334155;
+        }
+
+        /* Top navigation bar */
+        .top-bar {
+            background-color: #0077cc;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Links in top bar */
+        .top-bar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        /* Hover effect for top bar links */
+        .top-bar a:hover {
+            color: #cce4ff;
+        }
+
+        /* Page content container */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Profile header (username + location) */
+        .profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        /* Profile title */
+        h1 {
+            color: #1e293b;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        /* Location text under profile name */
+        .location {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        /* Card component for sections */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        /* Section headings inside cards */
+        h2 {
+            color: #1e293b;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        /* Row for profile information (label + value) */
+        .info-row {
+            display: flex;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        /* Remove border from last row */
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        /* Label for profile info */
+        .info-label {
+            font-weight: 500;
+            color: #64748b;
+            min-width: 120px;
+        }
+
+        /* Value text for profile info */
+        .info-value {
+            color: #1e293b;
+        }
+
+        /* Container for interest tags */
+        .interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        /* Individual interest tag styling */
+        .interest-tag {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Rating summary container */
+        .rating-box {
+            text-align: center;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        /* Large numeric rating */
+        .rating-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #0ea5e9;
+            margin-bottom: 4px;
+        }
+
+        /* Star rating display */
+        .stars {
+            color: #fbbf24;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        /* Text under rating stars */
+        .rating-text {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* Review item styling */
+        .review {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 3px solid #0ea5e9;
+        }
+
+        /* Review header (reviewer + rating) */
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        /* Reviewer name styling */
+        .reviewer-name {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        /* Review rating number */
+        .review-rating {
+            color: #0ea5e9;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* Review comment text */
+        .review-comment {
+            color: #475569;
+            font-style: italic;
+        }
+
+        /* Message for empty states */
+        .empty-message {
+            text-align: center;
+            color: #94a3b8;
+            padding: 20px;
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 640px) {
+            .container {
+                padding: 0 16px;
+                margin: 20px auto;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            /* Stack info rows vertically on small screens */
+            .info-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+            
+            .info-label {
+                min-width: auto;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation bar with back link -->
+    <div class="top-bar">
+        <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+    </div>
+
+    <!-- Main content container -->
+    <div class="container">
+
+        <!-- Profile header with username and location -->
+        <div class="profile-header">
+            <h1>{{ profile.username or 'User Profile' }}</h1>
+            <p class="location">{{ profile.city_name }}{{ ', ' + profile.area_name if profile.area_name else '' }}</p>
+        </div>
+
+        <!-- Basic Information card -->
+        <div class="card">
+            <h2>Basic Information</h2>
+            <div class="info-row">
+                <span class="info-label">Username:</span>
+                <span class="info-value">{{ profile.username or 'Not specified' }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Email:</span>
+                <span class="info-value">{{ profile.email or 'Not specified' }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">City:</span>
+                <span class="info-value">{{ profile.city_name or 'Not specified' }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Neighborhood:</span>
+                <span class="info-value">{{ profile.area_name or 'Not specified' }}</span>
+            </div>
+        </div>
+
+        <!-- Interests card -->
+        <div class="card">
+            <h2>My Interests</h2>
+            {% if interests %}
+                <div class="interests">
+                    {% for interest in interests %}
+                        <span class="interest-tag">{{ interest }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="empty-message">No interests selected yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- Ratings card -->
+        <div class="card">
+            <h2>My Ratings</h2>
+            <div class="rating-box">
+                <!-- Average rating number -->
+                <div class="rating-number">{{ avg_rating or '0.0' }}</div>
+
+                <!-- Star display based on rating -->
+                <div class="stars">
+                    {% set rating = avg_rating|float if avg_rating else 0 %}
+                    {% for i in range(5) %}
+                        {% if i < rating %}★{% else %}☆{% endif %}
+                    {% endfor %}
+                </div>
+
+                <!-- Review count text -->
+                <p class="rating-text">
+                    Based on {{ reviews|length if reviews else 0 }} review{{ 's' if reviews and reviews|length != 1 else '' }}
+                </p>
+            </div>
+
+            <!-- List of recent reviews -->
+            {% if reviews %}
+                <h3 style="color: #1e293b; margin-bottom: 16px; font-size: 18px;">Recent Reviews</h3>
+                {% for review in reviews %}
+                    <div class="review">
+                        <div class="review-header">
+                            <span class="reviewer-name">{{ review.username }}</span>
+                            <span class="review-rating">{{ review.rating }}/5</span>
+                        </div>
+                        {% if review.comments %}
+                            <div class="review-comment">"{{ review.comments }}"</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="empty-message">No ratings received yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Profile</title>
+
+    <style>
+        /* Basic styling for the page body */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Header styling with background color and layout */
+        .header {
+            background-color: #0077cc;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Styling for links in the header */
+        .header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Hover effect for header links */
+        .header a:hover {
+            color: #cce4ff;
+        }
+
+        /* Main container for the profile update form with background and shadow */
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            background-color: #ffffffcc; /* slightly transparent white */
+            padding: 40px 50px;
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(0, 119, 204, 0.15);
+            backdrop-filter: saturate(180%) blur(15px);
+            border: 1px solid #d1d9e6;
+        }
+
+        /* Heading style inside container */
+        h2 {
+            color: #0077cc;
+            margin-bottom: 30px;
+            font-weight: 700;
+            font-size: 2.2rem;
+            letter-spacing: 0.03em;
+            text-align: center;
+        }
+
+        /* Form labels styling */
+        form label {
+            font-weight: 600;
+            font-size: 1rem;
+            display: block;
+            margin-bottom: 8px;
+            color: #005fa3;
+        }
+
+        /* Dropdown (select) inputs styling */
+        form select {
+            padding: 12px 15px;
+            width: 100%;
+            font-size: 1rem;
+            margin-bottom: 25px;
+            border: 1.8px solid #ccd6f6;
+            border-radius: 10px;
+            background-color: #f7faff;
+            transition: border-color 0.3s ease;
+            outline-offset: 2px;
+        }
+
+        /* Focus effect for select inputs */
+        form select:focus {
+            border-color: #0077cc;
+            box-shadow: 0 0 8px rgba(0, 119, 204, 0.3);
+            background-color: white;
+        }
+
+        /* Checkbox styling including size and spacing */
+        input[type="checkbox"] {
+            margin-right: 12px;
+            accent-color: #0077cc;
+            cursor: pointer;
+            transform: scale(1.15);
+            vertical-align: middle;
+        }
+
+        /* Container for group of checkboxes with spacing */
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px 40px;
+            margin-bottom: 30px;
+        }
+
+        /* Each checkbox label styling */
+        .checkbox-group label {
+            width: calc(50% - 20px);
+            font-size: 1rem;
+            color: #2c3e50;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+
+        /* Hover color change on checkbox labels */
+        .checkbox-group label:hover {
+            color: #0077cc;
+        }
+
+        /* Submit button styling */
+        .btn-submit {
+            background-color: #0077cc;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 15px;
+            width: 100%;
+            font-weight: 700;
+            box-shadow: 0 6px 14px rgba(0, 119, 204, 0.4);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Submit button hover effect */
+        .btn-submit:hover {
+            background-color: #005fa3;
+            box-shadow: 0 8px 20px rgba(0, 95, 163, 0.6);
+        }
+
+        /* Success flash message styling */
+        .flash-message {
+            color: #1e7e34;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        /* Error flash message styling */
+        .flash-error {
+            color: #842029;
+            background-color: #f8d7da;
+            border: 1px solid #f5c2c7;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
+
+    <script>
+        // Function to dynamically update neighborhood dropdown based on selected city
+        function filterNeighborhoods() {
+            // Get the selected city code from the city dropdown
+            const cityCode = document.getElementById("city").value;
+            // Parse the JSON object containing all neighborhoods (passed from backend)
+            const allNeighborhoods = JSON.parse('{{ neighborhoods_json | tojson | safe }}');
+            // Get the neighborhood dropdown element
+            const neighborhoodSelect = document.getElementById("neighborhood");
+
+            // Clear current options in neighborhood dropdown
+            neighborhoodSelect.innerHTML = "";
+
+            // Filter neighborhoods that belong to the selected city
+            allNeighborhoods
+                .filter(n => n.city_code == cityCode)
+                .forEach(n => {
+                    // Create an option element for each matching neighborhood
+                    const option = document.createElement("option");
+                    option.value = n.postal_code;    // Set postal code as option value
+                    option.text = n.area_name;       // Set neighborhood name as visible text
+
+                    // Pre-select the neighborhood if it matches user's current postal code
+                    if (n.postal_code == "{{ user_postal_code }}") {
+                        option.selected = true;
+                    }
+
+                    // Add the option to the neighborhood select dropdown
+                    neighborhoodSelect.appendChild(option);
+                });
+        }
+    </script>
+</head>
+
+<body onload="filterNeighborhoods()">
+    <!-- Header section with a back navigation link -->
+    <div class="header">
+        <div>
+            <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Container holding the profile update form -->
+    <div class="container">
+        <h2>Update Profile</h2>
+
+        <!-- Form for updating user profile -->
+        <form method="POST">
+            <!-- Dropdown for selecting city -->
+            <label for="city">City:</label>
+            <select name="city" id="city" onchange="filterNeighborhoods()">
+                <!-- Loop over cities passed from backend and create options -->
+                {% for city in cities %}
+                    <option value="{{ city.city_code }}"
+                        {% if city.city_code == user_city_code %}selected{% endif %}>
+                        {{ city.city_name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <!-- Dropdown for neighborhoods, dynamically populated by JS -->
+            <label for="neighborhood">Neighborhood:</label>
+            <select name="neighborhood" id="neighborhood">
+                <!-- Options populated dynamically on page load and city change -->
+            </select>
+
+            <!-- Group of checkboxes for user interests -->
+            <label>Interests:</label><br>
+            <div class="checkbox-group">
+                <!-- Loop over all interests and create checkboxes -->
+                {% for id, name in all_interests %}
+                    <label>
+                        <input type="checkbox" name="interests" value="{{ id }}"
+                            {% if id in user_interest_ids %}checked{% endif %}>
+                        {{ name }}
+                    </label>
+                {% endfor %}
+            </div>
+
+            <!-- Submit button to update profile -->
+            <input type="submit" class="btn-submit" value="Update">
+        </form>
+
+        <!-- Display flash messages (success or error) -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="{{ 'flash-message' if category == 'success' else 'flash-error' }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+    </div>
+</body>
+</html>
