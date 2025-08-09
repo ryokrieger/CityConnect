@@ -1,10 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import mysql.connector
-import json
 
 # Initialize Flask application
 app = Flask(__name__)
-app.secret_key = '12345'  # Secret key for session management
+app.secret_key = '12345'
 
 # Database configuration
 db_config = {
@@ -14,8 +13,8 @@ db_config = {
     'database': 'cityconnect'
 }
 
+# Helper function to connect to MySQL database using the configuration
 def connect_db():
-    # Helper function to connect to MySQL database using the configuration
     return mysql.connector.connect(**db_config)
 
 # Route for the root URL - redirects to login page
@@ -26,8 +25,9 @@ def index():
 # User signup route - handles both GET (form display) and POST (form submission)
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    # Connect to database
     conn = connect_db()
-    cursor = conn.cursor(dictionary=True)  # Dictionary cursor returns rows as dictionaries
+    cursor = conn.cursor(dictionary=True)
 
     # Fetch all cities for dropdown
     cursor.execute("SELECT city_code, city_name FROM City ORDER BY city_name")
@@ -53,11 +53,12 @@ def signup():
                 VALUES (%s, %s, %s, %s, %s, %s)
             """, (username, email, gender, password, city_code, postal_code))
             conn.commit()  # Commit the transaction
-            flash('Signup successful! Please log in.', 'success')  # Flash success message
-            return redirect(url_for('login'))  # Redirect to login page after successful signup
+            flash('Signup successful! Please log in.', 'success')
+            return redirect(url_for('login'))
         except mysql.connector.Error as err:
-            flash(f'Error: {err}', 'danger')  # Flash error message if something goes wrong
-
+            flash(f'Error: {err}', 'danger')
+            
+    # Close database connection
     cursor.close()
     conn.close()
 
