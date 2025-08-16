@@ -44,13 +44,6 @@ CityConnect is a community-centric social web application designed to help users
 - **Event Oversight**: Monitor and manage local events
 - **Community Safety**: Tools for maintaining a safe and engaging environment
 
-## 🚀 Quick Start
-
-### Prerequisites
-- Python 3.8 or higher
-- MySQL or compatible relational database
-
-
 ## 🏗️ Technology Stack
 
 - **Backend**: Python with Flask framework
@@ -65,13 +58,6 @@ CityConnect is a community-centric social web application designed to help users
 - **Event Organization**: Create and discover community activities
 - **Neighborhood Engagement**: Strengthen ties with nearby residents
 - **Community Building**: Foster meaningful local connections
-
-## 🔧 Configuration
-
-### Database Setup
-1. Create a MySQL database named `cityconnect`
-2. Update database credentials in your configuration
-3. Run database migrations if available
 
 ## 🐛 Issues & Support
 
