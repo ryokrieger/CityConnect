@@ -57,7 +57,6 @@ CityConnect is a community-centric social web application designed to help users
 - **Frontend**: HTML5, CSS3 (custom styling)
 - **Database**: MySQL (or compatible relational database)
 - **Session Management**: Flask Sessions
-- **Architecture**: Model-View-Controller (MVC)
 
 ## 🎯 Use Cases
 
