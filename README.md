@@ -2,7 +2,6 @@
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![Flask](https://img.shields.io/badge/Flask-2.0+-green.svg)](https://flask.palletsprojects.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > *A platform that helps newcomers easily find and connect with friends who share their interests in a new city.*
 
@@ -20,21 +19,18 @@ CityConnect is a community-centric social web application designed to help users
 
 ### 🤝 Social Connections
 - **Friend System**: Send, receive, and manage friend requests
-- **Location-Based Discovery**: Connect with people in your city or neighborhood
+- **Location-Based Discovery**: Connect with people in your neighborhood
 - **Friend Lists**: Maintain and organize your connections
 - **Pending Requests**: Track incoming and outgoing friend requests
 
 ### 👥 Interest-Based Groups
 - **Group Creation**: Form communities around shared interests, activities, or causes
-- **Geographic Targeting**: Groups tied to specific cities and neighborhoods
 - **Group Management**: Join existing groups or create new ones
 - **Discussion Forums**: Share posts and engage in group conversations
 
 ### 📅 Local Events
 - **Event Creation**: Organize local meetups and activities within groups
-- **Event Discovery**: Find events in your city and neighborhood
 - **RSVP System**: Join events that match your interests
-- **Location-Specific**: All events are tied to geographic locations
 
 ### 💬 Community Interaction
 - **Group Posts**: Share content within interest-based groups
@@ -44,7 +40,7 @@ CityConnect is a community-centric social web application designed to help users
 
 ### 🛡️ Administrative Features
 - **User Management**: Admin dashboard for community oversight
-- **Content Moderation**: Manage posts, comments, and user-generated content
+- **Content Moderation**: Manage posts and user-generated content
 - **Event Oversight**: Monitor and manage local events
 - **Community Safety**: Tools for maintaining a safe and engaging environment
 
@@ -53,46 +49,7 @@ CityConnect is a community-centric social web application designed to help users
 ### Prerequisites
 - Python 3.8 or higher
 - MySQL or compatible relational database
-- pip package manager
 
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/ryokrieger/CityConnect.git
-   cd CityConnect
-   ```
-
-2. **Set up virtual environment**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Database Configuration**
-   ```bash
-   # Create your database
-   mysql -u root -p -e "CREATE DATABASE cityconnect;"
-   ```
-
-5. **Environment Setup**
-   ```bash
-   # Configure your database connection and other settings
-   # Edit configuration files as needed
-   ```
-
-6. **Run the application**
-   ```bash
-   python app.py
-   ```
-
-7. **Access the application**
-   Open your browser and navigate to `http://localhost:5000`
 
 ## 🏗️ Technology Stack
 
@@ -102,41 +59,11 @@ CityConnect is a community-centric social web application designed to help users
 - **Session Management**: Flask Sessions
 - **Architecture**: Model-View-Controller (MVC)
 
-## 📁 Project Structure
-
-```
-CityConnect/
-├── app.py                  # Main Flask application
-├── requirements.txt        # Python dependencies
-├── config.py              # Application configuration
-├── models/                # Database models
-│   ├── user.py
-│   ├── group.py
-│   ├── event.py
-│   └── ...
-├── routes/                # Application routes
-│   ├── auth.py
-│   ├── profile.py
-│   ├── groups.py
-│   └── ...
-├── templates/             # HTML templates
-│   ├── base.html
-│   ├── index.html
-│   ├── profile.html
-│   └── ...
-├── static/               # Static files
-│   ├── css/
-│   ├── js/
-│   └── images/
-└── utils/                # Helper functions
-    └── ...
-```
-
 ## 🎯 Use Cases
 
 - **New City Residents**: Find friends and integrate into local communities
 - **Interest-Based Networking**: Connect with people who share your hobbies and passions
-- **Local Event Organization**: Create and discover community activities
+- **Event Organization**: Create and discover community activities
 - **Neighborhood Engagement**: Strengthen ties with nearby residents
 - **Community Building**: Foster meaningful local connections
 
@@ -147,50 +74,11 @@ CityConnect/
 2. Update database credentials in your configuration
 3. Run database migrations if available
 
-### Environment Variables
-Configure the following (create a `.env` file):
-```env
-FLASK_APP=app.py
-FLASK_ENV=development
-DATABASE_URL=mysql://username:password@localhost/cityconnect
-SECRET_KEY=your-secret-key-here
-```
-
-## 🤝 Contributing
-
-Contributions are welcome! Here's how to get started:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/new-feature`)
-3. Make your changes
-4. Commit your changes (`git commit -am 'Add new feature'`)
-5. Push to the branch (`git push origin feature/new-feature`)
-6. Create a Pull Request
-
-### Development Guidelines
-- Follow Python PEP 8 style guidelines
-- Write descriptive commit messages
-- Test your changes thoroughly
-- Update documentation as needed
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 🐛 Issues & Support
 
 - **Bug Reports**: [Create an issue](https://github.com/ryokrieger/CityConnect/issues)
-- **Feature Requests**: [Open a discussion](https://github.com/ryokrieger/CityConnect/discussions)
 - **Questions**: Contact [@ryokrieger](https://github.com/ryokrieger)
 
-## 🚧 Roadmap
-
-- [ ] Mobile-responsive design improvements
-- [ ] Real-time messaging system
-- [ ] Advanced search and filtering options
-- [ ] Integration with external calendar systems
-- [ ] Mobile application development
-- [ ] Enhanced notification system
 
 ## 📞 Contact
 
