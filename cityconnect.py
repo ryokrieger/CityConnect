@@ -13,7 +13,7 @@ db_config = {
     'database': 'cityconnect'
 }
 
-# Helper function to connect to MySQL database using the configuration
+# Helper function to connect to MySQL database
 def connect_db():
     return mysql.connector.connect(**db_config)
 
@@ -25,7 +25,6 @@ def index():
 # User signup route - handles both GET (form display) and POST (form submission)
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    # Connect to database
     conn = connect_db()
     cursor = conn.cursor(dictionary=True)
 
@@ -52,17 +51,15 @@ def signup():
                 INSERT INTO User (username, email, gender, password, city_code, postal_code)
                 VALUES (%s, %s, %s, %s, %s, %s)
             """, (username, email, gender, password, city_code, postal_code))
-            conn.commit()  # Commit the transaction
+            conn.commit()
             flash('Signup successful! Please log in.', 'success')
             return redirect(url_for('login'))
         except mysql.connector.Error as err:
             flash(f'Error: {err}', 'danger')
             
-    # Close database connection
     cursor.close()
     conn.close()
 
-    # Render signup page with city and neighborhood data
     return render_template('signup.html', cities=cities, neighborhoods=neighborhoods, neighborhoods_json=neighborhoods)
 
 # User login route - handles both GET (form display) and POST (form submission)
