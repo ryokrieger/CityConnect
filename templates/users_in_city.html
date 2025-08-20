@@ -5,7 +5,6 @@
     <title>People in Your City - CityConnect</title>
 
     <style>
-        /* Body styling with font and background color */
         body {
             font-family: 'Segoe UI', sans-serif;
             background-color: #f4f7fa;
@@ -13,7 +12,6 @@
             padding: 0;
         }
 
-        /* Top navigation bar styling */
         .top-bar {
             background-color: #0077cc;
             color: white;
@@ -23,7 +21,6 @@
             align-items: center;
         }
 
-        /* Link styles in the top bar */
         .top-bar a {
             color: white;
             text-decoration: none;
@@ -34,20 +31,17 @@
             color: #cce4ff;
         }
 
-        /* Main container for page content */
         .container {
             max-width: 900px;
             margin: 40px auto;
             padding: 0 20px;
         }
 
-        /* Page heading style */
         h1 {
             color: #0077cc;
             margin-bottom: 30px;
         }
 
-        /* Table styling */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -56,7 +50,6 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        /* Table header and cell styles */
         th, td {
             padding: 15px 12px;
             text-align: left;
@@ -64,19 +57,16 @@
             vertical-align: middle;
         }
 
-        /* Table header background and font */
         th {
             background-color: #0077cc;
             color: white;
             font-weight: 600;
         }
 
-        /* Row hover effect */
         tr:hover {
             background-color: #f1f9ff;
         }
 
-        /* View Profile button styles */
         a.view-profile-btn {
             background-color: #0077cc;
             color: white;
@@ -98,7 +88,6 @@
             background-color: #005fa3;
         }
 
-        /* Message displayed when no users are found */
         .no-users {
             text-align: center;
             font-style: italic;
@@ -106,7 +95,6 @@
             margin-top: 40px;
         }
 
-        /* Pagination styling */
         .pagination {
             margin-top: 25px;
             display: flex;
@@ -149,12 +137,10 @@
 </head>
 <body>
 
-<!-- Top navigation bar -->
 <div class="top-bar">
     <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
 </div>
 
-<!-- Main content container -->
 <div class="container">
     <h1>People in Your City</h1>
 
@@ -182,7 +168,7 @@
         </tbody>
     </table>
 
-    <!-- Pagination block (same style/logic as ratings.html) -->
+    <!-- Pagination block -->
     <div class="pagination">
         <!-- Previous page button -->
         {% if page > 1 %}

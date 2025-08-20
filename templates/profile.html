@@ -4,7 +4,6 @@
     <title>Update Profile</title>
 
     <style>
-        /* Basic styling for the page body */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f7fa;
@@ -13,7 +12,6 @@
             color: #333;
         }
 
-        /* Header styling with background color and layout */
         .header {
             background-color: #0077cc;
             color: white;
@@ -23,19 +21,16 @@
             align-items: center;
         }
 
-        /* Styling for links in the header */
         .header a {
             color: white;
             text-decoration: none;
             font-weight: bold;
         }
 
-        /* Hover effect for header links */
         .header a:hover {
             color: #cce4ff;
         }
 
-        /* Main container for the profile update form with background and shadow */
         .container {
             max-width: 700px;
             margin: 40px auto;
@@ -47,7 +42,6 @@
             border: 1px solid #d1d9e6;
         }
 
-        /* Heading style inside container */
         h2 {
             color: #0077cc;
             margin-bottom: 30px;
@@ -57,7 +51,6 @@
             text-align: center;
         }
 
-        /* Form labels styling */
         form label {
             font-weight: 600;
             font-size: 1rem;
@@ -66,7 +59,6 @@
             color: #005fa3;
         }
 
-        /* Dropdown (select) inputs styling */
         form select {
             padding: 12px 15px;
             width: 100%;
@@ -79,14 +71,12 @@
             outline-offset: 2px;
         }
 
-        /* Focus effect for select inputs */
         form select:focus {
             border-color: #0077cc;
             box-shadow: 0 0 8px rgba(0, 119, 204, 0.3);
             background-color: white;
         }
 
-        /* Checkbox styling including size and spacing */
         input[type="checkbox"] {
             margin-right: 12px;
             accent-color: #0077cc;
@@ -95,7 +85,6 @@
             vertical-align: middle;
         }
 
-        /* Container for group of checkboxes with spacing */
         .checkbox-group {
             display: flex;
             flex-wrap: wrap;
@@ -103,7 +92,6 @@
             margin-bottom: 30px;
         }
 
-        /* Each checkbox label styling */
         .checkbox-group label {
             width: calc(50% - 20px);
             font-size: 1rem;
@@ -115,12 +103,10 @@
             transition: color 0.3s ease;
         }
 
-        /* Hover color change on checkbox labels */
         .checkbox-group label:hover {
             color: #0077cc;
         }
 
-        /* Submit button styling */
         .btn-submit {
             background-color: #0077cc;
             color: white;
@@ -135,13 +121,11 @@
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* Submit button hover effect */
         .btn-submit:hover {
             background-color: #005fa3;
             box-shadow: 0 8px 20px rgba(0, 95, 163, 0.6);
         }
 
-        /* Success flash message styling */
         .flash-message {
             color: #1e7e34;
             background-color: #d4edda;
@@ -153,7 +137,6 @@
             text-align: center;
         }
 
-        /* Error flash message styling */
         .flash-error {
             color: #842029;
             background-color: #f8d7da;
@@ -201,14 +184,12 @@
 </head>
 
 <body onload="filterNeighborhoods()">
-    <!-- Header section with a back navigation link -->
     <div class="header">
         <div>
             <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
         </div>
     </div>
 
-    <!-- Container holding the profile update form -->
     <div class="container">
         <h2>Update Profile</h2>
 
@@ -245,11 +226,9 @@
                 {% endfor %}
             </div>
 
-            <!-- Submit button to update profile -->
             <input type="submit" class="btn-submit" value="Update">
         </form>
 
-        <!-- Display flash messages (success or error) -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% for category, message in messages %}
                 <div class="{{ 'flash-message' if category == 'success' else 'flash-error' }}">

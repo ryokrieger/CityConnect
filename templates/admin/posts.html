@@ -5,7 +5,6 @@
     <title>Admin - Posts - CityConnect</title>
 
     <style>
-        /* General page style */
         body {
             font-family: 'Segoe UI', sans-serif;
             background-color: #f4f7fa;
@@ -13,7 +12,6 @@
             padding: 0;
         }
 
-        /* Top navigation bar */
         .top-bar {
             background-color: #0077cc;
             color: white;
@@ -31,20 +29,17 @@
             color: #cce4ff;
         }
 
-        /* Main content container */
         .container {
             max-width: 900px;
             margin: 40px auto;
             padding: 0 20px;
         }
 
-        /* Page heading */
         h1 {
             color: #0077cc;
             margin-bottom: 30px;
         }
 
-        /* Table styling */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -67,13 +62,11 @@
             background-color: #f1f9ff;
         }
 
-        /* Form for actions inside table */
         form.action-form {
             display: inline-block;
             margin: 0;
         }
 
-        /* Delete button styling */
         button.delete-btn {
             background-color: #dc3545;
             color: white;
@@ -94,7 +87,6 @@
             background-color: #c82333;
         }
 
-        /* Pagination container */
         .pagination {
             margin-top: 25px;
             display: flex;
@@ -103,7 +95,6 @@
             flex-wrap: wrap;
         }
 
-        /* Pagination links and spans */
         .pagination a, .pagination span {
             padding: 10px 16px;
             border-radius: 8px;
@@ -135,15 +126,12 @@
 </head>
 <body>
 
-<!-- Top navigation bar -->
 <div class="top-bar">
     <div>
-        <!-- Link back to admin dashboard -->
         <a href="{{ url_for('admin_dashboard') }}">← Back to Admin Dashboard</a>
     </div>
 </div>
 
-<!-- Main content container -->
 <div class="container">
     <h1>Manage Posts</h1>
 
@@ -181,7 +169,7 @@
         </tbody>
     </table>
 
-    <!-- Pagination navigation (fully updated like ratings.html) -->
+    <!-- Pagination navigation -->
     <div class="pagination">
         <!-- Previous page button -->
         {% if page > 1 %}

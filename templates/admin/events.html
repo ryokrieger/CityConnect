@@ -5,7 +5,6 @@
     <title>Admin - Events - CityConnect</title>
 
     <style>
-        /* General page styling */
         body {
             font-family: 'Segoe UI', sans-serif;
             background-color: #f4f7fa;
@@ -13,7 +12,6 @@
             padding: 0;
         }
 
-        /* Top navigation bar */
         .top-bar {
             background-color: #0077cc;
             color: white;
@@ -31,20 +29,17 @@
             color: #cce4ff;
         }
 
-        /* Content container */
         .container {
             max-width: 900px;
             margin: 40px auto;
             padding: 0 20px;
         }
 
-        /* Page heading */
         h1 {
             color: #0077cc;
             margin-bottom: 30px;
         }
 
-        /* Event table styles */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -67,7 +62,6 @@
             background-color: #f1f9ff;
         }
 
-        /* Action buttons */
         form.action-form {
             display: inline-block;
             margin: 0;
@@ -92,7 +86,6 @@
             background-color: #c82333;
         }
 
-        /* Pagination controls */
         .pagination {
             margin-top: 25px;
             display: flex;
@@ -131,15 +124,12 @@
 </head>
 <body>
 
-<!-- Top navigation bar -->
 <div class="top-bar">
     <div>
-        <!-- Link back to Admin Dashboard -->
         <a href="{{ url_for('admin_dashboard') }}">← Back to Admin Dashboard</a>
     </div>
 </div>
 
-<!-- Main content area -->
 <div class="container">
     <h1>Manage Events</h1>
 
@@ -177,7 +167,7 @@
         </tbody>
     </table>
 
-    <!-- Pagination block (ratings-style) -->
+    <!-- Pagination block -->
     <div class="pagination">
         <!-- Previous button -->
         {% if page > 1 %}

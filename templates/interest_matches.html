@@ -5,7 +5,6 @@
     <title>Users with Similar Interests - CityConnect</title>
 
     <style>
-        /* Body styling */
         body {
             font-family: 'Segoe UI', sans-serif;
             background-color: #f4f7fa;
@@ -13,7 +12,6 @@
             padding: 0;
         }
 
-        /* Top navigation bar */
         .top-bar {
             background-color: #0077cc;
             color: white;
@@ -33,7 +31,6 @@
             color: #cce4ff;
         }
 
-        /* Main content container */
         .container {
             max-width: 900px;
             margin: 40px auto;
@@ -46,7 +43,6 @@
             text-align: center;
         }
 
-        /* Table styling */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -73,7 +69,6 @@
             background-color: #f1f9ff;
         }
 
-        /* Shared interests */
         .shared-interests {
             display: flex;
             flex-direction: column;
@@ -85,7 +80,6 @@
             margin-top: 4px;
         }
 
-        /* Action buttons container */
         .actions-cell {
             display: flex;
             gap: 8px;
@@ -134,7 +128,6 @@
             margin-top: 40px;
         }
 
-        /* Pagination styling */
         .pagination {
             margin-top: 25px;
             display: flex;
@@ -182,12 +175,10 @@
 </head>
 <body>
 
-<!-- Navigation -->
 <div class="top-bar">
     <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
 </div>
 
-<!-- Main Content -->
 <div class="container">
     <h1>Users in Your Neighborhood with Similar Interests</h1>
 
@@ -287,7 +278,6 @@
     </div>
 
     {% else %}
-        <!-- No matches message -->
         <p class="no-users">No users found with matching interests in your neighborhood.</p>
     {% endif %}
 </div>

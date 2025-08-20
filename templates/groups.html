@@ -2,11 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <!-- Page title -->
     <title>Groups - CityConnect</title>
 
     <style>
-        /* Basic body styling */
         body {
             font-family: 'Segoe UI', sans-serif;
             background-color: #f4f7fa;
@@ -14,7 +12,6 @@
             padding: 0;
         }
 
-        /* Top navigation bar styling */
         .top-bar {
             background-color: #0077cc;
             color: white;
@@ -24,7 +21,6 @@
             align-items: center;
         }
 
-        /* Styling for links inside top bar */
         .top-bar a {
             color: white;
             text-decoration: none;
@@ -32,26 +28,22 @@
             margin-right: 15px;
         }
 
-        /* Hover effect for top bar links */
         .top-bar a:hover {
             color: #cce4ff;
         }
 
-        /* Container for main page content with max width and padding */
         .container {
             max-width: 1000px;
             margin: 40px auto;
             padding: 0 20px;
         }
 
-        /* Main heading style */
         h1 {
             color: #0077cc;
             margin-bottom: 30px;
             text-align: center;
         }
 
-        /* Table styling for listing groups */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -61,7 +53,6 @@
             overflow: hidden;
         }
 
-        /* Table headers and cells padding and border */
         th, td {
             padding: 15px 12px;
             text-align: left;
@@ -69,26 +60,22 @@
             vertical-align: middle;
         }
 
-        /* Header row styling */
         th {
             background-color: #0077cc;
             color: white;
             font-weight: 600;
         }
 
-        /* Hover effect on table rows */
         tr:hover {
             background-color: #f1f9ff;
         }
 
-        /* Cell that contains action buttons styled with flexbox */
         .actions-cell {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
         }
 
-        /* Base styles for buttons */
         .btn {
             padding: 10px 16px;
             font-size: 14px;
@@ -106,7 +93,6 @@
             transition: background-color 0.3s ease;
         }
 
-        /* Primary button styles */
         .btn-primary {
             background-color: #0077cc;
             color: white;
@@ -115,7 +101,6 @@
             background-color: #005fa3;
         }
 
-        /* Success button styles */
         .btn-success {
             background-color: #28a745;
             color: white;
@@ -124,7 +109,6 @@
             background-color: #218838;
         }
 
-        /* Danger button styles */
         .btn-danger {
             background-color: #dc3545;
             color: white;
@@ -133,7 +117,6 @@
             background-color: #c82333;
         }
 
-        /* Styling shown when no groups match user's interests */
         .no-groups {
             font-size: 1.1em;
             background-color: #fff3cd;
@@ -145,7 +128,6 @@
             text-align: center;
         }
 
-        /* Link styling inside the no-groups message */
         .no-groups a {
             color: #0077cc;
             font-weight: bold;
@@ -154,13 +136,11 @@
             text-decoration: underline;
         }
 
-        /* Inline display for forms used as action buttons */
         form.action-form {
             display: inline;
             margin: 0;
         }
 
-        /* Pagination container with flexbox layout */
         .pagination {
             margin-top: 25px;
             display: flex;
@@ -169,7 +149,6 @@
             flex-wrap: wrap;
         }
 
-        /* Pagination buttons and spans styling */
         .pagination a, .pagination span {
             padding: 10px 16px;
             border-radius: 8px;
@@ -186,25 +165,21 @@
             transition: background-color 0.3s ease;
         }
 
-        /* Hover effect for pagination links */
         .pagination a:hover {
             background-color: #005fa3;
         }
 
-        /* Disabled pagination buttons styling */
         .pagination .disabled {
             background-color: #a3c0e8;
             cursor: default;
         }
 
-        /* Current active page styling */
         .pagination span:not(.disabled) {
             background-color: #005fa3;
             min-width: auto;
             white-space: nowrap;
         }
 
-        /* Description cell limits width and adds ellipsis for overflow */
         .description-cell {
             max-width: 400px;
             white-space: nowrap;
@@ -215,7 +190,6 @@
 </head>
 <body>
 
-<!-- Top navigation bar with links to dashboard and group creation -->
 <div class="top-bar">
     <div>
         <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
@@ -223,7 +197,6 @@
     </div>
 </div>
 
-<!-- Main container for groups list -->
 <div class="container">
     <h1>Groups Matching Your Interests</h1>
 
@@ -278,7 +251,7 @@
             <span class="disabled">← Previous</span>
         {% endif %}
 
-        {# Pagination window calculation #}
+        <!-- Pagination window calculation -->
         {% set max_pages_to_show = 7 %}
         {% set half_window = max_pages_to_show // 2 %}
         {% set start_page = page - half_window if page - half_window > 0 else 1 %}
@@ -288,7 +261,7 @@
             {% set start_page = end_page - max_pages_to_show + 1 if end_page - max_pages_to_show + 1 > 0 else 1 %}
         {% endif %}
 
-        {# First page and ellipsis #}
+        <!-- First page and ellipsis -->
         {% if start_page > 1 %}
             <a href="{{ url_for('list_groups', page=1) }}">1</a>
             {% if start_page > 2 %}
@@ -296,7 +269,7 @@
             {% endif %}
         {% endif %}
 
-        {# Page links #}
+        <!-- Page links -->
         {% for p in range(start_page, end_page + 1) %}
             {% if p == page %}
                 <span>{{ p }}</span>
@@ -305,7 +278,7 @@
             {% endif %}
         {% endfor %}
 
-        {# Ellipsis and last page #}
+        <!-- Ellipsis and last page -->
         {% if end_page < total_pages %}
             {% if end_page < total_pages - 1 %}
                 <span>…</span>

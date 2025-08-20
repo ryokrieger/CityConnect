@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <style>
-        /* Root CSS variables for colors */
         :root {
             --primary: #3b82f6;
             --primary-dark: #2563eb;
@@ -27,7 +26,6 @@
             --border-color: #e5e7eb;
         }
 
-        /* Base body styling */
         body {
             font-family: 'Inter', 'Segoe UI', sans-serif;
             background-color: #f4f7fa;
@@ -37,7 +35,6 @@
             color: var(--text-color);
         }
 
-        /* Top navigation bar styling */
         .top-bar {
             background-color: #0077cc;
             color: white;
@@ -47,39 +44,33 @@
             align-items: center;
         }
 
-        /* Link styling inside top bar */
         .top-bar a {
             color: white;
             text-decoration: none;
             font-weight: bold;
         }
-        
-        /* Link hover effect inside top bar */
+
         .top-bar a:hover {
             color: #cce4ff;
         }
 
-        /* Main container with max width and horizontal padding */
         .container {
             max-width: 960px;
             margin: 30px auto;
             padding: 0 20px;
         }
 
-        /* Heading styles */
         h1 {
             color: var(--primary);
             margin-bottom: 10px;
         }
 
-        /* Group description paragraph style */
         p.group-desc {
             font-size: 1.1em;
             color: #555;
             margin-bottom: 30px;
         }
 
-        /* Generic section block style */
         .section {
             background: var(--card-bg);
             padding: 30px;
@@ -89,13 +80,11 @@
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
         }
 
-        /* Secondary heading style */
         h2 {
             color: #333;
             margin-bottom: 20px;
         }
 
-        /* Form inputs and textarea styling */
         textarea, input[type="text"], input[type="date"], input[type="time"], select {
             width: 100%;
             padding: 10px;
@@ -107,20 +96,17 @@
             transition: border-color 0.2s;
         }
 
-        /* Focus effect for form controls */
         textarea:focus, input:focus, select:focus {
             border-color: var(--primary);
             outline: none;
         }
 
-        /* Label styling */
         label {
             font-weight: 600;
             margin-top: 10px;
             display: block;
         }
 
-        /* Button base styling */
         button {
             padding: 10px 20px;
             font-size: 1em;
@@ -130,13 +116,11 @@
             transition: all 0.2s ease;
         }
 
-        /* Button hover effect */
         button:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
-        /* Primary button styles */
         .primary-btn {
             background-color: var(--primary);
             color: white;
@@ -145,7 +129,6 @@
             background-color: var(--primary-dark);
         }
 
-        /* Danger button styles */
         .danger-btn {
             background-color: var(--danger);
             color: white;
@@ -154,7 +137,6 @@
             background-color: var(--danger-dark);
         }
 
-        /* Success button styles */
         .success-btn {
             background-color: var(--success);
             color: white;
@@ -163,7 +145,6 @@
             background-color: var(--success-dark);
         }
 
-        /* Individual post and event card styles */
         .post, .event {
             border: 1px solid var(--border-color);
             padding: 20px;
@@ -172,7 +153,6 @@
             background-color: #fcfcfc;
         }
 
-        /* Comment styling with indentation and border */
         .comment {
             margin-left: 20px;
             padding-left: 15px;
@@ -180,17 +160,14 @@
             margin-top: 10px;
         }
 
-        /* Comment form styling */
         .comment-form {
             margin-top: 15px;
         }
 
-        /* Paragraph margin inside sections */
         .section p {
             margin: 5px 0;
         }
 
-        /* Button group container for flexible button layout */
         .button-group {
             display: flex;
             flex-wrap: wrap;
@@ -198,12 +175,10 @@
             margin-top: 10px;
         }
 
-        /* Remove margin from forms inside button groups */
         .button-group form {
             margin: 0;
         }
 
-        /* Responsive adjustments for smaller screens */
         @media (max-width: 768px) {
             .container {
                 padding: 0 15px;
@@ -220,18 +195,14 @@
 </head>
 <body>
 
-<!-- Top navigation bar with a back link to group list -->
 <div class="top-bar">
     <div>
         <a href="{{ url_for('list_groups') }}">← Return to Groups</a>
     </div>
 </div>
 
-<!-- Main content container -->
 <div class="container">
-    <!-- Display group name dynamically -->
     <h1>{{ group.group_name }}</h1>
-    <!-- Display group description -->
     <p class="group-desc">{{ group.description }}</p>
 
     <!-- Section to create a new post -->

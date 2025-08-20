@@ -100,13 +100,13 @@ def login():
 @app.route('/logout')
 def logout():
     session.clear()  # Clear all session data
-    flash("You've been logged out.", "info")  # Flash logout message
-    return redirect(url_for('login'))  # Redirect to login page
+    flash("You've been logged out.", "info")
+    return redirect(url_for('login'))
 
 # Route to show users in the same city as the logged-in user
 @app.route('/users/city')
 def users_in_same_city():
-    if 'user_id' not in session:  # Check if user is logged in
+    if 'user_id' not in session:
         flash("Please log in", "error")
         return redirect(url_for('login'))
 
@@ -140,7 +140,6 @@ def users_in_same_city():
     cursor.close()
     conn.close()
 
-    # Render template with user list and pagination info
     return render_template(
         "users_in_city.html",
         users=users,
@@ -161,7 +160,7 @@ def users_with_similar_interests():
 
     # Pagination setup
     page = request.args.get('page', 1, type=int)
-    per_page = 10  # Number of users per page
+    per_page = 10
     offset = (page - 1) * per_page
 
     # Get user's neighborhood postal code
@@ -191,14 +190,14 @@ def users_with_similar_interests():
               SELECT user2_ID FROM Friendship WHERE user1_ID = %s
               UNION
               SELECT user1_ID FROM Friendship WHERE user2_ID = %s
-          )
+          ) 
     """
 
     cursor.execute(count_query, (user_id, user_postal, *interest_ids, user_id, user_id))
     total_users = cursor.fetchone()['total']
     total_pages = (total_users + per_page - 1) // per_page
 
-    # Main query to find matching users with pagination
+    # Main query to find matching users
     base_query = f"""
         SELECT DISTINCT u.userID, u.username, u.email
         FROM User u
@@ -272,7 +271,6 @@ def users_with_similar_interests():
     cursor.close()
     conn.close()
 
-    # Render template with matched users and pagination info
     return render_template(
         "interest_matches.html",
         matches=matches,
@@ -350,7 +348,7 @@ def manage_friend_requests():
 
     # Pagination setup
     page = int(request.args.get('page', 1))
-    per_page = 10  # Requests per page
+    per_page = 10
     offset = (page - 1) * per_page
 
     conn = connect_db()
@@ -378,7 +376,6 @@ def manage_friend_requests():
     cursor.close()
     conn.close()
 
-    # Render template with requests and pagination info
     return render_template(
         'manage_requests.html',
         requests=requests,
@@ -482,7 +479,6 @@ def view_friends():
     cursor.close()
     conn.close()
 
-    # Render template with friends list and pagination info
     return render_template('friend_list.html', friends=friends, page=page, total_pages=total_pages)
 
 # Route to remove a friend
@@ -520,15 +516,12 @@ def remove_friend(friend_id):
 # Route for chat with a friend
 @app.route('/chat/<int:friend_id>', methods=['GET', 'POST'])
 def chat(friend_id):
-    # Check if user is logged in by verifying session
     if 'user_id' not in session:
         flash("Please log in first.", "error")
         return redirect(url_for('login'))
 
-    # Get current user ID from session
     user_id = session['user_id']
-    
-    # Establish database connection
+
     conn = connect_db()
     cursor = conn.cursor(dictionary=True)
 
@@ -573,11 +566,9 @@ def chat(friend_id):
     cursor.execute("SELECT username FROM User WHERE userID = %s", (friend_id,))
     friend_name = cursor.fetchone()['username']
 
-    # Close database connections
     cursor.close()
     conn.close()
 
-    # Render chat template with messages, friend info, and current user ID
     return render_template("chat.html", 
                          messages=messages, 
                          friend_name=friend_name, 
@@ -641,7 +632,6 @@ def profile(user_id):
     cursor.close()
     conn.close()
 
-    # Render profile page with all necessary data
     return render_template('profile.html',
                            username=username,
                            cities=cities,
@@ -714,7 +704,6 @@ def view_profile(profile_user_id):
     cursor.close()
     conn.close()
 
-    # Render profile view template with all gathered data
     return render_template("view_profile.html",
                            profile=profile,
                            profile_user_id=profile_user_id,
@@ -778,7 +767,6 @@ def view_own_profile():
     cursor.close()
     conn.close()
 
-    # Render profile view template
     return render_template("view_own_profile.html",
                            profile=profile,
                            interests=interests,
@@ -811,7 +799,6 @@ def dashboard():
     cursor.close()
     conn.close()
 
-    # Render dashboard with user info and admin flag
     return render_template("dashboard.html", username=user['username'], city_name=city, is_admin=is_admin)
 
 # Route to list groups matching user's interests
@@ -823,7 +810,7 @@ def list_groups():
 
     user_id = session['user_id']
     page = request.args.get('page', 1, type=int)
-    per_page = 10  # groups per page
+    per_page = 10
 
     conn = connect_db()
     cursor = conn.cursor(dictionary=True)
@@ -869,7 +856,6 @@ def list_groups():
     cursor.close()
     conn.close()
 
-    # Render groups page with pagination info
     return render_template('groups.html', groups=groups, memberships=joined_group_ids, page=page, total_pages=total_pages)
 
 # Route to create a new group
@@ -895,7 +881,7 @@ def create_group():
         # Insert new group
         cursor.execute("INSERT INTO GroupTable (group_name, description) VALUES (%s, %s)", (group_name, description))
         conn.commit()
-        group_id = cursor.lastrowid  # Get ID of newly created group
+        group_id = cursor.lastrowid
 
         # Add selected interests to group
         for interest_id in selected_interests:
@@ -928,6 +914,7 @@ def join_group(group_id):
         INSERT IGNORE INTO User_Group (userID, group_ID)
         VALUES (%s, %s)
     """, (session['user_id'], group_id))
+
     conn.commit()
     cursor.close()
     conn.close()
@@ -947,6 +934,7 @@ def leave_group(group_id):
 
     # Remove user from group
     cursor.execute("DELETE FROM User_Group WHERE userID = %s AND group_ID = %s", (user_id, group_id))
+
     conn.commit()
     cursor.close()
     conn.close()
@@ -1024,7 +1012,6 @@ def group_detail(group_id):
     cursor.close()
     conn.close()
 
-    # Render group detail page with all gathered data
     return render_template("group_detail.html",
                            group=group,
                            posts=posts,
@@ -1085,6 +1072,7 @@ def delete_post(group_id, post_id):
 
     # Delete post (only if user is author)
     cursor.execute("DELETE FROM GroupPost WHERE post_ID = %s AND userID = %s", (post_id, session['user_id']))
+
     conn.commit()
     cursor.close()
     conn.close()
@@ -1102,6 +1090,7 @@ def delete_comment(group_id, comment_id):
 
     # Delete comment (only if user is author)
     cursor.execute("DELETE FROM GroupComment WHERE comment_ID = %s AND userID = %s", (comment_id, session['user_id']))
+
     conn.commit()
     cursor.close()
     conn.close()
@@ -1148,10 +1137,12 @@ def join_event(group_id, event_id):
 
     conn = connect_db()
     cursor = conn.cursor()
+
     # Add user to event participation
     cursor.execute("""
         INSERT IGNORE INTO event_participation (userID, event_ID) VALUES (%s, %s)
     """, (session['user_id'], event_id))
+
     conn.commit()
     cursor.close()
     conn.close()
@@ -1170,6 +1161,7 @@ def leave_event(group_id, event_id):
     cursor.execute("""
         DELETE FROM event_participation WHERE userID = %s AND event_ID = %s
     """, (session['user_id'], event_id))
+
     conn.commit()
     cursor.close()
     conn.close()
@@ -1194,6 +1186,7 @@ def delete_event(group_id, event_id):
 
     # Delete event
     cursor.execute("DELETE FROM Event WHERE event_ID = %s", (event_id,))
+
     conn.commit()
     cursor.close()
     conn.close()
@@ -1255,11 +1248,13 @@ def delete_rating(profile_user_id):
 
     conn = connect_db()
     cursor = conn.cursor()
+
     # Delete rating
     cursor.execute("""
         DELETE FROM User_Rating
         WHERE rater_ID = %s AND ratee_ID = %s
     """, (rater_id, profile_user_id))
+
     conn.commit()
     cursor.close()
     conn.close()
@@ -1270,42 +1265,46 @@ def delete_rating(profile_user_id):
 def is_admin():
     if 'user_id' not in session:
         return False
+    
     conn = connect_db()
     cursor = conn.cursor()
+
+    # Query the database to get the 'is_admin' status of the current user
     cursor.execute("SELECT is_admin FROM User WHERE userID = %s", (session['user_id'],))
     result = cursor.fetchone()
+
     cursor.close()
     conn.close()
+
+    # Return True if result exists and is_admin column == 1 (means user is admin), otherwise False
     return result and result[0] == 1
 
 # Admin dashboard route
 @app.route('/admin')
 def admin_dashboard():
     if not is_admin():
-        flash("Admin access required.", "error")
         return redirect(url_for('dashboard'))
+    
     return render_template('admin/dashboard.html')
 
 # Admin users management route
 @app.route('/admin/users')
 def admin_users():
-    # Check if current user is admin, redirect if not
     if not is_admin():
         return redirect(url_for('dashboard'))
 
-    # Setup pagination parameters
-    page = int(request.args.get('page', 1))  # Current page number, default to 1
-    per_page = 10  # Number of users per page
-    offset = (page - 1) * per_page  # Calculate database offset
+    # Pagination Setup
+    page = int(request.args.get('page', 1))
+    per_page = 10
+    offset = (page - 1) * per_page
 
-    # Connect to database
     conn = connect_db()
     cursor = conn.cursor(dictionary=True)
 
     # Count total number of users for pagination
     cursor.execute("SELECT COUNT(*) AS total FROM User")
     total_users = cursor.fetchone()['total']
-    total_pages = (total_users + per_page - 1) // per_page  # Calculate total pages
+    total_pages = (total_users + per_page - 1) // per_page
 
     # Fetch paginated users with admin and restriction status
     cursor.execute("""
@@ -1315,17 +1314,14 @@ def admin_users():
     """, (per_page, offset))
     users = cursor.fetchall()
 
-    # Close database connection
     cursor.close()
     conn.close()
-    
-    # Render admin users page with user data and pagination info
+
     return render_template('admin/users.html', users=users, page=page, total_pages=total_pages)
 
-# Route: Promote a user to admin (admin only)
+# Route to pPromote a user to admin (admin only)
 @app.route('/admin/users/make_admin/<int:user_id>', methods=['POST'])
 def make_user_admin(user_id):
-    # Redirect non-admins
     if not is_admin():
         return redirect(url_for('dashboard'))
 
@@ -1333,25 +1329,21 @@ def make_user_admin(user_id):
     if session['user_id'] == user_id:
         return redirect(url_for('admin_users'))
 
-    # Connect to the database
     conn = connect_db()
     cursor = conn.cursor()
 
     # Promote the user to admin
     cursor.execute("UPDATE User SET is_admin = TRUE WHERE userID = %s", (user_id,))
-    conn.commit()
 
-    # Close DB connection
+    conn.commit()
     cursor.close()
     conn.close()
 
-    # Redirect back to user list
     return redirect(url_for('admin_users'))
 
-# Route: Revoke admin rights from a user (admin only)
+# Route to revoke admin rights from a user (admin only)
 @app.route('/admin/users/revoke_admin/<int:user_id>', methods=['POST'])
 def revoke_user_admin(user_id):
-    # Redirect non-admins
     if not is_admin():
         return redirect(url_for('dashboard'))
 
@@ -1359,25 +1351,21 @@ def revoke_user_admin(user_id):
     if session['user_id'] == user_id:
         return redirect(url_for('admin_users'))
 
-    # Connect to the database
     conn = connect_db()
     cursor = conn.cursor()
 
     # Revoke the user's admin rights
     cursor.execute("UPDATE User SET is_admin = FALSE WHERE userID = %s", (user_id,))
-    conn.commit()
 
-    # Close DB connection
+    conn.commit()
     cursor.close()
     conn.close()
 
-    # Redirect back to user list
     return redirect(url_for('admin_users'))
 
-# Route: Restrict a user from logging in (admin only) - NEW FEATURE
+# Route to restrict a user from logging in (admin only)
 @app.route('/admin/users/restrict/<int:user_id>', methods=['POST'])
 def restrict_user(user_id):
-    # Check if current user is admin, redirect if not
     if not is_admin():
         return redirect(url_for('dashboard'))
 
@@ -1385,47 +1373,39 @@ def restrict_user(user_id):
     if session['user_id'] == user_id:
         return redirect(url_for('admin_users'))
 
-    # Connect to database
     conn = connect_db()
     cursor = conn.cursor()
 
     # Set user as restricted
     cursor.execute("UPDATE User SET is_restricted = TRUE WHERE userID = %s", (user_id,))
-    conn.commit()  # Save changes to database
 
-    # Close database connection
+    conn.commit()
     cursor.close()
     conn.close()
 
-    # Redirect back to admin users list
     return redirect(url_for('admin_users'))
 
-# Route: Remove restriction from a user (admin only) - NEW FEATURE
+# Route to remove restriction from a user (admin only) - NEW FEATURE
 @app.route('/admin/users/unrestrict/<int:user_id>', methods=['POST'])
 def unrestrict_user(user_id):
-    # Check if current user is admin, redirect if not
     if not is_admin():
         return redirect(url_for('dashboard'))
 
-    # Connect to database
     conn = connect_db()
     cursor = conn.cursor()
 
     # Remove restriction from user
     cursor.execute("UPDATE User SET is_restricted = FALSE WHERE userID = %s", (user_id,))
-    conn.commit()  # Save changes to database
 
-    # Close database connection
+    conn.commit()
     cursor.close()
     conn.close()
 
-    # Redirect back to admin users list
     return redirect(url_for('admin_users'))
 
 # Route to delete user (admin only)
 @app.route('/admin/users/delete/<int:user_id>', methods=['POST'])
 def admin_delete_user(user_id):
-    # Check if the current user is an admin; if not, deny access and redirect
     if not is_admin():
         return redirect(url_for('dashboard'))
 
@@ -1433,7 +1413,6 @@ def admin_delete_user(user_id):
     if session['user_id'] == user_id:
         return redirect(url_for('admin_users'))
 
-    # Connect to the database and create a cursor with dictionary output
     conn = connect_db()
     cursor = conn.cursor(dictionary=True)
 
@@ -1471,18 +1450,15 @@ def admin_delete_user(user_id):
         # Finally, delete the user record itself
         cursor.execute("DELETE FROM User WHERE userID = %s", (user_id,))
 
-        # Commit all changes to the database
         conn.commit()
 
     except Exception as e:
         # Roll back the transaction on error and notify the user
         conn.rollback()
 
-    # Close cursor and connection to clean up resources
     cursor.close()
     conn.close()
 
-    # Redirect back to the admin user list page
     return redirect(url_for('admin_users'))
 
 # Admin groups management route
@@ -1526,10 +1502,14 @@ def admin_delete_group(group_id):
 
     conn = connect_db()
     cursor = conn.cursor()
+
+    # Delete the group with the given group_id
     cursor.execute("DELETE FROM GroupTable WHERE group_ID = %s", (group_id,))
+
     conn.commit()
     cursor.close()
     conn.close()
+
     return redirect(url_for('admin_groups'))
 
 # Admin posts management route
@@ -1574,10 +1554,14 @@ def admin_delete_post(post_id):
 
     conn = connect_db()
     cursor = conn.cursor()
+
+    # Delete the post with the given post_id
     cursor.execute("DELETE FROM GroupPost WHERE post_ID = %s", (post_id,))
+
     conn.commit()
     cursor.close()
     conn.close()
+
     return redirect(url_for('admin_posts'))
 
 # Admin events management route
@@ -1622,10 +1606,14 @@ def admin_delete_event(event_id):
 
     conn = connect_db()
     cursor = conn.cursor()
+
+    # delete the event with the specified event_id
     cursor.execute("DELETE FROM Event WHERE event_ID = %s", (event_id,))
+    
     conn.commit()
     cursor.close()
     conn.close()
+
     return redirect(url_for('admin_events'))
 
 # Admin ratings management route
@@ -1669,10 +1657,14 @@ def admin_delete_rating(rater_id, ratee_id):
 
     conn = connect_db()
     cursor = conn.cursor()
+
+    # Delete the rating given by rater_id to ratee_id
     cursor.execute("DELETE FROM User_Rating WHERE rater_ID = %s AND ratee_ID = %s", (rater_id, ratee_id))
+
     conn.commit()
     cursor.close()
     conn.close()
+    
     return redirect(url_for('admin_ratings'))
 
 # Main entry point

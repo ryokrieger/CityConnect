@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Admin Dashboard - CityConnect</title>
     <style>
-        /* General body styling */
         body {
             font-family: 'Segoe UI', sans-serif;
             background-color: #f4f7fa;
@@ -12,7 +11,6 @@
             padding: 0;
         }
 
-        /* Top navigation bar */
         .top-bar {
             background-color: #0077cc;
             color: white;
@@ -22,26 +20,22 @@
             align-items: center;
         }
 
-        /* Links in the top bar */
         .top-bar a {
             color: white;
             text-decoration: none;
             font-weight: bold;
         }
 
-        /* Hover effect for top bar links */
         .top-bar a:hover {
             color: #cce4ff;
         }
 
-        /* Main container layout */
         .container {
             max-width: 1000px;
             margin: 40px auto;
             padding: 0 20px;
         }
 
-        /* Main heading style */
         h1 {
             color: #0077cc;
             margin-bottom: 30px;
@@ -49,14 +43,12 @@
             text-align: center;
         }
 
-        /* Grid layout for admin option cards */
         .card-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 20px;
         }
 
-        /* Individual card styling */
         .card {
             background-color: white;
             border-radius: 12px;
@@ -66,13 +58,11 @@
             text-align: center;
         }
 
-        /* Card hover animation */
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 24px rgba(0,0,0,0.12);
         }
 
-        /* Links inside cards */
         .card a {
             display: block;
             color: #007bff;
@@ -82,12 +72,10 @@
             margin-top: 10px;
         }
 
-        /* Hover effect for card links */
         .card a:hover {
             color: #0056b3;
         }
 
-        /* Icon styling inside cards */
         .icon {
             font-size: 40px;
             margin-bottom: 10px;
@@ -97,15 +85,12 @@
 </head>
 <body>
 
-    <!-- Top Bar with navigation link -->
     <div class="top-bar">
         <div>
-            <!-- Back button link to main dashboard -->
             <a href="{{ url_for('dashboard') }}">← Back to Main Dashboard</a>
         </div>
     </div>
 
-    <!-- Main content container -->
     <div class="container">
         <h1>Admin Dashboard</h1>
 

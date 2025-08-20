@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <title>Admin - Users - CityConnect</title>
     <style>
-        /* General page styling and layout */
         body {
             font-family: 'Segoe UI', sans-serif;
             background-color: #f4f7fa;
@@ -12,7 +11,6 @@
             padding: 0;
         }
 
-        /* Top navigation bar with back link */
         .top-bar {
             background-color: #0077cc;
             color: white;
@@ -32,7 +30,6 @@
             color: #cce4ff;
         }
 
-        /* Main content container */
         .container {
             max-width: 1100px;
             margin: 40px auto;
@@ -44,7 +41,6 @@
             margin-bottom: 30px;
         }
 
-        /* User table styling */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -60,19 +56,16 @@
             vertical-align: middle;
         }
 
-        /* Table header styling */
         th {
             background-color: #0077cc;
             color: white;
             font-weight: 600;
         }
 
-        /* Table row hover effect */
         tr:hover {
             background-color: #f1f9ff;
         }
 
-        /* Action buttons container layout */
         .actions-container {
             display: flex;
             align-items: center;
@@ -84,7 +77,6 @@
             display: inline-block;
         }
 
-        /* Base styling for all action buttons */
         button.delete-btn,
         button.make-admin-btn,
         button.revoke-admin-btn,
@@ -106,7 +98,6 @@
             box-sizing: border-box;
         }
 
-        /* Delete button - red color for destructive action */
         button.delete-btn {
             background-color: #dc3545;
             color: white;
@@ -116,7 +107,6 @@
             background-color: #c82333;
         }
 
-        /* Make Admin button - green color for positive action */
         button.make-admin-btn {
             background-color: #28a745;
             color: white;
@@ -126,7 +116,6 @@
             background-color: #218838;
         }
 
-        /* Revoke Admin button - yellow color for warning action */
         button.revoke-admin-btn {
             background-color: #ffc107;
             color: black;
@@ -136,7 +125,6 @@
             background-color: #e0a800;
         }
 
-        /* Restrict button - orange color for restriction action */
         button.restrict-btn {
             background-color: #fd7e14;
             color: white;
@@ -146,7 +134,6 @@
             background-color: #e55a00;
         }
 
-        /* Unrestrict button - purple color for unrestriction action */
         button.unrestrict-btn {
             background-color: #6f42c1;
             color: white;
@@ -156,7 +143,6 @@
             background-color: #5a32a3;
         }
 
-        /* View Profile button - blue color for information action */
         a.view-profile-btn {
             background-color: #0077cc;
             color: white;
@@ -166,7 +152,6 @@
             background-color: #005fa3;
         }
 
-        /* Special labels for current user and status indicators */
         .you-label,
         .status-label {
             color: #999;
@@ -180,7 +165,6 @@
             font-weight: bold;
         }
 
-        /* Pagination styling */
         .pagination {
             margin-top: 25px;
             display: flex;
@@ -189,7 +173,6 @@
             flex-wrap: wrap;
         }
 
-        /* Pagination buttons styling */
         .pagination a, .pagination span {
             padding: 10px 16px;
             border-radius: 8px;
@@ -210,20 +193,17 @@
             background-color: #005fa3;
         }
 
-        /* Disabled pagination button styling */
         .pagination .disabled {
             background-color: #a3c0e8;
             cursor: default;
         }
 
-        /* Current page indicator styling */
         .pagination span:not(.disabled) {
             background-color: #005fa3;
             min-width: auto;
             white-space: nowrap;
         }
 
-        /* Status columns styling for better visibility */
         .status-yes {
             color: #28a745;
             font-weight: bold;
@@ -241,14 +221,12 @@
 </head>
 <body>
 
-<!-- Top navigation bar with back to dashboard link -->
 <div class="top-bar">
     <div>
         <a href="{{ url_for('admin_dashboard') }}">← Back to Admin Dashboard</a>
     </div>
 </div>
 
-<!-- Main content container -->
 <div class="container">
     <h1>Manage Users</h1>
 
@@ -338,7 +316,7 @@
         </tbody>
     </table>
 
-    <!-- Pagination section for navigating through multiple pages of users -->
+    <!-- Pagination controls -->
     <div class="pagination">
         <!-- Previous page navigation -->
         {% if page > 1 %}
@@ -347,7 +325,7 @@
             <span class="disabled">← Previous</span>
         {% endif %}
 
-        <!-- Calculate pagination window to show limited number of page links -->
+        <!-- Pagination window calculation -->
         {% set max_pages_to_show = 7 %}
         {% set half_window = max_pages_to_show // 2 %}
         {% set start_page = page - half_window if page - half_window > 0 else 1 %}
@@ -357,7 +335,7 @@
             {% set start_page = end_page - max_pages_to_show + 1 if end_page - max_pages_to_show + 1 > 0 else 1 %}
         {% endif %}
 
-        <!-- First page link and ellipsis if needed -->
+        <!-- First page and ellipsis -->
         {% if start_page > 1 %}
             <a href="{{ url_for('admin_users', page=1) }}">1</a>
             {% if start_page > 2 %}
@@ -365,7 +343,7 @@
             {% endif %}
         {% endif %}
 
-        <!-- Page number links within the calculated window -->
+        <!-- Page links -->
         {% for p in range(start_page, end_page + 1) %}
             {% if p == page %}
                 <span>{{ p }}</span> <!-- Current page (highlighted) -->
@@ -374,7 +352,7 @@
             {% endif %}
         {% endfor %}
 
-        <!-- Last page link and ellipsis if needed -->
+        <!-- Ellipsis and last page -->
         {% if end_page < total_pages %}
             {% if end_page < total_pages - 1 %}
                 <span>…</span>
@@ -382,7 +360,7 @@
             <a href="{{ url_for('admin_users', page=total_pages) }}">{{ total_pages }}</a>
         {% endif %}
 
-        <!-- Next page navigation -->
+        <!-- Next page button -->
         {% if page < total_pages %}
             <a href="{{ url_for('admin_users', page=page+1) }}">Next →</a>
         {% else %}
@@ -391,7 +369,7 @@
     </div>
 
     {% else %}
-        <!-- Message displayed when no users are found -->
+        <!-- No users message -->
         <p>No users found.</p>
     {% endif %}
 </div>

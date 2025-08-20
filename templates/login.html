@@ -105,14 +105,15 @@
     <div class="container">
         <h2>Log In</h2>
 
+        <!-- Login form -->
         <form method="POST">
             <label>Username:</label>
-            <input type="text" name="username" required> <!-- Username input -->
+            <input type="text" name="username" required>
 
             <label>Password:</label>
-            <input type="password" name="password" required> <!-- Password input -->
+            <input type="password" name="password" required>
 
-            <input type="submit" value="Log In" class="btn-submit"> <!-- Submit button -->
+            <input type="submit" value="Log In" class="btn-submit">
         </form>
 
         <div class="signup-link">
@@ -127,6 +128,7 @@
             {% endfor %}
         {% endwith %}
 
+        <!-- Profile link (only shows if logged in) -->
         {% if session.user_id %}
             <div class="profile-link">
                 <a href="{{ url_for('dashboard', user_id=session.user_id) }}">Go to Profile</a>

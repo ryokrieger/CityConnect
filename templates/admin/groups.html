@@ -5,7 +5,6 @@
     <title>Admin - Groups - CityConnect</title>
 
     <style>
-        /* General page styling */
         body {
             font-family: 'Segoe UI', sans-serif;
             background-color: #f4f7fa;
@@ -13,7 +12,6 @@
             padding: 0;
         }
 
-        /* Top navigation bar */
         .top-bar {
             background-color: #0077cc;
             color: white;
@@ -31,20 +29,17 @@
             color: #cce4ff;
         }
 
-        /* Main content container */
         .container {
             max-width: 900px;
             margin: 40px auto;
             padding: 0 20px;
         }
 
-        /* Page heading */
         h1 {
             color: #0077cc;
             margin-bottom: 30px;
         }
 
-        /* Table styling */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -67,19 +62,16 @@
             background-color: #f1f9ff;
         }
 
-        /* Action buttons container */
         .actions-container {
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        /* Action form styling */
         .action-form {
             display: inline-block;
         }
 
-        /* Delete button styling */
         button.delete-btn {
             height: 36px;
             padding: 0 14px;
@@ -99,7 +91,6 @@
             background-color: #c82333;
         }
 
-        /* Pagination container styling */
         .pagination {
             margin-top: 25px;
             display: flex;
@@ -108,7 +99,6 @@
             flex-wrap: wrap;
         }
 
-        /* Pagination links */
         .pagination a, .pagination span {
             padding: 10px 16px;
             border-radius: 8px;
@@ -128,7 +118,6 @@
             background-color: #005fa3;
         }
 
-        /* Disabled pagination state */
         .pagination .disabled {
             background-color: #a3c0e8;
             cursor: default;
@@ -143,14 +132,12 @@
 </head>
 <body>
 
-<!-- Top navigation bar with link back to Admin Dashboard -->
 <div class="top-bar">
     <div>
         <a href="{{ url_for('admin_dashboard') }}">← Back to Admin Dashboard</a>
     </div>
 </div>
 
-<!-- Main content container -->
 <div class="container">
     <h1>Manage Groups</h1>
 
@@ -188,7 +175,7 @@
         </tbody>
     </table>
 
-    <!-- Pagination block (copied and adapted from ratings.html) -->
+    <!-- Pagination block -->
     <div class="pagination">
         <!-- Previous page link -->
         {% if page > 1 %}

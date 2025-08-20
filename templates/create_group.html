@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <title>Create Group - CityConnect</title>
     <style>
-        /* Body with base font, background color, and default text color */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f7fa;
@@ -13,7 +12,6 @@
             color: #333;
         }
 
-        /* Top bar styling with background color, padding, and flex layout */
         .top-bar {
             background-color: #0077cc;
             color: white;
@@ -23,20 +21,16 @@
             align-items: center;
         }
 
-        /* Styling for links in the top bar */
         .top-bar a {
             color: white;
             text-decoration: none;
             font-weight: bold;
         }
 
-        /* Hover effect for top bar links */
         .top-bar a:hover {
             color: #cce4ff;
         }
 
-        /* Main container with max width, centered margin, translucent background,
-           padding, rounded corners, shadow, and backdrop blur effect */
         .container {
             max-width: 700px;
             margin: 40px auto;
@@ -48,7 +42,6 @@
             border: 1px solid #d1d9e6;
         }
 
-        /* Heading style with color, margin, font size, weight, letter spacing, and center alignment */
         h1 {
             color: #0077cc;
             margin-bottom: 30px;
@@ -58,7 +51,6 @@
             text-align: center;
         }
 
-        /* Form label styling: bold font, size, margin, and color */
         label {
             font-weight: 600;
             font-size: 1rem;
@@ -67,8 +59,6 @@
             color: #005fa3;
         }
 
-        /* Text input and textarea styling: padding, full width, font size, margin,
-           border style, radius, background, transition for focus, and vertical resize for textarea */
         input[type="text"],
         textarea {
             padding: 12px 15px;
@@ -83,7 +73,6 @@
             resize: vertical;
         }
 
-        /* Focus styles for inputs and textarea: border color, shadow, and background */
         input[type="text"]:focus,
         textarea:focus {
             border-color: #0077cc;
@@ -91,7 +80,6 @@
             background-color: white;
         }
 
-        /* Checkbox styling: spacing, accent color, pointer cursor, scaling, and vertical alignment */
         input[type="checkbox"] {
             margin-right: 12px;
             accent-color: #0077cc;
@@ -100,7 +88,6 @@
             vertical-align: middle;
         }
 
-        /* Container for the checkboxes with flex wrap, gap between items, and margin below */
         .checkbox-group {
             display: flex;
             flex-wrap: wrap;
@@ -108,8 +95,6 @@
             margin-bottom: 30px;
         }
 
-        /* Individual checkbox label styling: width (50% minus gap), font size, color,
-           pointer cursor, no text selection, flex alignment, and color transition */
         .checkbox-group label {
             width: calc(50% - 20px);
             font-size: 1rem;
@@ -121,13 +106,10 @@
             transition: color 0.3s ease;
         }
 
-        /* Hover effect for checkbox labels */
         .checkbox-group label:hover {
             color: #0077cc;
         }
 
-        /* Submit button styling: background, text color, border radius, cursor,
-           font size, padding, full width, bold font, shadow, and smooth transitions */
         button[type="submit"] {
             background-color: #0077cc;
             color: white;
@@ -142,7 +124,6 @@
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* Hover effect for submit button */
         button[type="submit"]:hover {
             background-color: #005fa3;
             box-shadow: 0 8px 20px rgba(0, 95, 163, 0.6);
@@ -151,12 +132,10 @@
 </head>
 <body>
 
-<!-- Top bar with a link to go back to the list of groups -->
 <div class="top-bar">
     <a href="{{ url_for('list_groups') }}">← Back to Groups</a>
 </div>
 
-<!-- Main form container -->
 <div class="container">
     <h1>Create a New Group</h1>
     <form method="POST">
@@ -180,7 +159,6 @@
             {% endfor %}
         </div>
 
-        <!-- Submit button to create the group -->
         <button type="submit">Create Group</button>
     </form>
 </div>

@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>CityConnect Dashboard</title>
     <style>
-        /* Base styles for body */
         body {
             font-family: 'Segoe UI', sans-serif;
             background-color: #f4f7fa;
@@ -12,7 +11,6 @@
             padding: 0;
         }
 
-        /* Top navigation bar styling */
         .top-bar {
             background-color: #0077cc;
             color: white;
@@ -22,26 +20,22 @@
             align-items: center;
         }
 
-        /* Links inside the top bar */
         .top-bar a {
             color: white;
             text-decoration: none;
             font-weight: bold;
         }
 
-        /* Hover effect for top bar links */
         .top-bar a:hover {
             color: #cce4ff;
         }
 
-        /* Container for main content with max width and horizontal padding */
         .container {
             max-width: 1000px;
             margin: 40px auto;
             padding: 0 20px;
         }
 
-        /* Heading styling */
         h1 {
             color: #0077cc;
             margin-bottom: 30px;
@@ -49,7 +43,6 @@
             text-align: center;
         }
 
-        /* Paragraph styling below heading */
         p {
             text-align: center;
             font-size: 18px;
@@ -57,14 +50,12 @@
             margin-bottom: 40px;
         }
 
-        /* Grid layout for cards, responsive with minimum card width */
         .card-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 20px;
         }
 
-        /* Individual card styling */
         .card {
             background-color: white;
             border-radius: 12px;
@@ -74,13 +65,11 @@
             text-align: center;
         }
 
-        /* Card hover effect: raise and stronger shadow */
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 24px rgba(0,0,0,0.12);
         }
 
-        /* Links inside cards */
         .card a {
             display: block;
             color: #007bff;
@@ -90,12 +79,10 @@
             margin-top: 10px;
         }
 
-        /* Card link hover effect */
         .card a:hover {
             color: #0056b3;
         }
 
-        /* Icon styling for card icons */
         .icon {
             font-size: 40px;
             margin-bottom: 10px;
@@ -105,7 +92,6 @@
 </head>
 <body>
 
-    <!-- Top Bar with app name and logout link -->
     <div class="top-bar">
         <div><strong>CityConnect</strong></div>
         <div>
@@ -115,11 +101,8 @@
         </div>
     </div>
 
-    <!-- Main content container -->
     <div class="container">
-        <!-- Greeting with username -->
         <h1>Hello, {{ username }}!</h1>
-        <!-- Showing current city -->
         <p>You're currently in <strong>{{ city_name }}</strong></p>
 
         <!-- Grid of dashboard cards with links to different features -->
