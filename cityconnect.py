@@ -70,7 +70,6 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        # Connect to database
         conn = connect_db()
         cursor = conn.cursor()
         
@@ -93,9 +92,9 @@ def login():
             session['user_id'] = user[0]
             return redirect(url_for('dashboard'))  # Redirect to dashboard after successful login
         else:
-            flash("Invalid credentials.", "error")  # Flash error for invalid credentials
+            flash("Invalid credentials.", "error")
 
-    return render_template('login.html')  # Render login page for GET requests
+    return render_template('login.html')
 
 # Logout route - clears session and redirects to login
 @app.route('/logout')
