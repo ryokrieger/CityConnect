@@ -128,16 +128,10 @@
                 <a href="{{ url_for('profile', user_id=session['user_id']) }}">Edit Profile</a>
             </div>            
 
-            <!-- Card to see people in the same city -->
-            <div class="card">
-                <div class="icon">🏙️</div>
-                <a href="{{ url_for('users_in_same_city') }}">People in Your City</a>
-            </div>
-
             <!-- Card for users with similar interests -->
             <div class="card">
                 <div class="icon">💬</div>
-                <a href="{{ url_for('users_with_similar_interests') }}">Similar Interests</a>
+                <a href="{{ url_for('similar_interests', scope='city') }}">Similar Interests</a>
             </div>
 
             <!-- Card to view user's friends -->

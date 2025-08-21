@@ -103,176 +103,159 @@ def logout():
     flash("You've been logged out.", "info")
     return redirect(url_for('login'))
 
-# Route to show users in the same city as the logged-in user
-@app.route('/users/city')
-def users_in_same_city():
-    if 'user_id' not in session:
-        flash("Please log in", "error")
-        return redirect(url_for('login'))
-
-    # Pagination setup
-    page = int(request.args.get('page', 1))
-    per_page = 10
-    offset = (page - 1) * per_page
-
-    conn = connect_db()
-    cursor = conn.cursor(dictionary=True)
-
-    # Get current user's city code
-    cursor.execute("SELECT city_code FROM User WHERE userID = %s", (session['user_id'],))
-    user_city_code = cursor.fetchone()['city_code']
-
-    # Count total users in same city (excluding current user)
-    cursor.execute("SELECT COUNT(*) AS total FROM User WHERE city_code = %s AND userID != %s", 
-                   (user_city_code, session['user_id']))
-    total_users = cursor.fetchone()['total']
-    total_pages = (total_users + per_page - 1) // per_page  # Calculate total pages needed
-
-    # Fetch paginated list of users in same city
-    cursor.execute("""
-        SELECT userID, username, email 
-        FROM User 
-        WHERE city_code = %s AND userID != %s
-        LIMIT %s OFFSET %s
-    """, (user_city_code, session['user_id'], per_page, offset))
-    users = cursor.fetchall()
-
-    cursor.close()
-    conn.close()
-
-    return render_template(
-        "users_in_city.html",
-        users=users,
-        page=page,
-        total_pages=total_pages
-    )
-
-# Route to find users with similar interests in the same neighborhood
+# Route for similar interests matches - redirects to city tab by default
 @app.route('/users/match')
-def users_with_similar_interests():
+def similar_interests_root():
+    return redirect(url_for('similar_interests', scope='city'))
+
+# Route to find users with similar interests based on city or neighborhood
+@app.route('/users/match/<scope>')
+def similar_interests(scope):
     if 'user_id' not in session:
         flash("Please log in first.", "error")
         return redirect(url_for('login'))
 
-    user_id = session['user_id']
-    conn = connect_db()
-    cursor = conn.cursor(dictionary=True)
+    if scope not in ('city', 'neighborhood'):
+        # Fallback to city tab if invalid scope is provided
+        return redirect(url_for('similar_interests', scope='city'))
 
-    # Pagination setup
+    user_id = session['user_id']
+
     page = request.args.get('page', 1, type=int)
     per_page = 10
     offset = (page - 1) * per_page
 
-    # Get user's neighborhood postal code
-    cursor.execute("SELECT postal_code FROM User WHERE userID = %s", (user_id,))
-    user_postal = cursor.fetchone()['postal_code']
+    conn = connect_db()
+    cursor = conn.cursor(dictionary=True)
 
-    # Get user's interest IDs
+    # Get current user's location (city & neighborhood)
+    cursor.execute("SELECT city_code, postal_code FROM User WHERE userID = %s", (user_id,))
+    row = cursor.fetchone()
+    user_city_code = row['city_code']
+    user_postal = row['postal_code']
+
+    # Get current user's interest IDs
     cursor.execute("SELECT interest_ID FROM User_Interest WHERE userID = %s", (user_id,))
-    interest_ids = [row['interest_ID'] for row in cursor.fetchall()]
+    interest_ids = [r['interest_ID'] for r in cursor.fetchall()]
 
     if not interest_ids:
-        flash("You have no interests selected!", "warning")
+        cursor.close()
+        conn.close()
+        flash("You haven't selected any interests yet—add some to see matches.", "warning")
         return redirect(url_for('profile', user_id=user_id))
 
-    # Prepare format string for SQL IN clause
-    format_ids = ','.join(['%s'] * len(interest_ids))
+    # Dynamically build IN clause placeholders for interest IDs
+    in_placeholders = ','.join(['%s'] * len(interest_ids))
 
-    # Query to count total matching users (for pagination)
-    count_query = f"""
-        SELECT COUNT(DISTINCT u.userID) AS total
-        FROM User u
-        JOIN User_Interest ui ON u.userID = ui.userID
-        WHERE u.userID != %s
-          AND u.postal_code = %s
-          AND ui.interest_ID IN ({format_ids})
-          AND u.userID NOT IN (
-              SELECT user2_ID FROM Friendship WHERE user1_ID = %s
-              UNION
-              SELECT user1_ID FROM Friendship WHERE user2_ID = %s
-          ) 
+    # Scope condition: city or neighborhood
+    if scope == 'city':
+        scope_condition = "u.city_code = %s"
+        scope_value = user_city_code
+    else:
+        scope_condition = "u.postal_code = %s"
+        scope_value = user_postal
+
+    # Count total distinct users matching (exclude self + current friends)
+    count_sql = f"""
+        SELECT COUNT(*) AS total FROM (
+            SELECT DISTINCT u.userID
+            FROM User u
+            JOIN User_Interest ui ON u.userID = ui.userID
+            WHERE u.userID != %s
+              AND {scope_condition}
+              AND ui.interest_ID IN ({in_placeholders})
+              AND u.userID NOT IN (
+                  SELECT user2_ID FROM Friendship WHERE user1_ID = %s
+                  UNION
+                  SELECT user1_ID FROM Friendship WHERE user2_ID = %s
+              )
+        ) AS sub
     """
-
-    cursor.execute(count_query, (user_id, user_postal, *interest_ids, user_id, user_id))
+    cursor.execute(count_sql, (user_id, scope_value, *interest_ids, user_id, user_id))
     total_users = cursor.fetchone()['total']
     total_pages = (total_users + per_page - 1) // per_page
 
-    # Main query to find matching users
-    base_query = f"""
-        SELECT DISTINCT u.userID, u.username, u.email
+    # Fetch page of users with shared interest count (sorted by match count DESC)
+    page_sql = f"""
+        SELECT
+            u.userID,
+            u.username,
+            u.email,
+            COUNT(ui.interest_ID) AS shared_count
         FROM User u
         JOIN User_Interest ui ON u.userID = ui.userID
         WHERE u.userID != %s
-          AND u.postal_code = %s
-          AND ui.interest_ID IN ({format_ids})
+          AND {scope_condition}
+          AND ui.interest_ID IN ({in_placeholders})
           AND u.userID NOT IN (
               SELECT user2_ID FROM Friendship WHERE user1_ID = %s
               UNION
               SELECT user1_ID FROM Friendship WHERE user2_ID = %s
           )
-        ORDER BY u.userID
+        GROUP BY u.userID, u.username, u.email
+        ORDER BY shared_count DESC, u.username ASC
+        LIMIT %s OFFSET %s
     """
-
-    # Add pagination to main query
-    paged_query = base_query + " LIMIT %s OFFSET %s"
-
-    cursor.execute(paged_query, (user_id, user_postal, *interest_ids, user_id, user_id, per_page, offset))
+    cursor.execute(page_sql, (user_id, scope_value, *interest_ids, user_id, user_id, per_page, offset))
     users_page = cursor.fetchall()
 
-    if not users_page:
-        matches = []
-    else:
-        # Get IDs of users on current page
-        user_ids = [u['userID'] for u in users_page]
-        format_user_ids = ','.join(['%s'] * len(user_ids))
+    # Collect IDs on this page to fetch the actual shared interest names
+    matches = []
+    if users_page:
+        page_user_ids = [u['userID'] for u in users_page]
+        user_id_placeholders = ','.join(['%s'] * len(page_user_ids))
 
-        # Query to get shared interests for these users
-        interests_query = f"""
+        interests_sql = f"""
             SELECT ui.userID, i.interest_name
             FROM User_Interest ui
             JOIN Interest i ON ui.interest_ID = i.interest_ID
-            WHERE ui.userID IN ({format_user_ids})
-              AND ui.interest_ID IN ({format_ids})
+            WHERE ui.userID IN ({user_id_placeholders})
+              AND ui.interest_ID IN ({in_placeholders})
+            ORDER BY i.interest_name
         """
+        cursor.execute(interests_sql, (*page_user_ids, *interest_ids))
+        interest_rows = cursor.fetchall()
 
-        cursor.execute(interests_query, (*user_ids, *interest_ids))
-        interests_rows = cursor.fetchall()
-
-        # Create dictionary mapping user IDs to their shared interests
         interest_map = {}
-        for row in interests_rows:
-            interest_map.setdefault(row['userID'], []).append(row['interest_name'])
+        for r in interest_rows:
+            interest_map.setdefault(r['userID'], []).append(r['interest_name'])
 
-        # Combine user data with their shared interests
-        matches = []
-        for user in users_page:
+        # Assemble final list
+        for u in users_page:
             matches.append({
-                'userID': user['userID'],
-                'username': user['username'],
-                'email': user['email'],
-                'shared_interests': interest_map.get(user['userID'], [])
+                'userID': u['userID'],
+                'username': u['username'],
+                'email': u['email'],
+                'shared_interests': interest_map.get(u['userID'], []),
+                'shared_count': u['shared_count']
             })
 
-    # Check friend request status for these users
-    cursor.execute("""
-        SELECT sender_id, receiver_id, status FROM FriendRequest
-        WHERE (sender_id = %s OR receiver_id = %s)
-    """, (user_id, user_id))
-    requests = cursor.fetchall()
+    # Friend request statuses involving the current user <-> page users
+    if users_page:
+        cursor.execute("""
+            SELECT sender_id, receiver_id, status
+            FROM FriendRequest
+            WHERE (sender_id = %s AND receiver_id IN ({ids}))
+               OR (receiver_id = %s AND sender_id IN ({ids}))
+        """.format(ids=user_id_placeholders), (user_id, *page_user_ids, user_id, *page_user_ids))
+        req_rows = cursor.fetchall()
+    else:
+        req_rows = []
 
-    # Create dictionary of request statuses
     request_status = {}
-    for req in requests:
-        if req['sender_id'] == user_id:
-            request_status[req['receiver_id']] = req['status']
-        elif req['receiver_id'] == user_id:
-            request_status[req['sender_id']] = req['status']
+    for r in req_rows:
+        # If I sent it, track status keyed by the other user
+        if r['sender_id'] == user_id:
+            request_status[r['receiver_id']] = r['status']
+        else:
+            request_status[r['sender_id']] = r['status']
 
     cursor.close()
     conn.close()
 
     return render_template(
-        "interest_matches.html",
+        "interest_matches_tabs.html",
+        scope=scope,
         matches=matches,
         request_status=request_status,
         page=page,
@@ -287,34 +270,41 @@ def send_friend_request(receiver_id):
         return redirect(url_for('login'))
 
     sender_id = session['user_id']
+
     conn = connect_db()
-    cursor = conn.cursor()
+    cursor = conn.cursor(dictionary=True)
 
-    # Check for existing request
+    # Check if a pending friend request already exists from this user to the receiver
     cursor.execute("""
-        SELECT * FROM FriendRequest 
-        WHERE sender_id = %s AND receiver_id = %s
+        SELECT 1 FROM FriendRequest
+        WHERE sender_id = %s AND receiver_id = %s AND status = 'pending'
     """, (sender_id, receiver_id))
-    existing_request = cursor.fetchone()
+    if cursor.fetchone():
+        cursor.close()
+        conn.close()
+        return redirect(request.referrer or url_for('similar_interests_root'))
 
-    # Check for existing friendship
+    # Check if the users are already friends
     cursor.execute("""
-        SELECT * FROM Friendship 
-        WHERE (user1_ID = %s AND user2_ID = %s) OR 
-              (user1_ID = %s AND user2_ID = %s)
+        SELECT 1 FROM Friendship
+        WHERE (user1_ID = %s AND user2_ID = %s) OR (user1_ID = %s AND user2_ID = %s)
     """, (sender_id, receiver_id, receiver_id, sender_id))
-    existing_friendship = cursor.fetchone()
+    if cursor.fetchone():
+        cursor.close()
+        conn.close()
+        flash("You are already friends.", "info")
+        return redirect(request.referrer or url_for('similar_interests_root'))
 
-    # Insert new friend request
+    # Insert a new friend request into the FriendRequest table
     cursor.execute("""
-        INSERT INTO FriendRequest (sender_id, receiver_id)
-         VALUES (%s, %s)
+        INSERT INTO FriendRequest (sender_id, receiver_id) VALUES (%s, %s)
     """, (sender_id, receiver_id))
     conn.commit()
 
     cursor.close()
     conn.close()
-    return redirect(url_for('users_with_similar_interests'))
+    
+    return redirect(request.referrer or url_for('similar_interests_root'))
 
 # Route to cancel friend request
 @app.route('/friend_request/cancel/<int:receiver_id>', methods=['POST'])
@@ -324,10 +314,11 @@ def cancel_friend_request(receiver_id):
         return redirect(url_for('login'))
 
     user_id = session['user_id']
+
     conn = connect_db()
     cursor = conn.cursor()
 
-    # Delete pending friend request
+    # Delete the pending friend request sent by the user
     cursor.execute("""
         DELETE FROM FriendRequest
         WHERE sender_id = %s AND receiver_id = %s AND status = 'pending'
@@ -336,8 +327,7 @@ def cancel_friend_request(receiver_id):
     conn.commit()
     cursor.close()
     conn.close()
-
-    return redirect(url_for('users_with_similar_interests'))
+    return redirect(request.referrer or url_for('similar_interests_root'))
 
 # Route to manage incoming friend requests
 @app.route('/friend_request/manage')
@@ -445,6 +435,7 @@ def view_friends():
         return redirect(url_for('login'))
 
     user_id = session['user_id']
+
     page = request.args.get('page', 1, type=int)
     per_page = 10
     offset = (page - 1) * per_page
@@ -489,6 +480,7 @@ def remove_friend(friend_id):
         return redirect(url_for('login'))
 
     user_id = session['user_id']
+
     conn = connect_db()
     cursor = conn.cursor()
 
