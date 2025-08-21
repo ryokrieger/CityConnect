@@ -1453,6 +1453,103 @@ def admin_delete_user(user_id):
 
     return redirect(url_for('admin_users'))
 
+# Route for the admin to control interests
+@app.route('/admin/interests')
+def admin_interests():
+    if not is_admin():
+        return redirect(url_for('dashboard'))
+
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+    offset = (page - 1) * per_page
+
+    conn = connect_db()
+    cursor = conn.cursor(dictionary=True)
+
+    # Get total number of interests (for pagination)
+    cursor.execute("SELECT COUNT(*) AS total FROM Interest")
+    total_interests = cursor.fetchone()['total']
+    total_pages = (total_interests + per_page - 1) // per_page
+
+    # Fetch only interests for current page
+    cursor.execute("SELECT * FROM Interest ORDER BY interest_ID LIMIT %s OFFSET %s", (per_page, offset))
+    interests = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template('admin/interests.html', interests=interests, page=page, total_pages=total_pages)
+
+# Route for admin to add a new interest
+@app.route('/admin/interests/add', methods=['POST'])
+def add_interest():
+    if not is_admin():
+        return redirect(url_for('dashboard'))
+    
+    interest_name = request.form['interest_name']
+    category = request.form['category']
+    page = request.form.get('page', 1, type=int)  # Current page to return to after adding
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    # Insert the new interest into the Interest table
+    cursor.execute(
+        "INSERT INTO Interest (interest_name, category) VALUES (%s, %s)", 
+        (interest_name, category)
+    )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('admin_interests', page=page))
+
+# Route for admin to edit an existing interest
+@app.route('/admin/interests/edit/<int:interest_id>', methods=['POST'])
+def edit_interest(interest_id):
+    if not is_admin():
+        return redirect(url_for('dashboard'))
+    
+    interest_name = request.form['interest_name']
+    category = request.form['category']
+    page = request.form.get('page', 1, type=int)  # Current page to return to after editing
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    # Update the interest in the database
+    cursor.execute(
+        "UPDATE Interest SET interest_name=%s, category=%s WHERE interest_ID=%s",
+        (interest_name, category, interest_id)
+    )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('admin_interests', page=page))
+
+# Route for admin to delete an interest
+@app.route('/admin/interests/delete/<int:interest_id>', methods=['POST'])
+def delete_interest(interest_id):
+    if not is_admin():
+        return redirect(url_for('dashboard'))
+
+    page = request.form.get('page', 1, type=int)
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    # Delete the interest from the database 
+    cursor.execute("DELETE FROM Interest WHERE interest_ID=%s", (interest_id,))
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('admin_interests', page=page))
+
 # Admin groups management route
 @app.route('/admin/groups')
 def admin_groups():

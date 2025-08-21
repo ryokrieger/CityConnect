@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Interests - Admin</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background-color: #f9fbfd;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .top-bar {
+      background-color: #0077cc;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top-bar a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .top-bar a:hover {
+      color: #cce4ff;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 40px auto;
+      background: white;
+      padding: 35px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      text-align: center;
+      color: #0077cc;
+      margin-bottom: 25px;
+      font-size: 28px;
+    }
+
+    form.add-form {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    input[type="text"] {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #0077cc;
+      outline: none;
+    }
+
+    button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .btn-add {
+      background: #28a745; color: white;
+    }
+
+    .btn-add:hover {
+        background: #218838;
+    }
+
+    .btn-edit {
+      background: #cddc39;
+      color: #222;
+    }
+
+    .btn-edit:hover {
+        background: #afb42b;
+    }
+
+    .btn-delete {
+      background: #dc3545; color: white;
+    }
+
+    .btn-delete:hover {
+        background: #c82333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    table th, table td {
+      padding: 14px;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    table th {
+      background: #0077cc;
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 14px;
+    }
+
+    table tr {
+      background: #fff;
+      border-bottom: 1px solid #eee;
+      transition: background 0.2s;
+    }
+
+    table tr:hover {
+      background: #f1f9ff;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .actions form {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .actions input[type="text"] {
+      width: 120px;
+    }
+
+    .pagination {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pagination a, .pagination span {
+      padding: 10px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      background-color: #0077cc;
+      color: white;
+      height: 40px;
+      min-width: 60px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      transition: background-color 0.3s ease;
+    }
+
+    .pagination a:hover {
+      background-color: #005fa3;
+    }
+
+    .pagination .disabled {
+      background-color: #a3c0e8;
+      cursor: default;
+    }
+
+    .pagination span:not(.disabled) {
+      background-color: #005fa3;
+      min-width: auto;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <div>
+      <a href="{{ url_for('admin_dashboard') }}">← Back to Admin Dashboard</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>Manage Interests</h1>
+
+    <!-- Add Interest Form -->
+    <form class="add-form" action="{{ url_for('add_interest') }}" method="POST">
+      <input type="text" name="interest_name" placeholder="Interest Name" required>
+      <input type="text" name="category" placeholder="Category" required>
+      <input type="hidden" name="page" value="{{ page }}">
+      <button type="submit" class="btn-add">+ Add Interest</button>
+    </form>
+
+    {% if interests %}
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Interest</th>
+          <th>Category</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for interest in interests %}
+        <tr>
+          <td>{{ interest.interest_ID }}</td>
+          <td>{{ interest.interest_name }}</td>
+          <td>{{ interest.category }}</td>
+          <td class="actions">
+            <!-- Edit Form -->
+            <form action="{{ url_for('edit_interest', interest_id=interest.interest_ID) }}" method="POST">
+              <input type="text" name="interest_name" value="{{ interest.interest_name }}" required>
+              <input type="text" name="category" value="{{ interest.category }}" required>
+              <input type="hidden" name="page" value="{{ page }}">
+              <button type="submit" class="btn-edit">Confirm Edit</button>
+            </form>
+
+            <!-- Delete Form -->
+            <form action="{{ url_for('delete_interest', interest_id=interest.interest_ID) }}" method="POST">
+              <input type="hidden" name="page" value="{{ page }}">
+              <button type="submit" class="btn-delete" onclick="return confirm('Delete this interest?')">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Pagination navigation -->
+    <div class="pagination">
+      {% if page > 1 %}
+        <a href="{{ url_for('admin_interests', page=page-1) }}">← Previous</a>
+      {% else %}
+        <span class="disabled">← Previous</span>
+      {% endif %}
+
+      <!-- Calculate pagination range -->
+      {% set max_pages_to_show = 7 %}
+      {% set half_window = max_pages_to_show // 2 %}
+      {% set start_page = page - half_window if page - half_window > 0 else 1 %}
+      {% set end_page = start_page + max_pages_to_show - 1 %}
+      {% if end_page > total_pages %}
+        {% set end_page = total_pages %}
+        {% set start_page = end_page - max_pages_to_show + 1 if end_page - max_pages_to_show + 1 > 0 else 1 %}
+      {% endif %}
+
+      <!-- First page link and ellipsis -->
+      {% if start_page > 1 %}
+        <a href="{{ url_for('admin_interests', page=1) }}">1</a>
+        {% if start_page > 2 %}<span>…</span>{% endif %}
+      {% endif %}
+ 
+      <!-- Page numbers -->
+      {% for p in range(start_page, end_page + 1) %}
+        {% if p == page %}
+          <span>{{ p }}</span>
+        {% else %}
+          <a href="{{ url_for('admin_interests', page=p) }}">{{ p }}</a>
+        {% endif %}
+      {% endfor %}
+
+      <!-- Ellipsis and last page link -->
+      {% if end_page < total_pages %}
+        {% if end_page < total_pages - 1 %}<span>…</span>{% endif %}
+        <a href="{{ url_for('admin_interests', page=total_pages) }}">{{ total_pages }}</a>
+      {% endif %}
+
+      <!-- Next page button -->
+      {% if page < total_pages %}
+        <a href="{{ url_for('admin_interests', page=page+1) }}">Next →</a>
+      {% else %}
+        <span class="disabled">Next →</span>
+      {% endif %}
+    </div>
+
+    {% else %}
+      <p>No interests found.</p>
+    {% endif %}
+  </div>
+</body>
+</html>
