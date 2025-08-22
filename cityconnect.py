@@ -1622,9 +1622,10 @@ def admin_posts():
 
     # Fetch paginated posts with group info
     cursor.execute("""
-        SELECT gp.post_ID, gp.content, gp.post_time, g.group_name
+        SELECT gp.post_ID, gp.content, gp.post_time, g.group_name, u.username
         FROM GroupPost gp
         JOIN GroupTable g ON gp.group_ID = g.group_ID
+        JOIN User u ON gp.userID = u.userID
         ORDER BY gp.post_time DESC
         LIMIT %s OFFSET %s
     """, (per_page, offset))

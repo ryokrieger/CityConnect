@@ -141,6 +141,7 @@
         <thead>
             <tr>
                 <th>Post ID</th>
+                <th>Posted By</th>
                 <th>Content</th>
                 <th>Post Time</th>
                 <th>Group Name</th>
@@ -152,6 +153,7 @@
             {% for post in posts %}
             <tr>
                 <td>{{ post.post_ID }}</td>
+                <td>{{ post.username }}</td>
                 <td>{{ post.content }}</td>
                 <td>{{ post.post_time }}</td>
                 <td>{{ post.group_name }}</td>
