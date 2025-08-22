@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ group.group_name }} - CityConnect</title>
-
     <style>
+
+        * {
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Segoe UI', sans-serif;
-            background-color: #f4f7fa;
+            background: linear-gradient(to bottom right, #f4f7fa, #e0e8f5);
             margin: 0;
             padding: 0;
+            color: #333;
         }
 
         .top-bar {
@@ -41,81 +45,123 @@
 
         h1 {
             color: #0077cc;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
             text-align: center;
+            font-size: 2.5em;
+        }
+
+        p {
+            font-size: 1em;
+            line-height: 1.6;
         }
 
         .section {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            padding: 25px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            padding: 30px;
             margin-bottom: 30px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
         }
 
         textarea, input[type="text"], input[type="date"], input[type="time"], select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-top: 5px;
             margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
             font-size: 1em;
+            transition: all 0.2s ease;
+            max-width: 100%;
+        }
+
+        textarea:focus, input:focus, select:focus {
+            border-color: #0077cc;
+            box-shadow: 0 0 5px rgba(0, 119, 204, 0.3);
+            outline: none;
         }
 
         button {
-            padding: 10px 16px;
+            padding: 12px 18px;
             font-size: 14px;
-            border-radius: 6px;
+            border-radius: 8px;
             border: none;
             cursor: pointer;
             font-weight: bold;
             min-width: 120px;
-            height: 40px;
+            height: 45px;
             margin-right: 8px;
+            transition: all 0.2s ease;
         }
 
         .btn-primary {
-            background-color: #0077cc; color: white;
+            background-color: #0077cc;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 119, 204, 0.3);
         }
-
 
         .btn-primary:hover {
             background-color: #005fa3;
+            box-shadow: 0 6px 15px rgba(0, 95, 163, 0.4);
         }
 
         .btn-success {
-            background-color: #28a745; color: white;
+            background-color: #28a745;
+            color: white;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
         }
 
         .btn-success:hover {
             background-color: #218838;
+            box-shadow: 0 6px 15px rgba(33, 136, 56, 0.4);
         }
 
         .btn-danger {
-            background-color: #dc3545; color: white;
+            background-color: #dc3545;
+            color: white;
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
         }
 
         .btn-danger:hover {
             background-color: #c82333;
+            box-shadow: 0 6px 15px rgba(200, 35, 51, 0.4);
         }
 
         .post, .event {
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 15px;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f9f9f9;
+            transition: all 0.2s ease;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .post:hover, .event:hover {
+            background: #f0f4fb;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
         }
 
         .comment {
             margin-left: 20px;
             padding-left: 15px;
-            border-left: 3px solid #ccc;
+            border-left: 3px solid #ddd;
             margin-top: 10px;
-        }
-
-        .comment-form {
-            margin-top: 10px;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
         }
 
         .toggle-tabs {
@@ -124,8 +170,22 @@
             margin-bottom: 20px;
         }
 
+        .toggle-tabs button {
+            flex: 1;
+            font-weight: bold;
+            border-radius: 10px;
+        }
+
         .toggle-tabs button.active {
-            background-color: #005fa3;
+            background: #005fa3;
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 95, 163, 0.3);
+            border-bottom: 3px solid #ffcc00;
+        }
+
+        .toggle-tabs button:not(.active):hover {
+            background: #0077cc;
+            color: #fff;
         }
 
         .button-group {
@@ -135,6 +195,39 @@
             margin-top: 10px;
         }
 
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-row input,
+        .form-row select {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .section, .post, .event {
+                padding: 20px;
+            }
+
+            button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .form-row {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
@@ -146,10 +239,11 @@
 </div>
 
 <div class="container">
+
     <h1>{{ group.group_name }}</h1>
     <p style="text-align:center; color:#555;">{{ group.description }}</p>
 
-    <!-- Toggle Buttons for Posts & Events -->
+    <!-- Toggle buttons for Posts and Events -->
     <div class="section">
         <div class="toggle-tabs">
             <button id="toggle-posts" class="btn-primary active">Posts</button>
@@ -167,26 +261,26 @@
                 </form>
             </div>
 
-            <!-- Posts List -->
+            <!-- List of Posts -->
             <div class="section">
                 <h2>Posts</h2>
                 {% for post in posts %}
                     <div class="post">
                         <p><strong>{{ post.username }}</strong> ({{ post.post_time }}):</p>
                         <p>{{ post.content }}</p>
-                        <!-- Delete post button if current user owns it -->
+
+                        <!-- Delete post button (only if user owns it) -->
                         {% if post.userID == user_id %}
                             <form method="POST" action="{{ url_for('delete_post', group_id=group.group_ID, post_id=post.post_ID) }}">
                                 <button type="submit" class="btn-danger">Delete Post</button>
                             </form>
                         {% endif %}
 
-                        <!-- Comments -->
+                        <!-- List of comments for this post -->
                         <h4>Comments:</h4>
                         {% for comment in post.comments %}
                             <div class="comment">
                                 <p><strong>{{ comment.username }}</strong> ({{ comment.comment_time }}): {{ comment.content }}</p>
-                                <!-- Delete comment button if current user owns it -->
                                 {% if comment.userID == user_id %}
                                     <form method="POST" action="{{ url_for('delete_comment', group_id=group.group_ID, comment_id=comment.comment_ID) }}">
                                         <button type="submit" class="btn-danger">Delete Comment</button>
@@ -195,7 +289,7 @@
                             </div>
                         {% endfor %}
 
-                        <!-- Add Comment Form -->
+                        <!-- Add comment form -->
                         <form method="POST" action="{{ url_for('add_comment', group_id=group.group_ID, post_id=post.post_ID) }}" class="comment-form">
                             <input type="text" name="content" placeholder="Add a comment" required>
                             <button type="submit" class="btn-success">Comment</button>
@@ -211,36 +305,38 @@
             <div class="section">
                 <h2>Create an Event</h2>
                 <form method="POST" action="{{ url_for('create_event', group_id=group.group_ID) }}">
+
                     <input type="text" name="event_name" placeholder="Event Name" required>
-                    <input type="date" name="event_date" required>
-                    <input type="time" name="event_time" required>
+
+                    <div class="form-row">
+                        <input type="date" name="event_date" required>
+                        <input type="time" name="event_time" required>
+                    </div>
+
                     <textarea name="event_description" placeholder="Event Description" required></textarea>
 
-                    <!-- City Dropdown -->
-                    <label for="city">Select City:</label>
-                    <select id="city" name="city" required>
-                        <option value="">-- Select City --</option>
-                        {% for city in cities %}
-                            <option value="{{ city.city_code }}">{{ city.city_name }}</option>
-                        {% endfor %}
-                    </select>
+                    <div class="form-row">
+                        <select id="city" name="city" required>
+                            <option value="">-- Select City --</option>
+                            {% for city in cities %}
+                                <option value="{{ city.city_code }}">{{ city.city_name }}</option>
+                            {% endfor %}
+                        </select>
 
-                    <!-- Neighborhood Dropdown (depends on city) -->
-                    <label for="neighborhood">Select Neighborhood:</label>
-                    <select id="neighborhood" name="neighborhood" required>
-                        <option value="">-- Select Neighborhood --</option>
-                    </select>
+                        <select id="neighborhood" name="neighborhood" required>
+                            <option value="">-- Select Neighborhood --</option>
+                        </select>
+                    </div>
 
                     <button type="submit" class="btn-primary">Create Event</button>
                 </form>
             </div>
 
-            <!-- Events List -->
+            <!-- List of Events -->
             <div class="section">
                 <h2>Upcoming Events</h2>
                 {% for event in events %}
                     <div class="event">
-                        <!-- Event basic details -->
                         <p><strong>{{ event.event_name }}</strong></p>
                         <p>Date: {{ event.event_date }} | Time: {{ event.event_time }}</p>
                         <p>Description: {{ event.event_description }}</p>
@@ -248,7 +344,7 @@
                         <p>Created by: {{ event.creator_name }}</p>
                         <p>Participants Going: {{ event.participant_count }}</p>
 
-                        <!-- Join/Leave/Delete Buttons -->
+                        <!-- Event action buttons -->
                         <div class="button-group">
                             {% if event.is_participating %}
                                 <form method="POST" action="{{ url_for('leave_event', group_id=group.group_ID, event_id=event.event_ID) }}">
@@ -269,6 +365,7 @@
                 {% endfor %}
             </div>
         </div>
+
     </div>
 </div>
 
@@ -278,7 +375,7 @@
 </script>
 
 <script>
-    // Handle City → Neighborhood dropdown dynamically
+    // Populate neighborhood dropdown based on selected city
     const neighborhoodData = JSON.parse(document.getElementById('neighborhood-data').textContent);
     const cityDropdown = document.getElementById('city');
     const neighborhoodDropdown = document.getElementById('neighborhood');
@@ -295,7 +392,7 @@
         });
     });
 
-    // Toggle Posts/Events Tabs
+    // Toggle between Posts and Events tabs
     const postsTab = document.getElementById('posts-tab');
     const eventsTab = document.getElementById('events-tab');
     const togglePosts = document.getElementById('toggle-posts');
