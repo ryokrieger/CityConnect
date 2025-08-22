@@ -27,7 +27,6 @@ CityConnect bridges the gap between moving to a new city and building meaningful
 - **Group Discussions**: Share posts and engage in meaningful conversations
 
 ### 📅 Event Organization
-- **Local Events**: Create and discover events happening in your area
 - **Community Engagement**: Attend gatherings, meetups, and activities
 - **Event Management**: Full event lifecycle from creation to attendance tracking
 
