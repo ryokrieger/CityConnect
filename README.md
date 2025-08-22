@@ -36,7 +36,7 @@ CityConnect bridges the gap between moving to a new city and building meaningful
 - **Review System**: Rate and review users based on your interactions
 
 ### 🛡️ Administrative Tools
-- **Content Moderation**: Admin dashboard for managing users, posts, and events
+- **Content Moderation**: Admin dashboard for managing users, groups, posts, events and ratings
 - **Community Safety**: Tools to maintain a positive and safe community environment
 - **User Management**: Comprehensive user administration capabilities
 
@@ -57,7 +57,7 @@ CityConnect bridges the gap between moving to a new city and building meaningful
 3. **Explore**: Browse local users in your area
 4. **Connect**: Send friend requests to interesting people
 5. **Join Groups**: Participate in communities that match your interests
-6. **Attend Events**: Discover and join local events
+6. **Attend Events**: Discover and join events
 
 ### For Community Builders
 1. **Create Groups**: Start communities around your passions
