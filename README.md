@@ -68,10 +68,9 @@ CityConnect bridges the gap between moving to a new city and building meaningful
 
 ## 🗺️ Roadmap
 
-- [ ] Mobile application development
+- [ ] Integrate a map feature that allows users to find matches within their selected radius
 - [ ] Enhanced search and filtering capabilities
 - [ ] Advanced matching algorithms
-- [ ] Integrate a map feature that allows users to find matches within their selected radius
 
 ## 👨‍💻 Author
 
