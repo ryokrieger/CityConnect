@@ -72,20 +72,14 @@ CityConnect bridges the gap between moving to a new city and building meaningful
 - [ ] Enhanced search and filtering capabilities
 - [ ] Advanced matching algorithms
 
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 👨‍💻 Author
 
-**Ryokrieger** - [@ryokrieger](https://github.com/ryokrieger)
+[@ryokrieger](https://github.com/ryokrieger)
 
 ## 📞 Support
 
 - **Issues**: [GitHub Issues](https://github.com/ryokrieger/CityConnect/issues)
-- **Email**: Contact [@ryokrieger](https://github.com/ryokrieger) for questions and suggestions
-- **Discussions**: Use GitHub Discussions for community questions
+- **Contact**: [@ryokrieger](https://github.com/ryokrieger) for questions and suggestions
 
 ---
 
