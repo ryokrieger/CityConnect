@@ -2,37 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- Page title dynamically set based on group name -->
     <title>{{ group.group_name }} - CityConnect</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Import Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-
-    <!-- Import FontAwesome icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <style>
-        :root {
-            --primary: #3b82f6;
-            --primary-dark: #2563eb;
-            --danger: #ef4444;
-            --danger-dark: #b91c1c;
-            --success: #10b981;
-            --success-dark: #059669;
-            --text-color: #1f2937;
-            --bg-color: #f9fafb;
-            --card-bg: #ffffff;
-            --border-color: #e5e7eb;
-        }
 
         body {
-            font-family: 'Inter', 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: #f4f7fa;
             margin: 0;
             padding: 0;
-            line-height: 1.6;
-            color: var(--text-color);
         }
 
         .top-bar {
@@ -48,6 +26,7 @@
             color: white;
             text-decoration: none;
             font-weight: bold;
+            margin-right: 15px;
         }
 
         .top-bar a:hover {
@@ -55,34 +34,23 @@
         }
 
         .container {
-            max-width: 960px;
-            margin: 30px auto;
+            max-width: 1000px;
+            margin: 40px auto;
             padding: 0 20px;
         }
 
         h1 {
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-
-        p.group-desc {
-            font-size: 1.1em;
-            color: #555;
+            color: #0077cc;
             margin-bottom: 30px;
+            text-align: center;
         }
 
         .section {
-            background: var(--card-bg);
-            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 25px;
             margin-bottom: 30px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
-        }
-
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
         }
 
         textarea, input[type="text"], input[type="date"], input[type="time"], select {
@@ -90,67 +58,53 @@
             padding: 10px;
             margin-top: 5px;
             margin-bottom: 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
             font-size: 1em;
-            transition: border-color 0.2s;
-        }
-
-        textarea:focus, input:focus, select:focus {
-            border-color: var(--primary);
-            outline: none;
-        }
-
-        label {
-            font-weight: 600;
-            margin-top: 10px;
-            display: block;
         }
 
         button {
-            padding: 10px 20px;
-            font-size: 1em;
+            padding: 10px 16px;
+            font-size: 14px;
             border-radius: 6px;
             border: none;
             cursor: pointer;
-            transition: all 0.2s ease;
+            font-weight: bold;
+            min-width: 120px;
+            height: 40px;
+            margin-right: 8px;
         }
 
-        button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        .btn-primary {
+            background-color: #0077cc; color: white;
         }
 
-        .primary-btn {
-            background-color: var(--primary);
-            color: white;
-        }
-        .primary-btn:hover {
-            background-color: var(--primary-dark);
+
+        .btn-primary:hover {
+            background-color: #005fa3;
         }
 
-        .danger-btn {
-            background-color: var(--danger);
-            color: white;
-        }
-        .danger-btn:hover {
-            background-color: var(--danger-dark);
+        .btn-success {
+            background-color: #28a745; color: white;
         }
 
-        .success-btn {
-            background-color: var(--success);
-            color: white;
+        .btn-success:hover {
+            background-color: #218838;
         }
-        .success-btn:hover {
-            background-color: var(--success-dark);
+
+        .btn-danger {
+            background-color: #dc3545; color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
         }
 
         .post, .event {
-            border: 1px solid var(--border-color);
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            background-color: #fcfcfc;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
         }
 
         .comment {
@@ -161,36 +115,26 @@
         }
 
         .comment-form {
-            margin-top: 15px;
+            margin-top: 10px;
         }
 
-        .section p {
-            margin: 5px 0;
+        .toggle-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .toggle-tabs button.active {
+            background-color: #005fa3;
         }
 
         .button-group {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             margin-top: 10px;
         }
 
-        .button-group form {
-            margin: 0;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 15px;
-            }
-            .top-bar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .section {
-                padding: 20px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -203,150 +147,172 @@
 
 <div class="container">
     <h1>{{ group.group_name }}</h1>
-    <p class="group-desc">{{ group.description }}</p>
+    <p style="text-align:center; color:#555;">{{ group.description }}</p>
 
-    <!-- Section to create a new post -->
+    <!-- Toggle Buttons for Posts & Events -->
     <div class="section">
-        <h2>Create a Post</h2>
-        <form method="POST" action="{{ url_for('create_post', group_id=group.group_ID) }}">
-            <textarea name="content" placeholder="Write your post..." required></textarea>
-            <button type="submit" class="primary-btn"><i class="fas fa-paper-plane"></i> Post</button>
-        </form>
-    </div>
+        <div class="toggle-tabs">
+            <button id="toggle-posts" class="btn-primary active">Posts</button>
+            <button id="toggle-events" class="btn-primary">Events</button>
+        </div>
 
-    <!-- Section displaying all posts in the group -->
-    <div class="section">
-        <h2>Posts</h2>
-        <!-- Loop through posts -->
-        {% for post in posts %}
-            <div class="post">
-                <!-- Show username and post time -->
-                <p><strong>{{ post.username }}</strong> ({{ post.post_time }}):</p>
-                <!-- Show post content -->
-                <p>{{ post.content }}</p>
-
-                <!-- If the current user owns the post, show delete button -->
-                {% if post.userID == user_id %}
-                    <form method="POST" action="{{ url_for('delete_post', group_id=group.group_ID, post_id=post.post_ID) }}">
-                        <button type="submit" class="danger-btn"><i class="fas fa-trash-alt"></i> Delete Post</button>
-                    </form>
-                {% endif %}
-
-                <!-- Comments section under the post -->
-                <h4>Comments:</h4>
-                {% for comment in post.comments %}
-                    <div class="comment">
-                        <!-- Show commenter's name, time, and comment content -->
-                        <p><strong>{{ comment.username }}</strong> ({{ comment.comment_time }}): {{ comment.content }}</p>
-                        <!-- If current user owns comment, show delete comment button -->
-                        {% if comment.userID == user_id %}
-                            <form method="POST" action="{{ url_for('delete_comment', group_id=group.group_ID, comment_id=comment.comment_ID) }}">
-                                <button type="submit" class="danger-btn"><i class="fas fa-times-circle"></i> Delete Comment</button>
-                            </form>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-
-                <!-- Form to add a new comment to this post -->
-                <form method="POST" action="{{ url_for('add_comment', group_id=group.group_ID, post_id=post.post_ID) }}" class="comment-form">
-                    <input type="text" name="content" placeholder="Add a comment" required>
-                    <button type="submit" class="success-btn"><i class="fas fa-comment"></i> Comment</button>
+        <!-- POSTS TAB -->
+        <div id="posts-tab">
+            <!-- Create a Post Form -->
+            <div class="section">
+                <h2>Create a Post</h2>
+                <form method="POST" action="{{ url_for('create_post', group_id=group.group_ID) }}">
+                    <textarea name="content" placeholder="Write your post..." required></textarea>
+                    <button type="submit" class="btn-primary">Post</button>
                 </form>
             </div>
-        {% endfor %}
-    </div>
 
-    <!-- Section to create a new event -->
-    <div class="section">
-        <h2>Create an Event</h2>
-        <form method="POST" action="{{ url_for('create_event', group_id=group.group_ID) }}">
-            <input type="text" name="event_name" placeholder="Event Name" required>
-            <input type="date" name="event_date" required>
-            <input type="time" name="event_time" required>
-            <textarea name="event_description" placeholder="Event Description" required></textarea>
+            <!-- Posts List -->
+            <div class="section">
+                <h2>Posts</h2>
+                {% for post in posts %}
+                    <div class="post">
+                        <p><strong>{{ post.username }}</strong> ({{ post.post_time }}):</p>
+                        <p>{{ post.content }}</p>
+                        <!-- Delete post button if current user owns it -->
+                        {% if post.userID == user_id %}
+                            <form method="POST" action="{{ url_for('delete_post', group_id=group.group_ID, post_id=post.post_ID) }}">
+                                <button type="submit" class="btn-danger">Delete Post</button>
+                            </form>
+                        {% endif %}
 
-            <!-- Dropdown to select city -->
-            <label for="city">Select City:</label>
-            <select id="city" name="city" required>
-                <option value="">-- Select City --</option>
-                {% for city in cities %}
-                    <option value="{{ city.city_code }}">{{ city.city_name }}</option>
+                        <!-- Comments -->
+                        <h4>Comments:</h4>
+                        {% for comment in post.comments %}
+                            <div class="comment">
+                                <p><strong>{{ comment.username }}</strong> ({{ comment.comment_time }}): {{ comment.content }}</p>
+                                <!-- Delete comment button if current user owns it -->
+                                {% if comment.userID == user_id %}
+                                    <form method="POST" action="{{ url_for('delete_comment', group_id=group.group_ID, comment_id=comment.comment_ID) }}">
+                                        <button type="submit" class="btn-danger">Delete Comment</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <!-- Add Comment Form -->
+                        <form method="POST" action="{{ url_for('add_comment', group_id=group.group_ID, post_id=post.post_ID) }}" class="comment-form">
+                            <input type="text" name="content" placeholder="Add a comment" required>
+                            <button type="submit" class="btn-success">Comment</button>
+                        </form>
+                    </div>
                 {% endfor %}
-            </select>
-
-            <!-- Dropdown to select neighborhood, dynamically populated based on city -->
-            <label for="neighborhood">Select Neighborhood:</label>
-            <select id="neighborhood" name="neighborhood" required>
-                <option value="">-- Select Neighborhood --</option>
-            </select>
-
-            <button type="submit" class="primary-btn"><i class="fas fa-calendar-plus"></i> Create Event</button>
-        </form>
-    </div>
-
-    <!-- Section showing upcoming events -->
-    <div class="section">
-        <h2>Upcoming Events</h2>
-        {% for event in events %}
-            <div class="event">
-                <!-- Event basic details -->
-                <p><strong>{{ event.event_name }}</strong></p>
-                <p>Date: {{ event.event_date }} | Time: {{ event.event_time }}</p>
-                <p>Description: {{ event.event_description }}</p>
-                <p>City: {{ event.city_name }} | Neighborhood: {{ event.area_name }}</p>
-                <p>Created by: {{ event.creator_name }}</p>
-                <p>Participants Going: {{ event.participant_count }}</p>
-
-                <!-- Buttons to join or leave event -->
-                <div class="button-group">
-                    {% if event.is_participating %}
-                        <form method="POST" action="{{ url_for('leave_event', group_id=group.group_ID, event_id=event.event_ID) }}">
-                            <button type="submit" class="danger-btn"><i class="fas fa-times"></i> Cancel Going</button>
-                        </form>
-                    {% else %}
-                        <form method="POST" action="{{ url_for('join_event', group_id=group.group_ID, event_id=event.event_ID) }}">
-                            <button type="submit" class="success-btn"><i class="fas fa-check-circle"></i> I'm Going</button>
-                        </form>
-                    {% endif %}
-
-                    <!-- If current user is the event creator, show delete event button -->
-                    {% if event.creator_ID == user_id %}
-                        <form method="POST" action="{{ url_for('delete_event', group_id=group.group_ID, event_id=event.event_ID) }}">
-                            <button type="submit" class="danger-btn"><i class="fas fa-trash"></i> Delete Event</button>
-                        </form>
-                    {% endif %}
-                </div>
             </div>
-        {% endfor %}
+        </div>
+
+        <!-- EVENTS TAB -->
+        <div id="events-tab" style="display:none;">
+            <!-- Create Event Form -->
+            <div class="section">
+                <h2>Create an Event</h2>
+                <form method="POST" action="{{ url_for('create_event', group_id=group.group_ID) }}">
+                    <input type="text" name="event_name" placeholder="Event Name" required>
+                    <input type="date" name="event_date" required>
+                    <input type="time" name="event_time" required>
+                    <textarea name="event_description" placeholder="Event Description" required></textarea>
+
+                    <!-- City Dropdown -->
+                    <label for="city">Select City:</label>
+                    <select id="city" name="city" required>
+                        <option value="">-- Select City --</option>
+                        {% for city in cities %}
+                            <option value="{{ city.city_code }}">{{ city.city_name }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <!-- Neighborhood Dropdown (depends on city) -->
+                    <label for="neighborhood">Select Neighborhood:</label>
+                    <select id="neighborhood" name="neighborhood" required>
+                        <option value="">-- Select Neighborhood --</option>
+                    </select>
+
+                    <button type="submit" class="btn-primary">Create Event</button>
+                </form>
+            </div>
+
+            <!-- Events List -->
+            <div class="section">
+                <h2>Upcoming Events</h2>
+                {% for event in events %}
+                    <div class="event">
+                        <!-- Event basic details -->
+                        <p><strong>{{ event.event_name }}</strong></p>
+                        <p>Date: {{ event.event_date }} | Time: {{ event.event_time }}</p>
+                        <p>Description: {{ event.event_description }}</p>
+                        <p>City: {{ event.city_name }} | Neighborhood: {{ event.area_name }}</p>
+                        <p>Created by: {{ event.creator_name }}</p>
+                        <p>Participants Going: {{ event.participant_count }}</p>
+
+                        <!-- Join/Leave/Delete Buttons -->
+                        <div class="button-group">
+                            {% if event.is_participating %}
+                                <form method="POST" action="{{ url_for('leave_event', group_id=group.group_ID, event_id=event.event_ID) }}">
+                                    <button type="submit" class="btn-danger">Cancel Going</button>
+                                </form>
+                            {% else %}
+                                <form method="POST" action="{{ url_for('join_event', group_id=group.group_ID, event_id=event.event_ID) }}">
+                                    <button type="submit" class="btn-success">I'm Going</button>
+                                </form>
+                            {% endif %}
+                            {% if event.creator_ID == user_id %}
+                                <form method="POST" action="{{ url_for('delete_event', group_id=group.group_ID, event_id=event.event_ID) }}">
+                                    <button type="submit" class="btn-danger">Delete Event</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- Script tag containing JSON data of neighborhoods -->
+<!-- Neighborhood JSON for dynamic dropdown -->
 <script id="neighborhood-data" type="application/json">
     {{ neighborhoods_json | tojson | safe }}
 </script>
 
 <script>
-    // Parse neighborhood data JSON
+    // Handle City → Neighborhood dropdown dynamically
     const neighborhoodData = JSON.parse(document.getElementById('neighborhood-data').textContent);
-    // Reference to city and neighborhood dropdown elements
     const cityDropdown = document.getElementById('city');
     const neighborhoodDropdown = document.getElementById('neighborhood');
 
-    // Event listener to update neighborhoods when city changes
     cityDropdown.addEventListener('change', function () {
         const selectedCity = parseInt(this.value);
-        // Reset neighborhood dropdown options
         neighborhoodDropdown.innerHTML = '<option value="">-- Select Neighborhood --</option>';
-        // Filter neighborhoods matching selected city
         const filtered = neighborhoodData.filter(n => n.city_code === selectedCity);
-        // Populate neighborhood dropdown dynamically
         filtered.forEach(n => {
             const option = document.createElement('option');
             option.value = n.postal_code;
             option.textContent = n.area_name;
             neighborhoodDropdown.appendChild(option);
         });
+    });
+
+    // Toggle Posts/Events Tabs
+    const postsTab = document.getElementById('posts-tab');
+    const eventsTab = document.getElementById('events-tab');
+    const togglePosts = document.getElementById('toggle-posts');
+    const toggleEvents = document.getElementById('toggle-events');
+
+    togglePosts.addEventListener('click', () => {
+        postsTab.style.display = 'block';
+        eventsTab.style.display = 'none';
+        togglePosts.classList.add('active');
+        toggleEvents.classList.remove('active');
+    });
+
+    toggleEvents.addEventListener('click', () => {
+        eventsTab.style.display = 'block';
+        postsTab.style.display = 'none';
+        toggleEvents.classList.add('active');
+        togglePosts.classList.remove('active');
     });
 </script>
 
