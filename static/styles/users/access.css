@@ -1,42 +1,73 @@
+/* Ensures padding + border are included in width to prevent overflow */
 * {
     box-sizing: border-box;
 }
 
+/* General Body */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f6f9fc;
+    font-family: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif;
+    background: radial-gradient(circle, #ffe066 20%, #fffae5 80%);
+    background-image: radial-gradient(#00000020 1px, transparent 1px),
+                      radial-gradient(#00000020 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
     margin: 0;
     padding: 0;
 }
 
+/* Header */
 .header {
-    background-color: #0077cc;
-    color: white;
+    background-color: #ffdd00; /* bright comic yellow */
+    color: black;
     padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 6px solid black;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 2px;
 }
 
+/* Container */
 .container {
     max-width: 600px;
     margin: 80px auto;
     background-color: white;
     padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border: 4px solid black;
+    border-radius: 16px;
+    box-shadow: 6px 6px 0px black;
 }
 
+.container-signup {
+    max-width: 500px;
+    margin: 80px auto;
+    background-color: white;
+    padding: 30px;
+    border: 4px solid black;
+    border-radius: 16px;
+    box-shadow: 6px 6px 0px black;
+}
+
+/* Title */
 h2 {
-    color: #0077cc;
+    color: black;
     text-align: center;
     margin-bottom: 25px;
+    font-size: 32px;
+    font-family: 'Bangers', cursive, 'Comic Sans MS';
+    letter-spacing: 2px;
 }
 
+/* Form Elements */
 form label {
     font-weight: bold;
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
+    color: black;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 form input[type="text"],
@@ -44,53 +75,73 @@ form input[type="email"],
 form input[type="password"],
 form select {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     font-size: 16px;
     margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    border: 2px solid black;
+    border-radius: 8px;
+    background-color: #fffae5;
+    box-shadow: 2px 2px 0px black;
+    transition: all 0.2s;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
 }
 
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="password"]:focus,
+form select:focus {
+    border-color: #ff1e56;
+    outline: none;
+    box-shadow: 2px 2px 0px #ff1e56;
+}
+
+/* Button */
 .btn-submit {
     width: 100%;
     padding: 12px;
     font-size: 16px;
-    background-color: #0077cc;
-    color: white;
-    border: none;
+    background-color: #ffdd00;
+    color: black;
+    border: 2px solid black;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.2s ease;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 3px 3px 0px black;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
 }
 
 .btn-submit:hover {
-    background-color: #005fa3;
+    background-color: #ff1e56;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 5px 5px 0px black;
 }
 
+/* Links */
 .signup-link,
 .login-link {
     text-align: center;
-    margin-top: 15px;
+    margin-top: 20px;
 }
 
 .signup-link a,
 .login-link a {
-    color: #0077cc;
+    color: #ff1e56;
     text-decoration: none;
-}
-
-.flash-message {
-    text-align: center;
     font-weight: bold;
-    margin-top: 20px;
+    padding: 5px;
+    border-bottom: 2px dashed #ff1e56;
+    transition: all 0.2s ease;
 }
 
-.flash-success {
-    color: green;
-}
-
-.flash-error {
-    color: red;
+.signup-link a:hover,
+.login-link a:hover {
+    color: black;
+    border-bottom: 2px solid black;
+    transform: rotate(1deg);
 }
 
 .profile-link {
@@ -99,17 +150,39 @@ form select {
 }
 
 .profile-link a {
-    color: #0077cc;
+    color: #ff1e56;
     text-decoration: none;
     font-weight: bold;
+    padding: 5px;
+    border-bottom: 2px dashed #ff1e56;
+    transition: all 0.2s ease;
 }
 
-/* Additional styles for signup page */
-.container-signup {
-    max-width: 500px;
-    margin: 80px auto;
-    background-color: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+.profile-link a:hover {
+    color: black;
+    border-bottom: 2px solid black;
+    transform: rotate(1deg);
+}
+
+/* Flash Messages */
+.flash-message {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 8px;
+    box-shadow: 2px 2px 0px black;
+}
+
+.flash-success {
+    color: #00cc66;
+    background-color: #e6ffe6;
+    border-color: #00cc66;
+}
+
+.flash-error {
+    color: #ff1e56;
+    background-color: #ffe6e6;
+    border-color: #ff1e56;
 }

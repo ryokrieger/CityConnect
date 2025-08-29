@@ -1,58 +1,82 @@
+/* Ensures padding + border are included in width to prevent overflow */
+* {
+    box-sizing: border-box;
+}
+
+/* General Body */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f7fa;
+    font-family: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif;
+    background: radial-gradient(circle, #ffe066 20%, #fffae5 80%);
+    background-image: radial-gradient(#00000020 1px, transparent 1px),
+                      radial-gradient(#00000020 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
     margin: 0;
     padding: 0;
     color: #333;
 }
 
+/* Top Bar */
 .top-bar, .header {
-    background-color: #0077cc;
-    color: white;
+    background-color: #ffdd00; /* bright comic yellow */
+    color: black;
     padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 6px solid black;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 2px;
 }
 
 .top-bar a, .header a {
-    color: white;
+    color: black;
     text-decoration: none;
     font-weight: bold;
+    padding: 5px 10px;
+    border: 3px solid black;
+    background-color: #ffdd00;
+    border-radius: 8px;
+    transition: 0.2s ease;
 }
 
 .top-bar a:hover, .header a:hover {
-    color: #cce4ff;
+    background-color: black;
+    color: #ffdd00;
 }
 
+/* Container */
 .container {
     max-width: 700px;
     margin: 40px auto;
     background-color: #ffffffcc; /* slightly transparent white */
     padding: 40px 50px;
     border-radius: 16px;
-    box-shadow: 0 12px 30px rgba(0, 119, 204, 0.15);
-    backdrop-filter: saturate(180%) blur(15px);
-    border: 1px solid #d1d9e6;
+    box-shadow: 6px 6px 0px black;
+    border: 4px solid black;
 }
 
+/* Headings */
 h1, h2 {
-    color: #0077cc;
+    color: black;
     margin-bottom: 30px;
-    font-weight: 700;
-    font-size: 2.2rem;
-    letter-spacing: 0.03em;
+    font-size: 38px;
     text-align: center;
+    font-family: 'Bangers', cursive, 'Comic Sans MS';
+    letter-spacing: 3px;
 }
 
+/* Form Labels */
 label {
     font-weight: 600;
     font-size: 1rem;
     display: block;
     margin-bottom: 8px;
-    color: #005fa3;
+    color: black;
 }
 
+/* Form Inputs */
 input[type="text"],
 textarea,
 select {
@@ -60,25 +84,27 @@ select {
     width: 100%;
     font-size: 1rem;
     margin-bottom: 25px;
-    border: 1.8px solid #ccd6f6;
+    border: 3px solid black;
     border-radius: 10px;
-    background-color: #f7faff;
-    transition: border-color 0.3s ease;
+    background-color: #fffae5;
+    transition: all 0.2s ease;
     outline-offset: 2px;
     resize: vertical;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
 }
 
 input[type="text"]:focus,
 textarea:focus,
 select:focus {
-    border-color: #0077cc;
-    box-shadow: 0 0 8px rgba(0, 119, 204, 0.3);
+    border-color: #ff1e56;
+    box-shadow: 0 0 8px rgba(255, 30, 86, 0.5);
     background-color: white;
 }
 
+/* Checkbox Styling */
 input[type="checkbox"] {
     margin-right: 12px;
-    accent-color: #0077cc;
+    accent-color: #ff1e56;
     cursor: pointer;
     transform: scale(1.15);
     vertical-align: middle;
@@ -94,57 +120,66 @@ input[type="checkbox"] {
 .checkbox-group label {
     width: calc(50% - 20px);
     font-size: 1rem;
-    color: #2c3e50;
+    color: black;
     cursor: pointer;
     user-select: none;
     display: flex;
     align-items: center;
-    transition: color 0.3s ease;
+    transition: color 0.2s ease;
 }
 
 .checkbox-group label:hover {
-    color: #0077cc;
+    color: #ff1e56;
 }
 
+/* Submit Button */
 button[type="submit"],
 .btn-submit {
-    background-color: #0077cc;
-    color: white;
-    border: none;
+    background-color: #ffdd00;
+    color: black;
+    border: 3px solid black;
     border-radius: 12px;
     cursor: pointer;
     font-size: 1.1rem;
     padding: 15px;
     width: 100%;
     font-weight: 700;
-    box-shadow: 0 6px 14px rgba(0, 119, 204, 0.4);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 3px 3px 0px black;
+    transition: all 0.2s ease;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 button[type="submit"]:hover,
 .btn-submit:hover {
-    background-color: #005fa3;
-    box-shadow: 0 8px 20px rgba(0, 95, 163, 0.6);
+    background-color: #ff1e56;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 6px 6px 0px black;
 }
 
+/* Flash Messages */
 .flash-message {
     color: #1e7e34;
     background-color: #d4edda;
-    border: 1px solid #c3e6cb;
+    border: 3px solid #c3e6cb;
     padding: 12px 20px;
     border-radius: 10px;
     font-weight: 600;
     margin-top: 15px;
     text-align: center;
+    box-shadow: 3px 3px 0px #c3e6cb;
 }
 
 .flash-error {
     color: #842029;
     background-color: #f8d7da;
-    border: 1px solid #f5c2c7;
+    border: 3px solid #f5c2c7;
     padding: 12px 20px;
     border-radius: 10px;
     font-weight: 600;
     margin-top: 15px;
     text-align: center;
+    box-shadow: 3px 3px 0px #f5c2c7;
 }
