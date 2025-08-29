@@ -12,7 +12,7 @@
 
 /* Top Bar */
 .admin-dashboard-top-bar {
-    background-color: #ffdd00; /* bright comic yellow */
+    background-color: #ffdd00;
     color: black;
     padding: 15px 20px;
     display: flex;
@@ -49,13 +49,12 @@
 
 /* Title */
 .admin-dashboard-h1 {
-    color: black; /* solid black text */
+    color: black;
     margin-bottom: 30px;
     font-size: 38px;
     text-align: center;
     font-family: 'Bangers', cursive, 'Comic Sans MS';
     letter-spacing: 3px;
-    text-shadow: none; /* remove shadow */
 }
 
 /* Card Grid */
