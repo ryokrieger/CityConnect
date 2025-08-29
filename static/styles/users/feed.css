@@ -85,7 +85,7 @@ p {
 
 .section:hover {
     transform: translateY(-5px);
-    box-shadow: 12px 12px 0px black;
+    box-shadow: 10px 10px 0px #ff1e56, 12px 12px 0px black;
 }
 
 /* Form Elements */
@@ -132,7 +132,7 @@ button {
 .btn-primary:hover {
     background-color: #333;
     transform: translateY(-2px) rotate(1deg);
-    box-shadow: 6px 6px 0px black;
+    box-shadow: 10px 10px 0px #ff1e56, 12px 12px 0px black;
 }
 
 .btn-success {
@@ -176,7 +176,7 @@ button {
 .post:hover, .event:hover {
     background: #f0f4fb;
     transform: translateY(-3px);
-    box-shadow: 10px 10px 0px black;
+    box-shadow: 10px 10px 0px #ff1e56, 12px 12px 0px black;
 }
 
 /* Comments */
