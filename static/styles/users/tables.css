@@ -1,0 +1,250 @@
+/* Common Styles */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f7fa;
+    margin: 0;
+    padding: 0;
+}
+
+.top-bar {
+    background-color: #0077cc;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top-bar a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+.top-bar a:hover {
+    color: #cce4ff;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+h1 {
+    color: #0077cc;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+th, td {
+    padding: 15px 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+th {
+    background-color: #0077cc;
+    color: white;
+    font-weight: 600;
+}
+
+tr:hover {
+    background-color: #f1f9ff;
+}
+
+.actions-cell {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    height: 40px;
+    min-width: 120px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #0077cc;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #005fa3;
+}
+
+.btn-primary1, .btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-primary1:hover, .btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.no-friends, .no-requests, .no-users {
+    text-align: center;
+    font-style: italic;
+    color: #777;
+    margin-top: 40px;
+}
+
+.no-groups {
+    font-size: 1.1em;
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ffeeba;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.no-groups a {
+    color: #0077cc;
+    font-weight: bold;
+}
+
+.no-groups a:hover {
+    text-decoration: underline;
+}
+
+.pagination {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.pagination a, .pagination span {
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    background-color: #0077cc;
+    color: white;
+    height: 40px;
+    min-width: 60px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+}
+
+.pagination a:hover {
+    background-color: #005fa3;
+}
+
+.pagination .disabled {
+    background-color: #a3c0e8;
+    cursor: default;
+}
+
+.pagination span:not(.disabled) {
+    background-color: #005fa3;
+    min-width: auto;
+    white-space: nowrap;
+}
+
+form.action-form {
+    display: inline;
+    margin: 0;
+}
+
+/* Groups-specific styles */
+.description-cell {
+    max-width: 400px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Interest Matches specific styles */
+.tabs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 10px auto 24px;
+    flex-wrap: wrap;
+}
+
+.tab {
+    padding: 10px 16px;
+    background-color: #e1f0ff;
+    color: #004a82;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transition: background-color 0.2s ease;
+}
+
+.tab:hover { 
+    background-color: #d4e9ff; 
+}
+
+.tab.active {
+    background-color: #0077cc;
+    color: #fff;
+}
+
+.shared-interests {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.interest-count {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background-color: #eef6ff;
+    color: #0b5cab;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.subtext {
+    text-align: center;
+    color: #555;
+    margin-bottom: 18px;
+}

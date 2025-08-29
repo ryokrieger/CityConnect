@@ -1,0 +1,255 @@
+/* Base styles */
+.admin-table-body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f7fa;
+    margin: 0;
+    padding: 0;
+}
+
+.admin-top-bar {
+    background-color: #0077cc;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-top-bar a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.admin-top-bar a:hover {
+    color: #cce4ff;
+}
+
+.admin-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.admin-h1 {
+    color: #0077cc;
+    margin-bottom: 30px;
+}
+
+/* Table styles */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.admin-table th, 
+.admin-table td {
+    padding: 15px 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+.admin-table th {
+    background-color: #0077cc;
+    color: white;
+    font-weight: 600;
+}
+
+.admin-table tr:hover {
+    background-color: #f1f9ff;
+}
+
+/* Form and button styles */
+.admin-action-form {
+    display: inline-block;
+    margin: 0;
+}
+
+.admin-add-form {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.admin-input-text {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+.admin-input-text:focus {
+    border-color: #0077cc;
+    outline: none;
+}
+
+/* Button styles */
+.admin-btn {
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+.admin-btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.admin-btn-delete:hover {
+    background-color: #c82333;
+}
+
+.admin-btn-add {
+    background-color: #28a745;
+    color: white;
+}
+
+.admin-btn-add:hover {
+    background-color: #218838;
+}
+
+.admin-btn-edit {
+    background-color: #ffc107;
+    color: black;
+}
+
+.admin-btn-edit:hover {
+    background-color: #e0a800;
+}
+
+.admin-btn-make-admin {
+    background-color: #28a745;
+    color: white;
+}
+
+.admin-btn-make-admin:hover {
+    background-color: #218838;
+}
+
+.admin-btn-revoke-admin {
+    background-color: #ffc107;
+    color: black;
+}
+
+.admin-btn-revoke-admin:hover {
+    background-color: #e0a800;
+}
+
+.admin-btn-restrict {
+    background-color: #fd7e14;
+    color: white;
+}
+
+.admin-btn-restrict:hover {
+    background-color: #e55a00;
+}
+
+.admin-btn-unrestrict {
+    background-color: #6f42c1;
+    color: white;
+}
+
+.admin-btn-unrestrict:hover {
+    background-color: #5a32a3;
+}
+
+.admin-btn-view-profile {
+    background-color: #0077cc;
+    color: white;
+}
+
+.admin-btn-view-profile:hover {
+    background-color: #005fa3;
+}
+
+/* Actions container */
+.admin-actions-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Status labels */
+.admin-you-label,
+.admin-status-label {
+    color: #999;
+    font-style: italic;
+    font-size: 14px;
+    line-height: 36px;
+}
+
+.admin-restricted-label {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.admin-status-yes {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.admin-status-no {
+    color: #6c757d;
+}
+
+.admin-status-restricted {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Pagination */
+.admin-pagination {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.admin-pagination a, 
+.admin-pagination span {
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    background-color: #0077cc;
+    color: white;
+    height: 40px;
+    min-width: 60px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+}
+
+.admin-pagination a:hover {
+    background-color: #005fa3;
+}
+
+.admin-pagination .admin-disabled {
+    background-color: #a3c0e8;
+    cursor: default;
+}
+
+.admin-pagination span:not(.admin-disabled) {
+    background-color: #005fa3;
+    min-width: auto;
+    white-space: nowrap;
+}

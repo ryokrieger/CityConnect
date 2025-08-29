@@ -1,0 +1,77 @@
+.admin-dashboard-body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f7fa;
+    margin: 0;
+    padding: 0;
+}
+
+.admin-dashboard-top-bar {
+    background-color: #0077cc;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-dashboard-top-bar a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.admin-dashboard-top-bar a:hover {
+    color: #cce4ff;
+}
+
+.admin-dashboard-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.admin-dashboard-h1 {
+    color: #0077cc;
+    margin-bottom: 30px;
+    font-size: 32px;
+    text-align: center;
+}
+
+.admin-dashboard-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.admin-dashboard-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-align: center;
+}
+
+.admin-dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+}
+
+.admin-dashboard-card a {
+    display: block;
+    color: #007bff;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.admin-dashboard-card a:hover {
+    color: #0056b3;
+}
+
+.admin-dashboard-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: #0077cc;
+}
