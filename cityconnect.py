@@ -1042,6 +1042,7 @@ def add_comment(group_id, post_id):
     content = request.form['content']
     conn = connect_db()
     cursor = conn.cursor()
+    
     # Insert new comment
     cursor.execute("""
         INSERT INTO GroupComment (post_id, userID, content)
@@ -1149,6 +1150,7 @@ def leave_event(group_id, event_id):
 
     conn = connect_db()
     cursor = conn.cursor()
+    
     # Remove user from event participation
     cursor.execute("""
         DELETE FROM event_participation WHERE userID = %s AND event_ID = %s
@@ -1311,7 +1313,7 @@ def admin_users():
 
     return render_template('admin/users.html', users=users, page=page, total_pages=total_pages)
 
-# Route to pPromote a user to admin (admin only)
+# Route to promote a user to admin (admin only)
 @app.route('/admin/users/make_admin/<int:user_id>', methods=['POST'])
 def make_user_admin(user_id):
     if not is_admin():
@@ -1377,7 +1379,7 @@ def restrict_user(user_id):
 
     return redirect(url_for('admin_users'))
 
-# Route to remove restriction from a user (admin only) - NEW FEATURE
+# Route to remove restriction from a user (admin only)
 @app.route('/admin/users/unrestrict/<int:user_id>', methods=['POST'])
 def unrestrict_user(user_id):
     if not is_admin():
@@ -1697,7 +1699,7 @@ def admin_delete_event(event_id):
     conn = connect_db()
     cursor = conn.cursor()
 
-    # delete the event with the specified event_id
+    # Delete the event with the specified event_id
     cursor.execute("DELETE FROM Event WHERE event_ID = %s", (event_id,))
     
     conn.commit()
