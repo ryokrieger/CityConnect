@@ -1,16 +1,21 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import mysql.connector
+import os
+from dotenv import load_dotenv
+
+# Load .env file
+load_dotenv()
 
 # Initialize Flask application
 app = Flask(__name__)
-app.secret_key = '12345'
+app.secret_key = os.getenv("SECRET_KEY")
 
 # Database configuration
 db_config = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': '1234',
-    'database': 'cityconnect'
+    'host': os.getenv("DB_HOST"),
+    'user': os.getenv("DB_USER"),
+    'password': os.getenv("DB_PASSWORD"),
+    'database': os.getenv("DB_NAME")
 }
 
 # Helper function to connect to MySQL database
