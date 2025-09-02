@@ -5,20 +5,20 @@
     <title>Admin - Groups - CityConnect</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/tables.css') }}">
 </head>
-<body class="admin-table-body">
+<body>
 
-<div class="admin-top-bar">
+<div class="top-bar">
     <div>
         <a href="{{ url_for('admin_dashboard') }}">← Back to Admin Dashboard</a>
     </div>
 </div>
 
-<div class="admin-container">
-    <h1 class="admin-h1">Manage Groups</h1>
+<div class="container">
+    <h1>Manage Groups</h1>
 
     <!-- If groups are available -->
     {% if groups %}
-    <table class="admin-table">
+    <table>
         <thead>
             <tr>
                 <th>Group ID</th>
@@ -33,15 +33,15 @@
             <tr>
                 <td>{{ group.group_ID }}</td>
                 <td>{{ group.group_name }}</td>
-                <td>{{ group.description }}</td>
+                <td class="description-cell">{{ group.description }}</td>
                 <td>
-                    <div class="admin-actions-container">
+                    <div class="actions-cell">
                         <!-- Delete group form -->
                         <form method="POST"
                               action="{{ url_for('admin_delete_group', group_id=group.group_ID) }}"
-                              class="admin-action-form"
+                              class="action-form"
                               onsubmit="return confirm('Are you sure you want to delete this group?');">
-                            <button type="submit" class="admin-btn admin-btn-delete">Delete</button>
+                            <button type="submit" class="btn btn-delete">Delete</button>
                         </form>
                     </div>
                 </td>
@@ -51,12 +51,12 @@
     </table>
 
     <!-- Pagination block -->
-    <div class="admin-pagination">
+    <div class="pagination">
         <!-- Previous page link -->
         {% if page > 1 %}
             <a href="{{ url_for('admin_groups', page=page-1) }}">← Previous</a>
         {% else %}
-            <span class="admin-disabled">← Previous</span>
+            <span class="disabled">← Previous</span>
         {% endif %}
 
         <!-- Calculate pagination window -->
@@ -98,7 +98,7 @@
         {% if page < total_pages %}
             <a href="{{ url_for('admin_groups', page=page+1) }}">Next →</a>
         {% else %}
-            <span class="admin-disabled">Next →</span>
+            <span class="disabled">Next →</span>
         {% endif %}
     </div>
 

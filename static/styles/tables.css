@@ -1,5 +1,5 @@
 /* General Body */
-body, .admin-table-body {
+body {
     font-family: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif;
     background: radial-gradient(circle, #ffe066 20%, #fffae5 80%);
     background-image: radial-gradient(#00000020 1px, transparent 1px),
@@ -11,7 +11,7 @@ body, .admin-table-body {
 }
 
 /* Top Bar */
-.top-bar, .admin-top-bar {
+.top-bar {
     background-color: #ffdd00;
     color: black;
     padding: 15px 20px;
@@ -24,7 +24,7 @@ body, .admin-table-body {
     letter-spacing: 2px;
 }
 
-.top-bar a, .admin-top-bar a {
+.top-bar a {
     color: black;
     text-decoration: none;
     font-weight: bold;
@@ -35,24 +35,20 @@ body, .admin-table-body {
     transition: 0.2s ease;
 }
 
-.top-bar a {
-    margin-right: 15px;
-}
-
-.top-bar a:hover, .admin-top-bar a:hover {
+.top-bar a:hover {
     background-color: black;
     color: #ffdd00;
 }
 
 /* Container */
-.container, .admin-container {
+.container {
     max-width: 1100px;
     margin: 40px auto;
     padding: 0 20px;
 }
 
 /* Headings */
-h1, .admin-h1 {
+h1 {
     color: black;
     margin-bottom: 30px;
     font-size: 38px;
@@ -62,7 +58,7 @@ h1, .admin-h1 {
 }
 
 /* Table */
-table, .admin-table {
+table {
     width: 100%;
     border-collapse: collapse;
     background-color: white;
@@ -70,14 +66,14 @@ table, .admin-table {
     box-shadow: 6px 6px 0px black;
 }
 
-th, td, .admin-table th, .admin-table td {
+th, td {
     padding: 15px 12px;
     text-align: left;
     border-bottom: 3px solid black;
     vertical-align: middle;
 }
 
-th, .admin-table th {
+th {
     background-color: #ffdd00;
     color: black;
     font-weight: bold;
@@ -86,11 +82,11 @@ th, .admin-table th {
     border-right: 2px solid black;
 }
 
-th:last-child, .admin-table th:last-child {
+th:last-child {
     border-right: none;
 }
 
-tbody tr:hover, .admin-table tbody tr:hover {
+tbody tr:hover {
     background-color: #fffae5;
     transform: translateX(5px);
     transition: transform 0.2s ease;
@@ -100,19 +96,11 @@ tbody tr:hover, .admin-table tbody tr:hover {
 .actions-cell {
     display: flex;
     gap: 8px;
-    flex-wrap: wrap;
     align-items: center;
-}
-
-.admin-actions-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
 }
 
 /* Buttons */
-.btn, .admin-btn {
+.btn {
     height: 36px;
     padding: 0 14px;
     border-radius: 8px;
@@ -127,13 +115,10 @@ tbody tr:hover, .admin-table tbody tr:hover {
     text-decoration: none;
     box-sizing: border-box;
     box-shadow: 3px 3px 0px black;
-}
-
-.btn {
     min-width: 120px;
 }
 
-.btn:hover, .admin-btn:hover {
+.btn:hover {
     transform: translateY(-2px);
     box-shadow: 5px 5px 0px black;
 }
@@ -166,75 +151,75 @@ tbody tr:hover, .admin-table tbody tr:hover {
 }
 
 /* Admin-specific buttons */
-.admin-btn-delete {
+.btn-delete {
     background-color: #ff1e56;
     color: white;
 }
 
-.admin-btn-delete:hover {
+.btn-delete:hover {
     background-color: #d1003d;
 }
 
-.admin-btn-add {
+.btn-add {
     background-color: #00cc66;
     color: black;
 }
 
-.admin-btn-add:hover {
+.btn-add:hover {
     background-color: #00b359;
 }
 
-.admin-btn-edit {
+.btn-edit {
     background-color: #ffdd00;
     color: black;
 }
 
-.admin-btn-edit:hover {
+.btn-edit:hover {
     background-color: #e6c700;
 }
 
-.admin-btn-make-admin {
+.btn-make-admin {
     background-color: #00cc66;
     color: black;
 }
 
-.admin-btn-make-admin:hover {
+.btn-make-admin:hover {
     background-color: #00b359;
 }
 
-.admin-btn-revoke-admin {
+.btn-revoke-admin {
     background-color: #ffaa00;
     color: black;
 }
 
-.admin-btn-revoke-admin:hover {
+.btn-revoke-admin:hover {
     background-color: #e69900;
 }
 
-.admin-btn-restrict {
+.btn-restrict {
     background-color: #ff7744;
     color: black;
 }
 
-.admin-btn-restrict:hover {
+.btn-restrict:hover {
     background-color: #ff6633;
 }
 
-.admin-btn-unrestrict {
+.btn-unrestrict {
     background-color: #8844ff;
     color: white;
 }
 
-.admin-btn-unrestrict:hover {
+.btn-unrestrict:hover {
     background-color: #7733ee;
 }
 
-.admin-btn-view-profile {
+.btn-view-profile {
     background-color: #3399ff;
     color: white;
 }
 
-.admin-btn-view-profile:hover {
+.btn-view-profile:hover {
     background-color: #2288ee;
 }
 
@@ -269,7 +254,7 @@ tbody tr:hover, .admin-table tbody tr:hover {
 }
 
 /* Pagination */
-.pagination, .admin-pagination {
+.pagination {
     margin-top: 25px;
     display: flex;
     justify-content: center;
@@ -277,8 +262,7 @@ tbody tr:hover, .admin-table tbody tr:hover {
     flex-wrap: wrap;
 }
 
-.pagination a, .pagination span, 
-.admin-pagination a, .admin-pagination span {
+.pagination a, .pagination span {
     padding: 10px 16px;
     border-radius: 8px;
     text-decoration: none;
@@ -296,22 +280,21 @@ tbody tr:hover, .admin-table tbody tr:hover {
     box-shadow: 3px 3px 0px black;
 }
 
-.pagination a:hover, .admin-pagination a:hover {
+.pagination a:hover {
     background-color: black;
     color: #ffdd00;
     transform: translateY(-2px);
     box-shadow: 5px 5px 0px black;
 }
 
-.pagination .disabled, .admin-pagination .admin-disabled {
+.pagination .disabled {
     background-color: #cccccc;
     color: #666666;
     cursor: default;
     box-shadow: 3px 3px 0px #666666;
 }
 
-.pagination span:not(.disabled), 
-.admin-pagination span:not(.admin-disabled) {
+.pagination span:not(.disabled) {
     background-color: black;
     color: #ffdd00;
     min-width: auto;
@@ -324,12 +307,12 @@ form.action-form {
     margin: 0;
 }
 
-.admin-action-form {
+.action-form {
     display: inline-block;
     margin: 0;
 }
 
-.admin-add-form {
+.add-form {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
@@ -341,7 +324,7 @@ form.action-form {
     box-shadow: 4px 4px 0px black;
 }
 
-.admin-input-text {
+.input-text {
     padding: 10px 12px;
     border: 2px solid black;
     border-radius: 8px;
@@ -351,7 +334,7 @@ form.action-form {
     box-shadow: 2px 2px 0px black;
 }
 
-.admin-input-text:focus {
+.input-text:focus {
     border-color: #ff1e56;
     outline: none;
     box-shadow: 2px 2px 0px #ff1e56;
@@ -424,8 +407,8 @@ form.action-form {
 }
 
 /* Status labels */
-.admin-you-label,
-.admin-status-label {
+.you-label,
+.status-label {
     color: #666;
     font-style: italic;
     font-size: 14px;
@@ -433,22 +416,22 @@ form.action-form {
     font-weight: bold;
 }
 
-.admin-restricted-label {
+.restricted-label {
     color: #ff1e56;
     font-weight: bold;
 }
 
-.admin-status-yes {
+.status-yes {
     color: #00cc66;
     font-weight: bold;
 }
 
-.admin-status-no {
+.status-no {
     color: #666;
     font-weight: bold;
 }
 
-.admin-status-restricted {
+.status-restricted {
     color: #ff1e56;
     font-weight: bold;
 }

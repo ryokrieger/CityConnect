@@ -5,20 +5,20 @@
     <title>Admin - Users - CityConnect</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/tables.css') }}">
 </head>
-<body class="admin-table-body">
+<body>
 
-<div class="admin-top-bar">
+<div class="top-bar">
     <div>
         <a href="{{ url_for('admin_dashboard') }}">← Back to Admin Dashboard</a>
     </div>
 </div>
 
-<div class="admin-container">
-    <h1 class="admin-h1">Manage Users</h1>
+<div class="container">
+    <h1>Manage Users</h1>
 
     <!-- User table - only display if users exist -->
     {% if users %}
-    <table class="admin-table">
+    <table>
         <thead>
             <tr>
                 <th>User ID</th>
@@ -41,58 +41,58 @@
                 <!-- Admin status column with styling -->
                 <td>
                     {% if user.is_admin %}
-                        <span class="admin-status-yes">Yes</span>
+                        <span class="status-yes">Yes</span>
                     {% else %}
-                        <span class="admin-status-no">No</span>
+                        <span class="status-no">No</span>
                     {% endif %}
                 </td>
                 
                 <!-- Restriction status column with styling -->
                 <td>
                     {% if user.is_restricted %}
-                        <span class="admin-status-restricted">Yes</span>
+                        <span class="status-restricted">Yes</span>
                     {% else %}
-                        <span class="admin-status-no">No</span>
+                        <span class="status-no">No</span>
                     {% endif %}
                 </td>
                 
                 <!-- Actions column with various buttons based on user status -->
                 <td>
-                    <div class="admin-actions-container">
+                    <div class="actions-cell">
                         <!-- View profile link - available for all users -->
-                        <a href="{{ url_for('view_profile', profile_user_id=user.userID) }}" class="admin-btn admin-btn-view-profile">View Profile</a>
+                        <a href="{{ url_for('view_profile', profile_user_id=user.userID) }}" class="btn btn-view-profile">View Profile</a>
 
                         <!-- Special handling for current admin user -->
                         {% if user.userID == session['user_id'] and user.is_admin %}
-                            <span class="admin-you-label">Admin (You)</span>
+                            <span class="you-label">Admin (You)</span>
 
                         <!-- Actions for other admin users (can only revoke admin) -->
                         {% elif user.is_admin %}
-                            <form method="POST" action="{{ url_for('revoke_user_admin', user_id=user.userID) }}" class="admin-action-form" onsubmit="return confirm('Are you sure you want to revoke admin rights from this user?');">
-                                <button type="submit" class="admin-btn admin-btn-revoke-admin">Revoke Admin</button>
+                            <form method="POST" action="{{ url_for('revoke_user_admin', user_id=user.userID) }}" class="action-form" onsubmit="return confirm('Are you sure you want to revoke admin rights from this user?');">
+                                <button type="submit" class="btn btn-revoke-admin">Revoke Admin</button>
                             </form>
 
                         <!-- Actions for regular users (non-admin, non-current user) -->
                         {% else %}
                             <!-- Make admin button -->
-                            <form method="POST" action="{{ url_for('make_user_admin', user_id=user.userID) }}" class="admin-action-form" onsubmit="return confirm('Are you sure you want to make this user an admin?');">
-                                <button type="submit" class="admin-btn admin-btn-make-admin">Make Admin</button>
+                            <form method="POST" action="{{ url_for('make_user_admin', user_id=user.userID) }}" class="action-form" onsubmit="return confirm('Are you sure you want to make this user an admin?');">
+                                <button type="submit" class="btn btn-make-admin">Make Admin</button>
                             </form>
                             
                             <!-- Restrict/Unrestrict button based on current restriction status -->
                             {% if user.is_restricted %}
-                                <form method="POST" action="{{ url_for('unrestrict_user', user_id=user.userID) }}" class="admin-action-form" onsubmit="return confirm('Are you sure you want to remove restrictions from this user?');">
-                                    <button type="submit" class="admin-btn admin-btn-unrestrict">Unrestrict</button>
+                                <form method="POST" action="{{ url_for('unrestrict_user', user_id=user.userID) }}" class="action-form" onsubmit="return confirm('Are you sure you want to remove restrictions from this user?');">
+                                    <button type="submit" class="btn btn-unrestrict">Unrestrict</button>
                                 </form>
                             {% else %}
-                                <form method="POST" action="{{ url_for('restrict_user', user_id=user.userID) }}" class="admin-action-form" onsubmit="return confirm('Are you sure you want to restrict this user from logging in?');">
-                                    <button type="submit" class="admin-btn admin-btn-restrict">Restrict</button>
+                                <form method="POST" action="{{ url_for('restrict_user', user_id=user.userID) }}" class="action-form" onsubmit="return confirm('Are you sure you want to restrict this user from logging in?');">
+                                    <button type="submit" class="btn btn-restrict">Restrict</button>
                                 </form>
                             {% endif %}
                             
                             <!-- Delete user button (only for non-admin users) -->
-                            <form method="POST" action="{{ url_for('admin_delete_user', user_id=user.userID) }}" class="admin-action-form" onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.');">
-                                <button type="submit" class="admin-btn admin-btn-delete">Delete</button>
+                            <form method="POST" action="{{ url_for('admin_delete_user', user_id=user.userID) }}" class="action-form" onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.');">
+                                <button type="submit" class="btn btn-delete">Delete</button>
                             </form>
                         {% endif %}
                     </div>
@@ -103,12 +103,12 @@
     </table>
 
     <!-- Pagination controls -->
-    <div class="admin-pagination">
+    <div class="pagination">
         <!-- Previous page navigation -->
         {% if page > 1 %}
             <a href="{{ url_for('admin_users', page=page-1) }}">← Previous</a>
         {% else %}
-            <span class="admin-disabled">← Previous</span>
+            <span class="disabled">← Previous</span>
         {% endif %}
 
         <!-- Pagination window calculation -->
@@ -150,7 +150,7 @@
         {% if page < total_pages %}
             <a href="{{ url_for('admin_users', page=page+1) }}">Next →</a>
         {% else %}
-            <span class="admin-disabled">Next →</span>
+            <span class="disabled">Next →</span>
         {% endif %}
     </div>
 
