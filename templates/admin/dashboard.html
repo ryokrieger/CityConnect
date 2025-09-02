@@ -3,55 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard - CityConnect</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/dashboard.css') }}">
 </head>
-<body class="admin-dashboard-body">
+<body>
 
-    <div class="admin-dashboard-top-bar">
+    <div class="top-bar">
         <div>
             <a href="{{ url_for('dashboard') }}">← Back to Main Dashboard</a>
         </div>
     </div>
 
-    <div class="admin-dashboard-container">
-        <h1 class="admin-dashboard-h1">Admin Dashboard</h1>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
 
         <!-- Grid of admin option cards -->
-        <div class="admin-dashboard-card-grid">
+        <div class="card-grid">
             
             <!-- Card: Manage Users -->
-            <div class="admin-dashboard-card">
-                <div class="admin-dashboard-icon">👤</div>
+            <div class="card">
+                <div class="icon">👤</div>
                 <a href="{{ url_for('admin_users') }}">Manage Users</a>
             </div>
 
             <!-- Card: Manage Interests -->
-            <div class="admin-dashboard-card">
-                <div class="admin-dashboard-icon">🎯</div>
+            <div class="card">
+                <div class="icon">🎯</div>
                 <a href="{{ url_for('admin_interests') }}">Manage Interests</a>
             </div>
 
             <!-- Card: Manage Groups -->
-            <div class="admin-dashboard-card">
-                <div class="admin-dashboard-icon">👥</div>
+            <div class="card">
+                <div class="icon">👥</div>
                 <a href="{{ url_for('admin_groups') }}">Manage Groups</a>
             </div>
             
             <!-- Card: Manage Posts -->
-            <div class="admin-dashboard-card">
-                <div class="admin-dashboard-icon">📝</div>
+            <div class="card">
+                <div class="icon">📝</div>
                 <a href="{{ url_for('admin_posts') }}">Manage Posts</a>
             </div>
             
             <!-- Card: Manage Events -->
-            <div class="admin-dashboard-card">
-                <div class="admin-dashboard-icon">📅</div>
+            <div class="card">
+                <div class="icon">📅</div>
                 <a href="{{ url_for('admin_events') }}">Manage Events</a>
             </div>
             
             <!-- Card: Manage Ratings -->
-            <div class="admin-dashboard-card">
-                <div class="admin-dashboard-icon">⭐</div>
+            <div class="card">
+                <div class="icon">⭐</div>
                 <a href="{{ url_for('admin_ratings') }}">Manage Ratings</a>
             </div>
         </div>

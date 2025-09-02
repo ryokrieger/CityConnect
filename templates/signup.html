@@ -2,22 +2,17 @@
 <html>
 <head>
     <title>Sign Up - CityConnect</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/users/access.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/access.css') }}">
 
     <script>
         // Dynamically filters neighborhood options based on selected city
         function filterNeighborhoods() {
-            // Get selected city code from city dropdown
             const cityCode = document.getElementById("city").value;
-            // Parse neighborhoods JSON passed from backend
             const allNeighborhoods = JSON.parse('{{ neighborhoods_json | tojson | safe }}');
-            // Get the neighborhood select element
             const neighborhoodSelect = document.getElementById("neighborhood");
 
-            // Clear neighborhood dropdown and add default placeholder option
             neighborhoodSelect.innerHTML = "<option disabled selected value=''>Select Neighborhood</option>";
 
-            // Filter neighborhoods belonging to selected city and add them as options
             allNeighborhoods
                 .filter(n => n.city_code == cityCode)
                 .forEach(n => {
@@ -67,7 +62,6 @@
             <!-- Neighborhood dropdown, options filled dynamically via JS -->
             <label>Neighborhood:</label>
             <select name="neighborhood" id="neighborhood" required>
-                <!-- Options added dynamically by filterNeighborhoods() -->
             </select>
 
             <label>Password:</label>

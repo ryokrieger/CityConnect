@@ -27,6 +27,46 @@ def connect_db():
 def index():
     return redirect(url_for('login'))
 
+# User login route - handles both GET (form display) and POST (form submission)
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # Get login credentials from form data
+        username = request.form['username']
+        password = request.form['password']
+
+        conn = connect_db()
+        cursor = conn.cursor()
+        
+        # Check if user exists, get password and restriction status
+        cursor.execute("SELECT userID, password, is_restricted FROM User WHERE username = %s", (username,))
+        user = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        # Validate user credentials and check restriction status
+        if user and user[1] == password:
+            # Check if user is restricted from logging in
+            if user[2] == 1:  # is_restricted = TRUE
+                flash("You are restricted and cannot log in.", "error")
+                return render_template('login.html')
+            
+            # If credentials are valid and user is not restricted, set user ID in session
+            session['user_id'] = user[0]
+            return redirect(url_for('dashboard'))
+        else:
+            flash("Invalid credentials.", "error")
+
+    return render_template('login.html')
+
+# Logout route - clears session and redirects to login
+@app.route('/logout')
+def logout():
+    session.clear()  # Clear all session data
+    flash("You've been logged out.", "info")
+    return redirect(url_for('login'))
+
 # User signup route - handles both GET (form display) and POST (form submission)
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -67,46 +107,32 @@ def signup():
 
     return render_template('signup.html', cities=cities, neighborhoods=neighborhoods, neighborhoods_json=neighborhoods)
 
-# User login route - handles both GET (form display) and POST (form submission)
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        # Get login credentials from form data
-        username = request.form['username']
-        password = request.form['password']
+# Dashboard route - main page after login
+@app.route('/dashboard')
+def dashboard():
+    if 'user_id' not in session:
+        flash("Please log in", "error")
+        return redirect(url_for('login'))
 
-        conn = connect_db()
-        cursor = conn.cursor()
-        
-        # Check if user exists, get password and restriction status
-        cursor.execute("SELECT userID, password, is_restricted FROM User WHERE username = %s", (username,))
-        user = cursor.fetchone()
+    conn = connect_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    # Get current user's basic info
+    cursor.execute("SELECT username, city_code FROM User WHERE userID = %s", (session['user_id'],))
+    user = cursor.fetchone()
 
-        # Close database connection
-        cursor.close()
-        conn.close()
+    # Get city name
+    cursor.execute("SELECT city_name FROM City WHERE city_code = %s", (user['city_code'],))
+    city = cursor.fetchone()['city_name'] if user['city_code'] else 'Unknown'
 
-        # Validate user credentials and check restriction status
-        if user and user[1] == password:
-            # Check if user is restricted from logging in
-            if user[2] == 1:  # is_restricted = TRUE
-                flash("You are restricted and cannot log in.", "error")
-                return render_template('login.html')
-            
-            # If credentials are valid and user is not restricted, set user ID in session
-            session['user_id'] = user[0]
-            return redirect(url_for('dashboard'))  # Redirect to dashboard after successful login
-        else:
-            flash("Invalid credentials.", "error")
+    # Check if user is admin
+    cursor.execute("SELECT is_admin FROM User WHERE userID = %s", (session['user_id'],))
+    is_admin = cursor.fetchone()['is_admin'] == 1
 
-    return render_template('login.html')
+    cursor.close()
+    conn.close()
 
-# Logout route - clears session and redirects to login
-@app.route('/logout')
-def logout():
-    session.clear()  # Clear all session data
-    flash("You've been logged out.", "info")
-    return redirect(url_for('login'))
+    return render_template("dashboard.html", username=user['username'], city_name=city, is_admin=is_admin)
 
 # Route for similar interests matches - redirects to city tab by default
 @app.route('/users/match')
@@ -770,33 +796,6 @@ def view_own_profile():
                            avg_rating=avg_rating,
                            reviews=reviews,
                            viewer_id=viewer_id)
-
-# Dashboard route - main page after login
-@app.route('/dashboard')
-def dashboard():
-    if 'user_id' not in session:
-        flash("Please log in", "error")
-        return redirect(url_for('login'))
-
-    conn = connect_db()
-    cursor = conn.cursor(dictionary=True)
-    
-    # Get current user's basic info
-    cursor.execute("SELECT username, city_code FROM User WHERE userID = %s", (session['user_id'],))
-    user = cursor.fetchone()
-
-    # Get city name
-    cursor.execute("SELECT city_name FROM City WHERE city_code = %s", (user['city_code'],))
-    city = cursor.fetchone()['city_name'] if user['city_code'] else 'Unknown'
-
-    # Check if user is admin
-    cursor.execute("SELECT is_admin FROM User WHERE userID = %s", (session['user_id'],))
-    is_admin = cursor.fetchone()['is_admin'] == 1
-
-    cursor.close()
-    conn.close()
-
-    return render_template("dashboard.html", username=user['username'], city_name=city, is_admin=is_admin)
 
 # Route to list groups matching user's interests
 @app.route('/groups')

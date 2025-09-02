@@ -1,3 +1,5 @@
+/* Handles login and signup */
+
 /* Ensures padding + border are included in width to prevent overflow */
 * {
     box-sizing: border-box;
@@ -17,7 +19,7 @@ body {
 
 /* Header */
 .header {
-    background-color: #ffdd00; /* bright comic yellow */
+    background-color: #ffdd00;
     color: black;
     padding: 15px 20px;
     display: flex;

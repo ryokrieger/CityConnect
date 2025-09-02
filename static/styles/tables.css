@@ -1,5 +1,5 @@
 /* General Body */
-body {
+body, .admin-table-body {
     font-family: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif;
     background: radial-gradient(circle, #ffe066 20%, #fffae5 80%);
     background-image: radial-gradient(#00000020 1px, transparent 1px),
@@ -11,7 +11,7 @@ body {
 }
 
 /* Top Bar */
-.top-bar {
+.top-bar, .admin-top-bar {
     background-color: #ffdd00;
     color: black;
     padding: 15px 20px;
@@ -24,7 +24,7 @@ body {
     letter-spacing: 2px;
 }
 
-.top-bar a {
+.top-bar a, .admin-top-bar a {
     color: black;
     text-decoration: none;
     font-weight: bold;
@@ -33,23 +33,26 @@ body {
     background-color: #ffdd00;
     border-radius: 8px;
     transition: 0.2s ease;
+}
+
+.top-bar a {
     margin-right: 15px;
 }
 
-.top-bar a:hover {
+.top-bar a:hover, .admin-top-bar a:hover {
     background-color: black;
     color: #ffdd00;
 }
 
 /* Container */
-.container {
+.container, .admin-container {
     max-width: 1100px;
     margin: 40px auto;
     padding: 0 20px;
 }
 
 /* Headings */
-h1 {
+h1, .admin-h1 {
     color: black;
     margin-bottom: 30px;
     font-size: 38px;
@@ -59,7 +62,7 @@ h1 {
 }
 
 /* Table */
-table {
+table, .admin-table {
     width: 100%;
     border-collapse: collapse;
     background-color: white;
@@ -67,14 +70,14 @@ table {
     box-shadow: 6px 6px 0px black;
 }
 
-th, td {
+th, td, .admin-table th, .admin-table td {
     padding: 15px 12px;
     text-align: left;
     border-bottom: 3px solid black;
     vertical-align: middle;
 }
 
-th {
+th, .admin-table th {
     background-color: #ffdd00;
     color: black;
     font-weight: bold;
@@ -83,11 +86,11 @@ th {
     border-right: 2px solid black;
 }
 
-th:last-child {
+th:last-child, .admin-table th:last-child {
     border-right: none;
 }
 
-tbody tr:hover {
+tbody tr:hover, .admin-table tbody tr:hover {
     background-color: #fffae5;
     transform: translateX(5px);
     transition: transform 0.2s ease;
@@ -101,8 +104,15 @@ tbody tr:hover {
     align-items: center;
 }
 
+.admin-actions-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
 /* Buttons */
-.btn {
+.btn, .admin-btn {
     height: 36px;
     padding: 0 14px;
     border-radius: 8px;
@@ -117,10 +127,13 @@ tbody tr:hover {
     text-decoration: none;
     box-sizing: border-box;
     box-shadow: 3px 3px 0px black;
+}
+
+.btn {
     min-width: 120px;
 }
 
-.btn:hover {
+.btn:hover, .admin-btn:hover {
     transform: translateY(-2px);
     box-shadow: 5px 5px 0px black;
 }
@@ -150,6 +163,79 @@ tbody tr:hover {
 
 .btn-danger:hover {
     background-color: #d1003d;
+}
+
+/* Admin-specific buttons */
+.admin-btn-delete {
+    background-color: #ff1e56;
+    color: white;
+}
+
+.admin-btn-delete:hover {
+    background-color: #d1003d;
+}
+
+.admin-btn-add {
+    background-color: #00cc66;
+    color: black;
+}
+
+.admin-btn-add:hover {
+    background-color: #00b359;
+}
+
+.admin-btn-edit {
+    background-color: #ffdd00;
+    color: black;
+}
+
+.admin-btn-edit:hover {
+    background-color: #e6c700;
+}
+
+.admin-btn-make-admin {
+    background-color: #00cc66;
+    color: black;
+}
+
+.admin-btn-make-admin:hover {
+    background-color: #00b359;
+}
+
+.admin-btn-revoke-admin {
+    background-color: #ffaa00;
+    color: black;
+}
+
+.admin-btn-revoke-admin:hover {
+    background-color: #e69900;
+}
+
+.admin-btn-restrict {
+    background-color: #ff7744;
+    color: black;
+}
+
+.admin-btn-restrict:hover {
+    background-color: #ff6633;
+}
+
+.admin-btn-unrestrict {
+    background-color: #8844ff;
+    color: white;
+}
+
+.admin-btn-unrestrict:hover {
+    background-color: #7733ee;
+}
+
+.admin-btn-view-profile {
+    background-color: #3399ff;
+    color: white;
+}
+
+.admin-btn-view-profile:hover {
+    background-color: #2288ee;
 }
 
 /* Empty state messages */
@@ -183,7 +269,7 @@ tbody tr:hover {
 }
 
 /* Pagination */
-.pagination {
+.pagination, .admin-pagination {
     margin-top: 25px;
     display: flex;
     justify-content: center;
@@ -191,7 +277,8 @@ tbody tr:hover {
     flex-wrap: wrap;
 }
 
-.pagination a, .pagination span {
+.pagination a, .pagination span, 
+.admin-pagination a, .admin-pagination span {
     padding: 10px 16px;
     border-radius: 8px;
     text-decoration: none;
@@ -209,21 +296,22 @@ tbody tr:hover {
     box-shadow: 3px 3px 0px black;
 }
 
-.pagination a:hover {
+.pagination a:hover, .admin-pagination a:hover {
     background-color: black;
     color: #ffdd00;
     transform: translateY(-2px);
     box-shadow: 5px 5px 0px black;
 }
 
-.pagination .disabled {
+.pagination .disabled, .admin-pagination .admin-disabled {
     background-color: #cccccc;
     color: #666666;
     cursor: default;
     box-shadow: 3px 3px 0px #666666;
 }
 
-.pagination span:not(.disabled) {
+.pagination span:not(.disabled), 
+.admin-pagination span:not(.admin-disabled) {
     background-color: black;
     color: #ffdd00;
     min-width: auto;
@@ -234,6 +322,39 @@ tbody tr:hover {
 form.action-form {
     display: inline;
     margin: 0;
+}
+
+.admin-action-form {
+    display: inline-block;
+    margin: 0;
+}
+
+.admin-add-form {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: white;
+    border: 3px solid black;
+    border-radius: 12px;
+    box-shadow: 4px 4px 0px black;
+}
+
+.admin-input-text {
+    padding: 10px 12px;
+    border: 2px solid black;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s;
+    background-color: #fffae5;
+    box-shadow: 2px 2px 0px black;
+}
+
+.admin-input-text:focus {
+    border-color: #ff1e56;
+    outline: none;
+    box-shadow: 2px 2px 0px #ff1e56;
 }
 
 /* Groups-specific styles */
@@ -300,4 +421,34 @@ form.action-form {
     text-align: center;
     color: #555;
     margin-bottom: 18px;
+}
+
+/* Status labels */
+.admin-you-label,
+.admin-status-label {
+    color: #666;
+    font-style: italic;
+    font-size: 14px;
+    line-height: 36px;
+    font-weight: bold;
+}
+
+.admin-restricted-label {
+    color: #ff1e56;
+    font-weight: bold;
+}
+
+.admin-status-yes {
+    color: #00cc66;
+    font-weight: bold;
+}
+
+.admin-status-no {
+    color: #666;
+    font-weight: bold;
+}
+
+.admin-status-restricted {
+    color: #ff1e56;
+    font-weight: bold;
 }
