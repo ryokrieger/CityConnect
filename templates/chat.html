@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chat with {{ friend_name }} - CityConnect</title>
+    <title>Chat with {{ friend_name }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/chat.css') }}">
 </head>
 <body>
     <div class="header">
-        <a href="{{ url_for('view_friends') }}">← Back to Friends</a>
+        <a href="{{ url_for('friends') }}">← Back to Friends</a>
     </div>
 
     <div class="container">

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CityConnect Dashboard</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/dashboard.css') }}">
 </head>
 <body>
@@ -32,13 +32,13 @@
             <!-- Card to view own profile -->
             <div class="card">
                 <div class="icon">🙋</div>
-                <a href="{{ url_for('view_own_profile') }}">View My Profile</a>
+                <a href="{{ url_for('profile') }}">View My Profile</a>
             </div>
 
             <!-- Card to edit profile, using current user ID -->
             <div class="card">
                 <div class="icon">✏️</div>
-                <a href="{{ url_for('profile', user_id=session['user_id']) }}">Edit Profile</a>
+                <a href="{{ url_for('edit_profile', user_id=session['user_id']) }}">Edit Profile</a>
             </div>            
 
             <!-- Card for users with similar interests -->
@@ -50,13 +50,13 @@
             <!-- Card to view user's friends -->
             <div class="card">
                 <div class="icon">🤝</div>
-                <a href="{{ url_for('view_friends') }}">My Friends</a>
+                <a href="{{ url_for('friends') }}">My Friends</a>
             </div>
 
             <!-- Card to view all groups -->
             <div class="card">
                 <div class="icon">👥</div>
-                <a href="{{ url_for('list_groups') }}">View All Groups</a>
+                <a href="{{ url_for('groups') }}">View All Groups</a>
             </div>
 
             <!-- Card to manage friend requests -->

@@ -1,3 +1,5 @@
+/* Styles for edit_profile and create_group */
+
 /* Ensures padding + border are included in width to prevent overflow */
 * {
     box-sizing: border-box;
@@ -17,8 +19,8 @@ body {
 }
 
 /* Top Bar */
-.top-bar, .header {
-    background-color: #ffdd00; /* bright comic yellow */
+.top-bar {
+    background-color: #ffdd00;
     color: black;
     padding: 15px 20px;
     display: flex;
@@ -30,7 +32,7 @@ body {
     letter-spacing: 2px;
 }
 
-.top-bar a, .header a {
+.top-bar a {
     color: black;
     text-decoration: none;
     font-weight: bold;
@@ -41,7 +43,7 @@ body {
     transition: 0.2s ease;
 }
 
-.top-bar a:hover, .header a:hover {
+.top-bar a:hover {
     background-color: black;
     color: #ffdd00;
 }
@@ -50,7 +52,7 @@ body {
 .container {
     max-width: 700px;
     margin: 40px auto;
-    background-color: #ffffffcc; /* slightly transparent white */
+    background-color: #ffffffcc;
     padding: 40px 50px;
     border-radius: 16px;
     box-shadow: 6px 6px 0px black;

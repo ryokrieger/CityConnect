@@ -105,7 +105,10 @@ def signup():
     cursor.close()
     conn.close()
 
-    return render_template('signup.html', cities=cities, neighborhoods=neighborhoods, neighborhoods_json=neighborhoods)
+    return render_template('signup.html',
+                           cities=cities,
+                           neighborhoods=neighborhoods,
+                           neighborhoods_json=neighborhoods)
 
 # Dashboard route - main page after login
 @app.route('/dashboard')
@@ -132,7 +135,280 @@ def dashboard():
     cursor.close()
     conn.close()
 
-    return render_template("dashboard.html", username=user['username'], city_name=city, is_admin=is_admin)
+    return render_template("dashboard.html",
+                           username=user['username'],
+                           city_name=city,
+                           is_admin=is_admin)
+
+# Route to view own profile
+@app.route('/profile')
+def profile():
+    if 'user_id' not in session:
+        flash("Please log in", "error")
+        return redirect(url_for('login'))
+
+    viewer_id = session['user_id']
+
+    conn = connect_db()
+    cursor = conn.cursor(dictionary=True)
+
+    # Get user info
+    cursor.execute("""
+        SELECT u.username, u.email, c.city_name, n.area_name
+        FROM User u
+        LEFT JOIN City c ON u.city_code = c.city_code
+        LEFT JOIN Neighborhood n ON u.postal_code = n.postal_code
+        WHERE u.userID = %s
+    """, (viewer_id,))
+    profile = cursor.fetchone()
+
+    # Get user's interests
+    cursor.execute("""
+        SELECT i.interest_name
+        FROM User_Interest ui
+        JOIN Interest i ON ui.interest_ID = i.interest_ID
+        WHERE ui.userID = %s
+    """, (viewer_id,))
+    interests = [row['interest_name'] for row in cursor.fetchall()]
+
+    # Calculate average rating
+    cursor.execute("""
+        SELECT AVG(rating) AS avg_rating
+        FROM User_Rating
+        WHERE ratee_ID = %s
+    """, (viewer_id,))
+    rating_row = cursor.fetchone()
+    if rating_row and rating_row['avg_rating'] is not None:
+        avg_rating = round(rating_row['avg_rating'], 2)
+    else:
+        avg_rating = "No ratings yet"
+
+    # Get individual reviews
+    cursor.execute("""
+        SELECT ur.rater_ID, ur.rating, ur.comments, u.username
+        FROM User_Rating ur
+        JOIN User u ON ur.rater_ID = u.userID
+        WHERE ur.ratee_ID = %s
+    """, (viewer_id,))
+    reviews = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template("profile.html",
+                           profile=profile,
+                           interests=interests,
+                           avg_rating=avg_rating,
+                           reviews=reviews,
+                           viewer_id=viewer_id)
+
+# Route for editing profile (GET for viewing, POST for updating)
+@app.route('/profile/<int:user_id>', methods=['GET', 'POST'])
+def edit_profile(user_id):
+    # Verify user is logged in and accessing their own profile
+    if 'user_id' not in session or session['user_id'] != user_id:
+        flash("Unauthorized access", "error")
+        return redirect(url_for('login'))
+
+    conn = connect_db()
+    cursor = conn.cursor(dictionary=True)
+
+    # Get basic user info
+    cursor.execute("SELECT username, city_code, postal_code FROM User WHERE userID = %s", (user_id,))
+    user_row = cursor.fetchone()
+    username = user_row['username'] if user_row else 'User'
+    user_city_code = user_row['city_code']
+    user_postal_code = user_row['postal_code']
+
+    # Get all cities for dropdown
+    cursor.execute("SELECT city_code, city_name FROM City ORDER BY city_name ASC")
+    cities = cursor.fetchall()
+
+    # Get all neighborhoods for dropdown
+    cursor.execute("SELECT postal_code, area_name, city_code FROM Neighborhood ORDER BY area_name ASC")
+    neighborhoods = cursor.fetchall()
+
+    # Get all possible interests
+    cursor.execute("SELECT interest_ID, interest_name FROM Interest ORDER BY interest_name ASC")
+    all_interests = cursor.fetchall()
+
+    if request.method == 'POST':
+        # Handle profile update form submission
+        city_code = request.form['city']
+        postal_code = request.form['neighborhood']
+        selected_interests = request.form.getlist('interests')
+
+        # Update user's city and neighborhood
+        cursor.execute("UPDATE User SET city_code = %s, postal_code = %s WHERE userID = %s",
+                       (city_code, postal_code, user_id))
+
+        # Update user's interests (delete old ones first)
+        cursor.execute("DELETE FROM User_Interest WHERE userID = %s", (user_id,))
+        for interest_id in selected_interests:
+            cursor.execute("INSERT INTO User_Interest (userID, interest_ID) VALUES (%s, %s)",
+                           (user_id, interest_id))
+
+        conn.commit()
+        flash("Profile updated successfully!", "success")
+        return redirect(url_for('profile', user_id=user_id))
+
+    # Get user's current interests
+    cursor.execute("SELECT interest_ID FROM User_Interest WHERE userID = %s", (user_id,))
+    user_interest_ids = [row['interest_ID'] for row in cursor.fetchall()]
+
+    cursor.close()
+    conn.close()
+
+    return render_template('edit_profile.html',
+                           username=username,
+                           cities=cities,
+                           neighborhoods_json=neighborhoods,
+                           all_interests=[(i['interest_ID'], i['interest_name']) for i in all_interests],
+                           user_interest_ids=user_interest_ids,
+                           user_city_code=user_city_code,
+                           user_postal_code=user_postal_code)
+
+# Route to view another user's profile
+@app.route('/user/<int:profile_user_id>/view')
+def view_profile(profile_user_id):
+    if 'user_id' not in session:
+        flash("Please log in", "error")
+        return redirect(url_for('login'))
+
+    viewer_id = session['user_id']
+
+    conn = connect_db()
+    cursor = conn.cursor(dictionary=True)
+
+    # Get basic profile info
+    cursor.execute("""
+        SELECT username, email FROM User WHERE userID = %s
+    """, (profile_user_id,))
+    profile = cursor.fetchone()
+
+    if not profile:
+        return redirect(url_for('dashboard'))
+
+    # Get profile user's interests
+    cursor.execute("""
+        SELECT i.interest_name FROM User_Interest ui
+        JOIN Interest i ON ui.interest_ID = i.interest_ID
+        WHERE ui.userID = %s
+    """, (profile_user_id,))
+    interests = [row['interest_name'] for row in cursor.fetchall()]
+
+    # Calculate average rating
+    cursor.execute("""
+        SELECT AVG(rating) AS avg_rating FROM User_Rating WHERE ratee_ID = %s
+    """, (profile_user_id,))
+    avg_row = cursor.fetchone()
+    avg_rating = round(avg_row['avg_rating'], 2) if avg_row['avg_rating'] else "No ratings yet"
+
+    # Get more detailed profile info including city and neighborhood
+    cursor.execute("""
+        SELECT u.username, u.email, c.city_name, n.area_name
+        FROM User u
+        LEFT JOIN City c ON u.city_code = c.city_code
+        LEFT JOIN Neighborhood n ON u.postal_code = n.postal_code
+        WHERE u.userID = %s
+    """, (profile_user_id,))
+    profile = cursor.fetchone()
+
+    # Get all reviews for this user
+    cursor.execute("""
+        SELECT ur.rater_ID, ur.rating, ur.comments, u.username
+        FROM User_Rating ur
+        JOIN User u ON ur.rater_ID = u.userID
+        WHERE ur.ratee_ID = %s
+    """, (profile_user_id,))
+    reviews = cursor.fetchall()
+
+    # Check if viewer has already rated this user
+    cursor.execute("""
+        SELECT * FROM User_Rating WHERE rater_ID = %s AND ratee_ID = %s
+    """, (viewer_id, profile_user_id))
+    your_rating = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    return render_template("view_profile.html",
+                           profile=profile,
+                           profile_user_id=profile_user_id,
+                           interests=interests,
+                           avg_rating=avg_rating,
+                           reviews=reviews,
+                           your_rating=your_rating,
+                           viewer_id=viewer_id)
+
+# Route to rate another user
+@app.route('/rate/<int:profile_user_id>', methods=['POST'])
+def rate_user(profile_user_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    rater_id = session['user_id']
+    rating = int(request.form['rating'])
+    comment = request.form.get('comment')
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    # Check if users are or were friends (required for rating)
+    cursor.execute("""
+        SELECT 1 FROM Friendship 
+        WHERE (user1_ID = %s AND user2_ID = %s) OR (user1_ID = %s AND user2_ID = %s)
+        UNION
+        SELECT 1 FROM FriendRequest 
+        WHERE ((sender_id = %s AND receiver_id = %s) OR (sender_id = %s AND receiver_id = %s))
+          AND status = 'accepted'
+    """, (rater_id, profile_user_id, profile_user_id, rater_id,
+          rater_id, profile_user_id, profile_user_id, rater_id))
+
+    relationship = cursor.fetchone()
+
+    if not relationship:
+        cursor.close()
+        conn.close()
+
+        return redirect(url_for('view_profile', profile_user_id=profile_user_id, error="not_friends"))
+
+    # Insert or update rating
+    cursor.execute("""
+        INSERT INTO User_Rating (rater_ID, ratee_ID, rating, comments)
+        VALUES (%s, %s, %s, %s)
+        ON DUPLICATE KEY UPDATE rating = %s, comments = %s
+    """, (rater_id, profile_user_id, rating, comment, rating, comment))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('view_profile', profile_user_id=profile_user_id, success="rating_submitted"))
+
+# Route to delete a rating
+@app.route('/rate/<int:profile_user_id>/delete', methods=['POST'])
+def delete_rating(profile_user_id):
+    if 'user_id' not in session:
+        flash("Please log in", "error")
+        return redirect(url_for('login'))
+
+    rater_id = session['user_id']
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    # Delete rating
+    cursor.execute("""
+        DELETE FROM User_Rating
+        WHERE rater_ID = %s AND ratee_ID = %s
+    """, (rater_id, profile_user_id))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('view_profile', profile_user_id=profile_user_id))
 
 # Route for similar interests matches - redirects to city tab by default
 @app.route('/users/match')
@@ -284,14 +560,12 @@ def similar_interests(scope):
     cursor.close()
     conn.close()
 
-    return render_template(
-        "interest_matches_tabs.html",
-        scope=scope,
-        matches=matches,
-        request_status=request_status,
-        page=page,
-        total_pages=total_pages
-    )
+    return render_template("similar_interests.html",
+                           scope=scope,
+                           matches=matches,
+                           request_status=request_status,
+                           page=page,
+                           total_pages=total_pages)
 
 # Route to send friend request
 @app.route('/friend_request/send/<int:receiver_id>', methods=['POST'])
@@ -330,8 +604,8 @@ def send_friend_request(receiver_id):
     cursor.execute("""
         INSERT INTO FriendRequest (sender_id, receiver_id) VALUES (%s, %s)
     """, (sender_id, receiver_id))
-    conn.commit()
 
+    conn.commit()
     cursor.close()
     conn.close()
     
@@ -358,109 +632,12 @@ def cancel_friend_request(receiver_id):
     conn.commit()
     cursor.close()
     conn.close()
+
     return redirect(request.referrer or url_for('similar_interests_root'))
 
-# Route to manage incoming friend requests
-@app.route('/friend_request/manage')
-def manage_friend_requests():
-    if 'user_id' not in session:
-        flash("Please log in first.", "error")
-        return redirect(url_for('login'))
-
-    # Pagination setup
-    page = int(request.args.get('page', 1))
-    per_page = 10
-    offset = (page - 1) * per_page
-
-    conn = connect_db()
-    cursor = conn.cursor(dictionary=True)
-
-    # Count total pending requests
-    cursor.execute("""
-        SELECT COUNT(*) as total
-        FROM FriendRequest fr
-        WHERE fr.receiver_id = %s AND fr.status = 'pending'
-    """, (session['user_id'],))
-    total_requests = cursor.fetchone()['total']
-    total_pages = (total_requests + per_page - 1) // per_page
-
-    # Get paginated list of pending requests
-    cursor.execute("""
-        SELECT fr.request_id, u.userID, u.username, u.email
-        FROM FriendRequest fr
-        JOIN User u ON fr.sender_id = u.userID
-        WHERE fr.receiver_id = %s AND fr.status = 'pending'
-        LIMIT %s OFFSET %s
-    """, (session['user_id'], per_page, offset))
-
-    requests = cursor.fetchall()
-    cursor.close()
-    conn.close()
-
-    return render_template(
-        'manage_requests.html',
-        requests=requests,
-        page=page,
-        total_pages=total_pages
-    )
-
-# Route to accept friend request
-@app.route('/friend_request/accept/<int:request_id>', methods=['POST'])
-def accept_friend_request(request_id):
-    if 'user_id' not in session:
-        flash("Please log in first.", "error")
-        return redirect(url_for('login'))
-
-    conn = connect_db()
-    cursor = conn.cursor()
-
-    # Get sender and receiver IDs from request
-    cursor.execute("""
-        SELECT sender_id, receiver_id FROM FriendRequest 
-        WHERE request_id = %s AND status = 'pending'
-    """, (request_id,))
-    result = cursor.fetchone()
-
-    if result:
-        sender_id, receiver_id = result
-        # Update request status to 'accepted'
-        cursor.execute("""
-            UPDATE FriendRequest SET status = 'accepted' WHERE request_id = %s
-        """, (request_id,))
-        # Create friendship record
-        cursor.execute("""
-            INSERT INTO Friendship (user1_ID, user2_ID) VALUES (%s, %s)
-        """, (sender_id, receiver_id))
-        conn.commit()
-
-    cursor.close()
-    conn.close()
-    return redirect(url_for('manage_friend_requests'))
-
-# Route to decline friend request
-@app.route('/friend_request/decline/<int:request_id>', methods=['POST'])
-def decline_friend_request(request_id):
-    if 'user_id' not in session:
-        flash("Please log in first.", "error")
-        return redirect(url_for('login'))
-
-    conn = connect_db()
-    cursor = conn.cursor()
-
-    # Update request status to 'declined'
-    cursor.execute("""
-        UPDATE FriendRequest SET status = 'declined' 
-        WHERE request_id = %s AND receiver_id = %s
-    """, (request_id, session['user_id']))
-    conn.commit()
-
-    cursor.close()
-    conn.close()
-    return redirect(url_for('manage_friend_requests'))
-
-# Route to view friends list
+# Route to view friends
 @app.route('/friends')
-def view_friends():
+def friends():
     if 'user_id' not in session:
         flash("Please log in first.", "error")
         return redirect(url_for('login'))
@@ -498,10 +675,14 @@ def view_friends():
     """, (user_id, user_id, per_page, offset))
 
     friends = cursor.fetchall()
+
     cursor.close()
     conn.close()
 
-    return render_template('friend_list.html', friends=friends, page=page, total_pages=total_pages)
+    return render_template('friends.html',
+                           friends=friends,
+                           page=page,
+                           total_pages=total_pages)
 
 # Route to remove a friend
 @app.route('/friend/remove/<int:friend_id>', methods=['POST'])
@@ -534,9 +715,9 @@ def remove_friend(friend_id):
     cursor.close()
     conn.close()
 
-    return redirect(url_for('view_friends'))
+    return redirect(url_for('friends'))
 
-# Route for chat with a friend
+# Route for chatting with a friend
 @app.route('/chat/<int:friend_id>', methods=['GET', 'POST'])
 def chat(friend_id):
     if 'user_id' not in session:
@@ -559,7 +740,7 @@ def chat(friend_id):
 
     # If no friendship exists, redirect to friends list
     if not friendship:
-        return redirect(url_for('view_friends'))
+        return redirect(url_for('friends'))
 
     # Handle POST request when user sends a new message
     if request.method == 'POST':
@@ -592,219 +773,21 @@ def chat(friend_id):
     cursor.close()
     conn.close()
 
-    return render_template("chat.html", 
-                         messages=messages, 
-                         friend_name=friend_name, 
-                         friend_id=friend_id,
-                         current_user_id=user_id)  # Pass current user ID to template
+    return render_template("chat.html",
+                           messages=messages,
+                           friend_name=friend_name,
+                           friend_id=friend_id,
+                           current_user_id=user_id)
 
-# Route for user profile (GET for viewing, POST for updating)
-@app.route('/profile/<int:user_id>', methods=['GET', 'POST'])
-def profile(user_id):
-    # Verify user is logged in and accessing their own profile
-    if 'user_id' not in session or session['user_id'] != user_id:
-        flash("Unauthorized access", "error")
-        return redirect(url_for('login'))
-
-    conn = connect_db()
-    cursor = conn.cursor(dictionary=True)
-
-    # Get basic user info
-    cursor.execute("SELECT username, city_code, postal_code FROM User WHERE userID = %s", (user_id,))
-    user_row = cursor.fetchone()
-    username = user_row['username'] if user_row else 'User'
-    user_city_code = user_row['city_code']
-    user_postal_code = user_row['postal_code']
-
-    # Get all cities for dropdown
-    cursor.execute("SELECT city_code, city_name FROM City ORDER BY city_name ASC")
-    cities = cursor.fetchall()
-
-    # Get all neighborhoods for dropdown
-    cursor.execute("SELECT postal_code, area_name, city_code FROM Neighborhood ORDER BY area_name ASC")
-    neighborhoods = cursor.fetchall()
-
-    # Get all possible interests
-    cursor.execute("SELECT interest_ID, interest_name FROM Interest ORDER BY interest_name ASC")
-    all_interests = cursor.fetchall()
-
-    if request.method == 'POST':
-        # Handle profile update form submission
-        city_code = request.form['city']
-        postal_code = request.form['neighborhood']
-        selected_interests = request.form.getlist('interests')
-
-        # Update user's city and neighborhood
-        cursor.execute("UPDATE User SET city_code = %s, postal_code = %s WHERE userID = %s",
-                       (city_code, postal_code, user_id))
-
-        # Update user's interests (delete old ones first)
-        cursor.execute("DELETE FROM User_Interest WHERE userID = %s", (user_id,))
-        for interest_id in selected_interests:
-            cursor.execute("INSERT INTO User_Interest (userID, interest_ID) VALUES (%s, %s)",
-                           (user_id, interest_id))
-
-        conn.commit()
-        flash("Profile updated successfully!", "success")
-        return redirect(url_for('profile', user_id=user_id))
-
-    # Get user's current interests
-    cursor.execute("SELECT interest_ID FROM User_Interest WHERE userID = %s", (user_id,))
-    user_interest_ids = [row['interest_ID'] for row in cursor.fetchall()]
-
-    cursor.close()
-    conn.close()
-
-    return render_template('profile.html',
-                           username=username,
-                           cities=cities,
-                           neighborhoods_json=neighborhoods,
-                           all_interests=[(i['interest_ID'], i['interest_name']) for i in all_interests],
-                           user_interest_ids=user_interest_ids,
-                           user_city_code=user_city_code,
-                           user_postal_code=user_postal_code)
-
-# Route to view another user's profile
-@app.route('/user/<int:profile_user_id>/view')
-def view_profile(profile_user_id):
-    if 'user_id' not in session:
-        flash("Please log in", "error")
-        return redirect(url_for('login'))
-
-    viewer_id = session['user_id']
-    conn = connect_db()
-    cursor = conn.cursor(dictionary=True)
-
-    # Get basic profile info
-    cursor.execute("""
-        SELECT username, email FROM User WHERE userID = %s
-    """, (profile_user_id,))
-    profile = cursor.fetchone()
-
-    if not profile:
-        return redirect(url_for('dashboard'))
-
-    # Get profile user's interests
-    cursor.execute("""
-        SELECT i.interest_name FROM User_Interest ui
-        JOIN Interest i ON ui.interest_ID = i.interest_ID
-        WHERE ui.userID = %s
-    """, (profile_user_id,))
-    interests = [row['interest_name'] for row in cursor.fetchall()]
-
-    # Calculate average rating
-    cursor.execute("""
-        SELECT AVG(rating) AS avg_rating FROM User_Rating WHERE ratee_ID = %s
-    """, (profile_user_id,))
-    avg_row = cursor.fetchone()
-    avg_rating = round(avg_row['avg_rating'], 2) if avg_row['avg_rating'] else "No ratings yet"
-
-    # Get more detailed profile info including city and neighborhood
-    cursor.execute("""
-        SELECT u.username, u.email, c.city_name, n.area_name
-        FROM User u
-        LEFT JOIN City c ON u.city_code = c.city_code
-        LEFT JOIN Neighborhood n ON u.postal_code = n.postal_code
-        WHERE u.userID = %s
-    """, (profile_user_id,))
-    profile = cursor.fetchone()
-
-    # Get all reviews for this user
-    cursor.execute("""
-        SELECT ur.rater_ID, ur.rating, ur.comments, u.username
-        FROM User_Rating ur
-        JOIN User u ON ur.rater_ID = u.userID
-        WHERE ur.ratee_ID = %s
-    """, (profile_user_id,))
-    reviews = cursor.fetchall()
-
-    # Check if viewer has already rated this user
-    cursor.execute("""
-        SELECT * FROM User_Rating WHERE rater_ID = %s AND ratee_ID = %s
-    """, (viewer_id, profile_user_id))
-    your_rating = cursor.fetchone()
-
-    cursor.close()
-    conn.close()
-
-    return render_template("view_profile.html",
-                           profile=profile,
-                           profile_user_id=profile_user_id,
-                           interests=interests,
-                           avg_rating=avg_rating,
-                           reviews=reviews,
-                           your_rating=your_rating,
-                           viewer_id=viewer_id)
-
-# Route to view own profile (simplified version)
-@app.route('/profile/view')
-def view_own_profile():
-    if 'user_id' not in session:
-        flash("Please log in", "error")
-        return redirect(url_for('login'))
-
-    viewer_id = session['user_id']
-    conn = connect_db()
-    cursor = conn.cursor(dictionary=True)
-
-    # Get user info with city and neighborhood
-    cursor.execute("""
-        SELECT u.username, u.email, c.city_name, n.area_name
-        FROM User u
-        LEFT JOIN City c ON u.city_code = c.city_code
-        LEFT JOIN Neighborhood n ON u.postal_code = n.postal_code
-        WHERE u.userID = %s
-    """, (viewer_id,))
-    profile = cursor.fetchone()
-
-    # Get user's interests
-    cursor.execute("""
-        SELECT i.interest_name
-        FROM User_Interest ui
-        JOIN Interest i ON ui.interest_ID = i.interest_ID
-        WHERE ui.userID = %s
-    """, (viewer_id,))
-    interests = [row['interest_name'] for row in cursor.fetchall()]
-
-    # Calculate average rating
-    cursor.execute("""
-        SELECT AVG(rating) AS avg_rating
-        FROM User_Rating
-        WHERE ratee_ID = %s
-    """, (viewer_id,))
-    rating_row = cursor.fetchone()
-    if rating_row and rating_row['avg_rating'] is not None:
-        avg_rating = round(rating_row['avg_rating'], 2)
-    else:
-        avg_rating = "No ratings yet"
-
-    # Get individual reviews
-    cursor.execute("""
-        SELECT ur.rater_ID, ur.rating, ur.comments, u.username
-        FROM User_Rating ur
-        JOIN User u ON ur.rater_ID = u.userID
-        WHERE ur.ratee_ID = %s
-    """, (viewer_id,))
-    reviews = cursor.fetchall()
-
-    cursor.close()
-    conn.close()
-
-    return render_template("view_own_profile.html",
-                           profile=profile,
-                           interests=interests,
-                           avg_rating=avg_rating,
-                           reviews=reviews,
-                           viewer_id=viewer_id)
-
-# Route to list groups matching user's interests
+# Route to groups matching user's interests
 @app.route('/groups')
-def list_groups():
+def groups():
     if 'user_id' not in session:
         flash("Please log in", "error")
         return redirect(url_for('login'))
 
     user_id = session['user_id']
+
     page = request.args.get('page', 1, type=int)
     per_page = 10
 
@@ -816,7 +799,11 @@ def list_groups():
     user_interests = [row['interest_ID'] for row in cursor.fetchall()]
 
     if not user_interests:
-        return render_template('groups.html', groups=[], memberships=set(), page=page, total_pages=0)
+        return render_template('groups.html',
+                               groups=[],
+                               memberships=set(),
+                               page=page,
+                               total_pages=0)
 
     # Prepare format string for SQL IN clause
     format_ids = ','.join(['%s'] * len(user_interests))
@@ -852,7 +839,54 @@ def list_groups():
     cursor.close()
     conn.close()
 
-    return render_template('groups.html', groups=groups, memberships=joined_group_ids, page=page, total_pages=total_pages)
+    return render_template('groups.html',
+                           groups=groups,
+                           memberships=joined_group_ids, 
+                           page=page,
+                           total_pages=total_pages)
+
+# Route to join a group
+@app.route('/groups/join/<int:group_id>', methods=['POST'])
+def join_group(group_id):
+    if 'user_id' not in session:
+        flash("Login first", "error")
+        return redirect(url_for('login'))
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    # Add user to group (IGNORE prevents duplicate errors)
+    cursor.execute("""
+        INSERT IGNORE INTO User_Group (userID, group_ID)
+        VALUES (%s, %s)
+    """, (session['user_id'], group_id))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('groups'))
+
+# Route to leave a group
+@app.route('/groups/leave/<int:group_id>', methods=['POST'])
+def leave_group(group_id):
+    if 'user_id' not in session:
+        flash("Please log in", "error")
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    # Remove user from group
+    cursor.execute("DELETE FROM User_Group WHERE userID = %s AND group_ID = %s", (user_id, group_id))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('groups'))
 
 # Route to create a new group
 @app.route('/groups/create', methods=['GET', 'POST'])
@@ -885,72 +919,34 @@ def create_group():
 
         # Add creator to group members
         cursor.execute("INSERT INTO User_Group (userID, group_ID) VALUES (%s, %s)", (session['user_id'], group_id))
-        conn.commit()
 
+        conn.commit()
         cursor.close()
         conn.close()
-        return redirect(url_for('list_groups'))
+
+        return redirect(url_for('groups'))
 
     cursor.close()
     conn.close()
-    return render_template("create_group.html", interests=all_interests)
 
-# Route to join a group
-@app.route('/groups/join/<int:group_id>', methods=['POST'])
-def join_group(group_id):
-    if 'user_id' not in session:
-        flash("Login first", "error")
-        return redirect(url_for('login'))
-
-    conn = connect_db()
-    cursor = conn.cursor()
-
-    # Add user to group (IGNORE prevents duplicate errors)
-    cursor.execute("""
-        INSERT IGNORE INTO User_Group (userID, group_ID)
-        VALUES (%s, %s)
-    """, (session['user_id'], group_id))
-
-    conn.commit()
-    cursor.close()
-    conn.close()
-
-    return redirect(url_for('list_groups'))
-
-# Route to leave a group
-@app.route('/groups/leave/<int:group_id>', methods=['POST'])
-def leave_group(group_id):
-    if 'user_id' not in session:
-        flash("Please log in", "error")
-        return redirect(url_for('login'))
-
-    user_id = session['user_id']
-    conn = connect_db()
-    cursor = conn.cursor()
-
-    # Remove user from group
-    cursor.execute("DELETE FROM User_Group WHERE userID = %s AND group_ID = %s", (user_id, group_id))
-
-    conn.commit()
-    cursor.close()
-    conn.close()
-
-    return redirect(url_for('list_groups'))
+    return render_template("create_group.html",
+                           interests=all_interests)
 
 # Route for group details page
 @app.route('/groups/<int:group_id>')
-def group_detail(group_id):
+def group(group_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
     user_id = session['user_id']
+
     conn = connect_db()
     cursor = conn.cursor(dictionary=True)
 
     # Verify user is a member of this group
     cursor.execute("SELECT * FROM User_Group WHERE userID = %s AND group_ID = %s", (user_id, group_id))
     if not cursor.fetchone():
-        return redirect(url_for('list_groups'))
+        return redirect(url_for('groups'))
 
     # Get group info
     cursor.execute("SELECT * FROM GroupTable WHERE group_ID = %s", (group_id,))
@@ -1008,7 +1004,7 @@ def group_detail(group_id):
     cursor.close()
     conn.close()
 
-    return render_template("group_detail.html",
+    return render_template("group.html",
                            group=group,
                            posts=posts,
                            events=events,
@@ -1023,6 +1019,7 @@ def create_post(group_id):
         return redirect(url_for('login'))
 
     content = request.form['content']
+
     conn = connect_db()
     cursor = conn.cursor()
 
@@ -1035,28 +1032,8 @@ def create_post(group_id):
     conn.commit()
     cursor.close()
     conn.close()
-    return redirect(url_for('group_detail', group_id=group_id))
 
-# Route to add comment to a group post
-@app.route('/groups/<int:group_id>/comment/<int:post_id>', methods=['POST'])
-def add_comment(group_id, post_id):
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-
-    content = request.form['content']
-    conn = connect_db()
-    cursor = conn.cursor()
-    
-    # Insert new comment
-    cursor.execute("""
-        INSERT INTO GroupComment (post_id, userID, content)
-        VALUES (%s, %s, %s)
-    """, (post_id, session['user_id'], content))
-
-    conn.commit()
-    cursor.close()
-    conn.close()
-    return redirect(url_for('group_detail', group_id=group_id))
+    return redirect(url_for('group', group_id=group_id))
 
 # Route to delete a group post
 @app.route('/groups/<int:group_id>/post/delete/<int:post_id>', methods=['POST'])
@@ -1074,9 +1051,32 @@ def delete_post(group_id, post_id):
     cursor.close()
     conn.close()
 
-    return redirect(url_for('group_detail', group_id=group_id))
+    return redirect(url_for('group', group_id=group_id))
 
-# Route to delete a group comment
+# Route to add comment to a group post
+@app.route('/groups/<int:group_id>/comment/<int:post_id>', methods=['POST'])
+def add_comment(group_id, post_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    content = request.form['content']
+
+    conn = connect_db()
+    cursor = conn.cursor()
+    
+    # Insert new comment
+    cursor.execute("""
+        INSERT INTO GroupComment (post_id, userID, content)
+        VALUES (%s, %s, %s)
+    """, (post_id, session['user_id'], content))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('group', group_id=group_id))
+
+# Route to delete a comment on a group post
 @app.route('/groups/<int:group_id>/comment/delete/<int:comment_id>', methods=['POST'])
 def delete_comment(group_id, comment_id):
     if 'user_id' not in session:
@@ -1092,7 +1092,7 @@ def delete_comment(group_id, comment_id):
     cursor.close()
     conn.close()
 
-    return redirect(url_for('group_detail', group_id=group_id))
+    return redirect(url_for('group', group_id=group_id))
 
 # Route to create a group event
 @app.route('/groups/<int:group_id>/events/create', methods=['POST'])
@@ -1124,49 +1124,10 @@ def create_event(group_id):
     conn.commit()
     cursor.close()
     conn.close()
-    return redirect(url_for('group_detail', group_id=group_id))
 
-# Route to join an event
-@app.route('/groups/<int:group_id>/event/<int:event_id>/join', methods=['POST'])
-def join_event(group_id, event_id):
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
+    return redirect(url_for('group', group_id=group_id))
 
-    conn = connect_db()
-    cursor = conn.cursor()
-
-    # Add user to event participation
-    cursor.execute("""
-        INSERT IGNORE INTO event_participation (userID, event_ID) VALUES (%s, %s)
-    """, (session['user_id'], event_id))
-
-    conn.commit()
-    cursor.close()
-    conn.close()
-
-    return redirect(url_for('group_detail', group_id=group_id))
-
-# Route to leave an event
-@app.route('/groups/<int:group_id>/event/<int:event_id>/leave', methods=['POST'])
-def leave_event(group_id, event_id):
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-
-    conn = connect_db()
-    cursor = conn.cursor()
-    
-    # Remove user from event participation
-    cursor.execute("""
-        DELETE FROM event_participation WHERE userID = %s AND event_ID = %s
-    """, (session['user_id'], event_id))
-
-    conn.commit()
-    cursor.close()
-    conn.close()
-
-    return redirect(url_for('group_detail', group_id=group_id))
-
-# Route to delete an event
+# Route to delete a group event
 @app.route('/groups/<int:group_id>/event/<int:event_id>/delete', methods=['POST'])
 def delete_event(group_id, event_id):
     if 'user_id' not in session:
@@ -1189,75 +1150,146 @@ def delete_event(group_id, event_id):
     cursor.close()
     conn.close()
 
-    return redirect(url_for('group_detail', group_id=group_id))
+    return redirect(url_for('group', group_id=group_id))
 
-# Route to rate another user
-@app.route('/rate/<int:profile_user_id>', methods=['POST'])
-def rate_user(profile_user_id):
+# Route to join a group event
+@app.route('/groups/<int:group_id>/event/<int:event_id>/join', methods=['POST'])
+def join_event(group_id, event_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
-
-    rater_id = session['user_id']
-    rating = int(request.form['rating'])
-    comment = request.form.get('comment')
 
     conn = connect_db()
     cursor = conn.cursor()
 
-    # Check if users are or were friends (required for rating)
+    # Add user to event participation
     cursor.execute("""
-        SELECT 1 FROM Friendship 
-        WHERE (user1_ID = %s AND user2_ID = %s) OR (user1_ID = %s AND user2_ID = %s)
-        UNION
-        SELECT 1 FROM FriendRequest 
-        WHERE ((sender_id = %s AND receiver_id = %s) OR (sender_id = %s AND receiver_id = %s))
-          AND status = 'accepted'
-    """, (rater_id, profile_user_id, profile_user_id, rater_id,
-          rater_id, profile_user_id, profile_user_id, rater_id))
-
-    relationship = cursor.fetchone()
-
-    if not relationship:
-        cursor.close()
-        conn.close()
-        return redirect(url_for('view_profile', profile_user_id=profile_user_id, error="not_friends"))
-
-    # Insert or update rating
-    cursor.execute("""
-        INSERT INTO User_Rating (rater_ID, ratee_ID, rating, comments)
-        VALUES (%s, %s, %s, %s)
-        ON DUPLICATE KEY UPDATE rating = %s, comments = %s
-    """, (rater_id, profile_user_id, rating, comment, rating, comment))
+        INSERT IGNORE INTO event_participation (userID, event_ID) VALUES (%s, %s)
+    """, (session['user_id'], event_id))
 
     conn.commit()
     cursor.close()
     conn.close()
 
-    return redirect(url_for('view_profile', profile_user_id=profile_user_id, success="rating_submitted"))
+    return redirect(url_for('group', group_id=group_id))
 
-# Route to delete a rating
-@app.route('/rate/<int:profile_user_id>/delete', methods=['POST'])
-def delete_rating(profile_user_id):
+# Route to leave a group event
+@app.route('/groups/<int:group_id>/event/<int:event_id>/leave', methods=['POST'])
+def leave_event(group_id, event_id):
     if 'user_id' not in session:
-        flash("Please log in", "error")
         return redirect(url_for('login'))
-
-    rater_id = session['user_id']
 
     conn = connect_db()
     cursor = conn.cursor()
-
-    # Delete rating
+    
+    # Remove user from event participation
     cursor.execute("""
-        DELETE FROM User_Rating
-        WHERE rater_ID = %s AND ratee_ID = %s
-    """, (rater_id, profile_user_id))
+        DELETE FROM event_participation WHERE userID = %s AND event_ID = %s
+    """, (session['user_id'], event_id))
 
     conn.commit()
     cursor.close()
     conn.close()
 
-    return redirect(url_for('view_profile', profile_user_id=profile_user_id))
+    return redirect(url_for('group', group_id=group_id))
+
+# Route to manage friend requests
+@app.route('/friend_request/manage')
+def manage_friend_requests():
+    if 'user_id' not in session:
+        flash("Please log in first.", "error")
+        return redirect(url_for('login'))
+
+    # Pagination setup
+    page = int(request.args.get('page', 1))
+    per_page = 10
+    offset = (page - 1) * per_page
+
+    conn = connect_db()
+    cursor = conn.cursor(dictionary=True)
+
+    # Count total pending requests
+    cursor.execute("""
+        SELECT COUNT(*) as total
+        FROM FriendRequest fr
+        WHERE fr.receiver_id = %s AND fr.status = 'pending'
+    """, (session['user_id'],))
+    total_requests = cursor.fetchone()['total']
+    total_pages = (total_requests + per_page - 1) // per_page
+
+    # Get paginated list of pending requests
+    cursor.execute("""
+        SELECT fr.request_id, u.userID, u.username, u.email
+        FROM FriendRequest fr
+        JOIN User u ON fr.sender_id = u.userID
+        WHERE fr.receiver_id = %s AND fr.status = 'pending'
+        LIMIT %s OFFSET %s
+    """, (session['user_id'], per_page, offset))
+
+    requests = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template('manage_requests.html',
+                           requests=requests,
+                           page=page,
+                           total_pages=total_pages)
+
+# Route to accept friend request
+@app.route('/friend_request/accept/<int:request_id>', methods=['POST'])
+def accept_friend_request(request_id):
+    if 'user_id' not in session:
+        flash("Please log in first.", "error")
+        return redirect(url_for('login'))
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    # Get sender and receiver IDs from request
+    cursor.execute("""
+        SELECT sender_id, receiver_id FROM FriendRequest 
+        WHERE request_id = %s AND status = 'pending'
+    """, (request_id,))
+    result = cursor.fetchone()
+
+    if result:
+        sender_id, receiver_id = result
+        # Update request status to 'accepted'
+        cursor.execute("""
+            UPDATE FriendRequest SET status = 'accepted' WHERE request_id = %s
+        """, (request_id,))
+        # Create friendship record
+        cursor.execute("""
+            INSERT INTO Friendship (user1_ID, user2_ID) VALUES (%s, %s)
+        """, (sender_id, receiver_id))
+        conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('manage_friend_requests'))
+
+# Route to decline friend request
+@app.route('/friend_request/decline/<int:request_id>', methods=['POST'])
+def decline_friend_request(request_id):
+    if 'user_id' not in session:
+        flash("Please log in first.", "error")
+        return redirect(url_for('login'))
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    # Update request status to 'declined'
+    cursor.execute("""
+        UPDATE FriendRequest SET status = 'declined' 
+        WHERE request_id = %s AND receiver_id = %s
+    """, (request_id, session['user_id']))
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('manage_friend_requests'))
 
 # Helper function to check if user is admin
 def is_admin():
@@ -1267,7 +1299,7 @@ def is_admin():
     conn = connect_db()
     cursor = conn.cursor()
 
-    # Query the database to get the 'is_admin' status of the current user
+    # Search the database to get the 'is_admin' status of the current user
     cursor.execute("SELECT is_admin FROM User WHERE userID = %s", (session['user_id'],))
     result = cursor.fetchone()
 
@@ -1315,7 +1347,10 @@ def admin_users():
     cursor.close()
     conn.close()
 
-    return render_template('admin/users.html', users=users, page=page, total_pages=total_pages)
+    return render_template('admin/users.html',
+                           users=users,
+                           page=page,
+                           total_pages=total_pages)
 
 # Route to promote a user to admin (admin only)
 @app.route('/admin/users/make_admin/<int:user_id>', methods=['POST'])
@@ -1484,7 +1519,10 @@ def admin_interests():
     cursor.close()
     conn.close()
 
-    return render_template('admin/interests.html', interests=interests, page=page, total_pages=total_pages)
+    return render_template('admin/interests.html',
+                           interests=interests,
+                           page=page,
+                           total_pages=total_pages)
 
 # Route for admin to add a new interest
 @app.route('/admin/interests/add', methods=['POST'])
@@ -1494,7 +1532,7 @@ def add_interest():
     
     interest_name = request.form['interest_name']
     category = request.form['category']
-    page = request.form.get('page', 1, type=int)  # Current page to return to after adding
+    page = request.form.get('page', 1, type=int)
 
     conn = connect_db()
     cursor = conn.cursor()
@@ -1519,7 +1557,7 @@ def edit_interest(interest_id):
     
     interest_name = request.form['interest_name']
     category = request.form['category']
-    page = request.form.get('page', 1, type=int)  # Current page to return to after editing
+    page = request.form.get('page', 1, type=int)
 
     conn = connect_db()
     cursor = conn.cursor()
@@ -1587,7 +1625,10 @@ def admin_groups():
     cursor.close()
     conn.close()
 
-    return render_template('admin/groups.html', groups=groups, page=page, total_pages=total_pages)
+    return render_template('admin/groups.html',
+                           groups=groups,
+                           page=page,
+                           total_pages=total_pages)
 
 # Route to delete group (admin only)
 @app.route('/admin/groups/delete/<int:group_id>', methods=['POST'])
@@ -1640,7 +1681,10 @@ def admin_posts():
     cursor.close()
     conn.close()
 
-    return render_template('admin/posts.html', posts=posts, page=page, total_pages=total_pages)
+    return render_template('admin/posts.html',
+                           posts=posts,
+                           page=page,
+                           total_pages=total_pages)
 
 # Route to delete post (admin only)
 @app.route('/admin/posts/delete/<int:post_id>', methods=['POST'])
@@ -1692,7 +1736,10 @@ def admin_events():
     cursor.close()
     conn.close()
 
-    return render_template('admin/events.html', events=events, page=page, total_pages=total_pages)
+    return render_template('admin/events.html',
+                           events=events,
+                           page=page,
+                           total_pages=total_pages)
 
 # Route to delete event (admin only)
 @app.route('/admin/events/delete/<int:event_id>', methods=['POST'])
@@ -1731,7 +1778,7 @@ def admin_ratings():
     total_ratings = cursor.fetchone()['total']
     total_pages = (total_ratings + per_page - 1) // per_page
 
-    # Fetch paginated ratings with usernames
+    # Fetch paginated ratings
     cursor.execute("""
         SELECT ur.rater_ID, ur.ratee_ID, ur.rating, ur.comments, u.username
         FROM User_Rating ur
@@ -1743,7 +1790,10 @@ def admin_ratings():
 
     cursor.close()
     conn.close()
-    return render_template('admin/ratings.html', ratings=ratings, page=page, total_pages=total_pages)
+    return render_template('admin/ratings.html',
+                           ratings=ratings,
+                           page=page,
+                           total_pages=total_pages)
 
 # Route to delete rating (admin only)
 @app.route('/admin/ratings/delete/<int:rater_id>/<int:ratee_id>', methods=['POST'])

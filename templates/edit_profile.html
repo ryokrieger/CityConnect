@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/edit.css') }}">
+
+    <script>
+        // Function to dynamically update neighborhood dropdown based on selected city
+        function filterNeighborhoods() {
+            const cityCode = document.getElementById("city").value;
+            const allNeighborhoods = JSON.parse('{{ neighborhoods_json | tojson | safe }}');
+            const neighborhoodSelect = document.getElementById("neighborhood");
+
+            neighborhoodSelect.innerHTML = "";
+
+            allNeighborhoods
+                .filter(n => n.city_code == cityCode)
+                .forEach(n => {
+                    const option = document.createElement("option");
+                    option.value = n.postal_code;
+                    option.text = n.area_name;
+
+                    if (n.postal_code == "{{ user_postal_code }}") {
+                        option.selected = true;
+                    }
+
+                    neighborhoodSelect.appendChild(option);
+                });
+        }
+    </script>
+</head>
+
+<body onload="filterNeighborhoods()">
+    <div class="top-bar">
+        <div>
+            <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Update Profile</h2>
+
+        <!-- Form for updating user profile -->
+        <form method="POST">
+            <!-- Dropdown for selecting city -->
+            <label for="city">City:</label>
+            <select name="city" id="city" onchange="filterNeighborhoods()">
+                <!-- Loop over cities passed from backend and create options -->
+                {% for city in cities %}
+                    <option value="{{ city.city_code }}"
+                        {% if city.city_code == user_city_code %}selected{% endif %}>
+                        {{ city.city_name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <!-- Dropdown for neighborhoods, dynamically populated by JS -->
+            <label for="neighborhood">Neighborhood:</label>
+            <select name="neighborhood" id="neighborhood">
+            </select>
+
+            <!-- Group of checkboxes for user interests -->
+            <label>Interests:</label><br>
+            <div class="checkbox-group">
+                <!-- Loop over all interests and create checkboxes -->
+                {% for id, name in all_interests %}
+                    <label>
+                        <input type="checkbox" name="interests" value="{{ id }}"
+                            {% if id in user_interest_ids %}checked{% endif %}>
+                        {{ name }}
+                    </label>
+                {% endfor %}
+            </div>
+
+            <input type="submit" class="btn-submit" value="Update">
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="{{ 'flash-message' if category == 'success' else 'flash-error' }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+    </div>
+</body>
+</html>

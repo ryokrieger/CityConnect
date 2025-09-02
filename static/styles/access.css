@@ -1,4 +1,4 @@
-/* Handles login and signup */
+/* Styles login and signup */
 
 /* Ensures padding + border are included in width to prevent overflow */
 * {
@@ -34,16 +34,6 @@ body {
 /* Container */
 .container {
     max-width: 600px;
-    margin: 80px auto;
-    background-color: white;
-    padding: 30px;
-    border: 4px solid black;
-    border-radius: 16px;
-    box-shadow: 6px 6px 0px black;
-}
-
-.container-signup {
-    max-width: 500px;
     margin: 80px auto;
     background-color: white;
     padding: 30px;

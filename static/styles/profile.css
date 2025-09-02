@@ -1,3 +1,5 @@
+/* Styles for profile and view_profile */
+
 /* Ensures padding + border are included in width to prevent overflow */
 * {
     box-sizing: border-box;
@@ -18,7 +20,7 @@ body {
 }
 
 /* Top Bar */
-.top-bar, .header {
+.top-bar {
     background-color: #ffdd00;
     color: black;
     padding: 15px 20px;
@@ -31,12 +33,7 @@ body {
     letter-spacing: 2px;
 }
 
-.header {
-    justify-content: flex-start;
-    gap: 10px;
-}
-
-.top-bar a, .header a {
+.top-bar a {
     color: black;
     text-decoration: none;
     font-weight: bold;
@@ -47,7 +44,7 @@ body {
     transition: 0.2s ease;
 }
 
-.top-bar a:hover, .header a:hover {
+.top-bar a:hover {
     background-color: black;
     color: #ffdd00;
 }
@@ -345,10 +342,5 @@ textarea {
 
     .btn, .btn-delete {
         width: 100%;
-    }
-    
-    .header {
-        flex-wrap: wrap;
-        gap: 5px;
     }
 }

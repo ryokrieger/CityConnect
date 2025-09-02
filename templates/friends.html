@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>My Friends - CityConnect</title>
+    <title>My Friends</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/tables.css') }}">
 </head>
 <body>
@@ -14,7 +14,6 @@
 <div class="container">
     <h1>My Friends</h1>
 
-    <!-- Check if the user has any friends -->
     {% if friends %}
     <!-- Table listing friends -->
     <table>

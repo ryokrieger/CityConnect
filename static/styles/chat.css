@@ -53,13 +53,13 @@ body {
 
 /* Title */
 h2 {
-    color: black; /* solid black text */
+    color: black;
     margin-bottom: 30px;
     font-size: 38px;
     text-align: center;
     font-family: 'Bangers', cursive, 'Comic Sans MS';
     letter-spacing: 3px;
-    text-shadow: none; /* remove shadow */
+    text-shadow: none;
 }
 
 /* Chat Box */
@@ -87,7 +87,7 @@ h2 {
 }
 
 .chat-message.sent .message-content {
-    background-color: #10b981;  /* Green background */
+    background-color: #10b981;
     color: white;
     align-self: flex-end;
     margin-right: 0;
@@ -101,8 +101,7 @@ h2 {
 }
 
 .chat-message.received .message-content {
-    background-color: #ffdd00;  /* Yellow background to match comic theme */
-    color: black;
+    background-color: #ffdd00;
     align-self: flex-start;
     margin-left: 0;
     border: 2px solid black;

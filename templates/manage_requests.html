@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Manage Friend Requests - CityConnect</title>
+    <title>Manage Friend Requests</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/tables.css') }}">
 </head>
 <body>
@@ -14,7 +14,6 @@
 <div class="container">
     <h1>Pending Friend Requests</h1>
 
-    <!-- If there are any pending friend requests -->
     {% if requests %}
     <table>
         <thead>
@@ -28,8 +27,8 @@
             <!-- Loop through each friend request -->
             {% for r in requests %}
             <tr>
-                <td>{{ r.username }}</td> <!-- Display username -->
-                <td>{{ r.email }}</td>   <!-- Display email -->
+                <td>{{ r.username }}</td>
+                <td>{{ r.email }}</td>
                 <td>
                     <div class="actions-cell">
                         <!-- Link to view the user's profile -->
