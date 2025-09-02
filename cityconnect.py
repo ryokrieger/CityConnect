@@ -1358,9 +1358,12 @@ def make_user_admin(user_id):
     if not is_admin():
         return redirect(url_for('dashboard'))
 
+    # Get current page from form data
+    page = request.form.get('page', 1, type=int)
+    
     # Prevent an admin from promoting themselves again
     if session['user_id'] == user_id:
-        return redirect(url_for('admin_users'))
+        return redirect(url_for('admin_users', page=page))
 
     conn = connect_db()
     cursor = conn.cursor()
@@ -1372,7 +1375,7 @@ def make_user_admin(user_id):
     cursor.close()
     conn.close()
 
-    return redirect(url_for('admin_users'))
+    return redirect(url_for('admin_users', page=page))
 
 # Route to revoke admin rights from a user (admin only)
 @app.route('/admin/users/revoke_admin/<int:user_id>', methods=['POST'])
@@ -1380,9 +1383,12 @@ def revoke_user_admin(user_id):
     if not is_admin():
         return redirect(url_for('dashboard'))
 
+    # Get current page from form data
+    page = request.form.get('page', 1, type=int)
+    
     # Prevent an admin from revoking their own rights
     if session['user_id'] == user_id:
-        return redirect(url_for('admin_users'))
+        return redirect(url_for('admin_users', page=page))
 
     conn = connect_db()
     cursor = conn.cursor()
@@ -1394,7 +1400,7 @@ def revoke_user_admin(user_id):
     cursor.close()
     conn.close()
 
-    return redirect(url_for('admin_users'))
+    return redirect(url_for('admin_users', page=page))
 
 # Route to restrict a user from logging in (admin only)
 @app.route('/admin/users/restrict/<int:user_id>', methods=['POST'])
@@ -1402,9 +1408,12 @@ def restrict_user(user_id):
     if not is_admin():
         return redirect(url_for('dashboard'))
 
+    # Get current page from form data
+    page = request.form.get('page', 1, type=int)
+    
     # Prevent admin from restricting themselves
     if session['user_id'] == user_id:
-        return redirect(url_for('admin_users'))
+        return redirect(url_for('admin_users', page=page))
 
     conn = connect_db()
     cursor = conn.cursor()
@@ -1416,7 +1425,7 @@ def restrict_user(user_id):
     cursor.close()
     conn.close()
 
-    return redirect(url_for('admin_users'))
+    return redirect(url_for('admin_users', page=page))
 
 # Route to remove restriction from a user (admin only)
 @app.route('/admin/users/unrestrict/<int:user_id>', methods=['POST'])
@@ -1424,6 +1433,9 @@ def unrestrict_user(user_id):
     if not is_admin():
         return redirect(url_for('dashboard'))
 
+    # Get current page from form data
+    page = request.form.get('page', 1, type=int)
+    
     conn = connect_db()
     cursor = conn.cursor()
 
@@ -1434,7 +1446,7 @@ def unrestrict_user(user_id):
     cursor.close()
     conn.close()
 
-    return redirect(url_for('admin_users'))
+    return redirect(url_for('admin_users', page=page))
 
 # Route to delete user (admin only)
 @app.route('/admin/users/delete/<int:user_id>', methods=['POST'])
@@ -1442,9 +1454,12 @@ def admin_delete_user(user_id):
     if not is_admin():
         return redirect(url_for('dashboard'))
 
+    # Get current page from form data
+    page = request.form.get('page', 1, type=int)
+    
     # Prevent admins from deleting their own account
     if session['user_id'] == user_id:
-        return redirect(url_for('admin_users'))
+        return redirect(url_for('admin_users', page=page))
 
     conn = connect_db()
     cursor = conn.cursor(dictionary=True)
@@ -1457,13 +1472,13 @@ def admin_delete_user(user_id):
     if not user:
         cursor.close()
         conn.close()
-        return redirect(url_for('admin_users'))
+        return redirect(url_for('admin_users', page=page))
 
     # Prevent deletion of other admins
     if user['is_admin']:
         cursor.close()
         conn.close()
-        return redirect(url_for('admin_users'))
+        return redirect(url_for('admin_users', page=page))
 
     try:
         # Delete related data manually in multiple tables to avoid foreign key constraint errors
@@ -1492,7 +1507,7 @@ def admin_delete_user(user_id):
     cursor.close()
     conn.close()
 
-    return redirect(url_for('admin_users'))
+    return redirect(url_for('admin_users', page=page))
 
 # Route for the admin to control interests
 @app.route('/admin/interests')
@@ -1636,6 +1651,9 @@ def admin_delete_group(group_id):
     if not is_admin():
         return redirect(url_for('dashboard'))
 
+    # Get current page from form data
+    page = request.form.get('page', 1, type=int)
+    
     conn = connect_db()
     cursor = conn.cursor()
 
@@ -1646,7 +1664,7 @@ def admin_delete_group(group_id):
     cursor.close()
     conn.close()
 
-    return redirect(url_for('admin_groups'))
+    return redirect(url_for('admin_groups', page=page))
 
 # Admin posts management route
 @app.route('/admin/posts')
@@ -1692,6 +1710,9 @@ def admin_delete_post(post_id):
     if not is_admin():
         return redirect(url_for('dashboard'))
 
+    # Get current page from form data
+    page = request.form.get('page', 1, type=int)
+    
     conn = connect_db()
     cursor = conn.cursor()
 
@@ -1702,7 +1723,7 @@ def admin_delete_post(post_id):
     cursor.close()
     conn.close()
 
-    return redirect(url_for('admin_posts'))
+    return redirect(url_for('admin_posts', page=page))
 
 # Admin events management route
 @app.route('/admin/events')
@@ -1747,6 +1768,9 @@ def admin_delete_event(event_id):
     if not is_admin():
         return redirect(url_for('dashboard'))
 
+    # Get current page from form data
+    page = request.form.get('page', 1, type=int)
+    
     conn = connect_db()
     cursor = conn.cursor()
 
@@ -1757,7 +1781,7 @@ def admin_delete_event(event_id):
     cursor.close()
     conn.close()
 
-    return redirect(url_for('admin_events'))
+    return redirect(url_for('admin_events', page=page))
 
 # Admin ratings management route
 @app.route('/admin/ratings')
@@ -1801,6 +1825,9 @@ def admin_delete_rating(rater_id, ratee_id):
     if not is_admin():
         return redirect(url_for('dashboard'))
 
+    # Get current page from form data
+    page = request.form.get('page', 1, type=int)
+    
     conn = connect_db()
     cursor = conn.cursor()
 
@@ -1811,7 +1838,7 @@ def admin_delete_rating(rater_id, ratee_id):
     cursor.close()
     conn.close()
     
-    return redirect(url_for('admin_ratings'))
+    return redirect(url_for('admin_ratings', page=page))
 
 # Main entry point
 if __name__ == '__main__':

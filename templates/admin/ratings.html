@@ -44,6 +44,7 @@
                           action="{{ url_for('admin_delete_rating', rater_id=rating.rater_ID, ratee_id=rating.ratee_ID) }}"
                           class="action-form"
                           onsubmit="return confirm('Are you sure you want to delete this rating?');">
+                        <input type="hidden" name="page" value="{{ page }}">
                         <button type="submit" class="btn btn-delete">Delete</button>
                     </form>
                 </td>
