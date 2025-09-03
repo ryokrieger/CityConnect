@@ -449,7 +449,7 @@ def similar_interests(scope):
         cursor.close()
         conn.close()
         flash("You haven't selected any interests yet—add some to see matches.", "warning")
-        return redirect(url_for('profile', user_id=user_id))
+        return redirect(url_for('edit_profile', user_id=user_id))
 
     # Dynamically build IN clause placeholders for interest IDs
     in_placeholders = ','.join(['%s'] * len(interest_ids))
