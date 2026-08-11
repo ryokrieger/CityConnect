@@ -1,0 +1,618 @@
+[
+  {
+    "model": "core.city",
+    "pk": 1,
+    "fields": {
+      "city_name": "Barishal",
+      "country": "Bangladesh"
+    }
+  },
+  {
+    "model": "core.city",
+    "pk": 2,
+    "fields": {
+      "city_name": "Chattogram",
+      "country": "Bangladesh"
+    }
+  },
+  {
+    "model": "core.city",
+    "pk": 3,
+    "fields": {
+      "city_name": "Dhaka",
+      "country": "Bangladesh"
+    }
+  },
+  {
+    "model": "core.city",
+    "pk": 4,
+    "fields": {
+      "city_name": "Khulna",
+      "country": "Bangladesh"
+    }
+  },
+  {
+    "model": "core.city",
+    "pk": 5,
+    "fields": {
+      "city_name": "Mymensingh",
+      "country": "Bangladesh"
+    }
+  },
+  {
+    "model": "core.city",
+    "pk": 6,
+    "fields": {
+      "city_name": "Rajshahi",
+      "country": "Bangladesh"
+    }
+  },
+  {
+    "model": "core.city",
+    "pk": 7,
+    "fields": {
+      "city_name": "Rangpur",
+      "country": "Bangladesh"
+    }
+  },
+  {
+    "model": "core.city",
+    "pk": 8,
+    "fields": {
+      "city_name": "Sylhet",
+      "country": "Bangladesh"
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 1001,
+    "fields": {
+      "area_name": "Barguna",
+      "city": 1
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 1002,
+    "fields": {
+      "area_name": "Barishal",
+      "city": 1
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 1003,
+    "fields": {
+      "area_name": "Bhola",
+      "city": 1
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 1004,
+    "fields": {
+      "area_name": "Jhalokati",
+      "city": 1
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 1005,
+    "fields": {
+      "area_name": "Patuakhali",
+      "city": 1
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 1006,
+    "fields": {
+      "area_name": "Pirojpur",
+      "city": 1
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 2001,
+    "fields": {
+      "area_name": "Bandarban",
+      "city": 2
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 2002,
+    "fields": {
+      "area_name": "Brahmanbaria",
+      "city": 2
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 2003,
+    "fields": {
+      "area_name": "Chandpur",
+      "city": 2
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 2004,
+    "fields": {
+      "area_name": "Chattogram",
+      "city": 2
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 2005,
+    "fields": {
+      "area_name": "Cumilla",
+      "city": 2
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 2006,
+    "fields": {
+      "area_name": "Cox Bazar",
+      "city": 2
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 2007,
+    "fields": {
+      "area_name": "Feni",
+      "city": 2
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 2008,
+    "fields": {
+      "area_name": "Khagrachhari",
+      "city": 2
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 2009,
+    "fields": {
+      "area_name": "Lakshmipur",
+      "city": 2
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 2010,
+    "fields": {
+      "area_name": "Noakhali",
+      "city": 2
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 2011,
+    "fields": {
+      "area_name": "Rangamati",
+      "city": 2
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 3001,
+    "fields": {
+      "area_name": "Dhaka",
+      "city": 3
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 3002,
+    "fields": {
+      "area_name": "Faridpur",
+      "city": 3
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 3003,
+    "fields": {
+      "area_name": "Gazipur",
+      "city": 3
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 3004,
+    "fields": {
+      "area_name": "Gopalganj",
+      "city": 3
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 3005,
+    "fields": {
+      "area_name": "Kishoreganj",
+      "city": 3
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 3006,
+    "fields": {
+      "area_name": "Madaripur",
+      "city": 3
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 3007,
+    "fields": {
+      "area_name": "Manikganj",
+      "city": 3
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 3008,
+    "fields": {
+      "area_name": "Munshiganj",
+      "city": 3
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 3009,
+    "fields": {
+      "area_name": "Narayanganj",
+      "city": 3
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 3010,
+    "fields": {
+      "area_name": "Narsingdi",
+      "city": 3
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 3011,
+    "fields": {
+      "area_name": "Rajbari",
+      "city": 3
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 3012,
+    "fields": {
+      "area_name": "Shariatpur",
+      "city": 3
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 3013,
+    "fields": {
+      "area_name": "Tangail",
+      "city": 3
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 4001,
+    "fields": {
+      "area_name": "Bagerhat",
+      "city": 4
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 4002,
+    "fields": {
+      "area_name": "Chuadanga",
+      "city": 4
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 4003,
+    "fields": {
+      "area_name": "Jashore",
+      "city": 4
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 4004,
+    "fields": {
+      "area_name": "Jhenaidah",
+      "city": 4
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 4005,
+    "fields": {
+      "area_name": "Khulna",
+      "city": 4
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 4006,
+    "fields": {
+      "area_name": "Kushtia",
+      "city": 4
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 4007,
+    "fields": {
+      "area_name": "Magura",
+      "city": 4
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 4008,
+    "fields": {
+      "area_name": "Meherpur",
+      "city": 4
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 4009,
+    "fields": {
+      "area_name": "Narail",
+      "city": 4
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 4010,
+    "fields": {
+      "area_name": "Satkhira",
+      "city": 4
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 5001,
+    "fields": {
+      "area_name": "Jamalpur",
+      "city": 5
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 5002,
+    "fields": {
+      "area_name": "Mymensingh",
+      "city": 5
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 5003,
+    "fields": {
+      "area_name": "Netrokona",
+      "city": 5
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 5004,
+    "fields": {
+      "area_name": "Sherpur",
+      "city": 5
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 6001,
+    "fields": {
+      "area_name": "Bogura",
+      "city": 6
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 6002,
+    "fields": {
+      "area_name": "Joypurhat",
+      "city": 6
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 6003,
+    "fields": {
+      "area_name": "Naogaon",
+      "city": 6
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 6004,
+    "fields": {
+      "area_name": "Natore",
+      "city": 6
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 6005,
+    "fields": {
+      "area_name": "Chapai Nawabganj",
+      "city": 6
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 6006,
+    "fields": {
+      "area_name": "Pabna",
+      "city": 6
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 6007,
+    "fields": {
+      "area_name": "Rajshahi",
+      "city": 6
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 6008,
+    "fields": {
+      "area_name": "Sirajganj",
+      "city": 6
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 7001,
+    "fields": {
+      "area_name": "Dinajpur",
+      "city": 7
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 7002,
+    "fields": {
+      "area_name": "Gaibandha",
+      "city": 7
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 7003,
+    "fields": {
+      "area_name": "Kurigram",
+      "city": 7
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 7004,
+    "fields": {
+      "area_name": "Lalmonirhat",
+      "city": 7
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 7005,
+    "fields": {
+      "area_name": "Nilphamari",
+      "city": 7
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 7006,
+    "fields": {
+      "area_name": "Panchagarh",
+      "city": 7
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 7007,
+    "fields": {
+      "area_name": "Rangpur",
+      "city": 7
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 7008,
+    "fields": {
+      "area_name": "Thakurgaon",
+      "city": 7
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 8001,
+    "fields": {
+      "area_name": "Habiganj",
+      "city": 8
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 8002,
+    "fields": {
+      "area_name": "Moulvibazar",
+      "city": 8
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 8003,
+    "fields": {
+      "area_name": "Sunamganj",
+      "city": 8
+    }
+  },
+  {
+    "model": "core.neighborhood",
+    "pk": 8004,
+    "fields": {
+      "area_name": "Sylhet",
+      "city": 8
+    }
+  },
+  {
+    "model": "core.interest",
+    "pk": 1,
+    "fields": {
+      "interest_name": "Sports",
+      "category": "Entertainment"
+    }
+  },
+  {
+    "model": "core.interest",
+    "pk": 2,
+    "fields": {
+      "interest_name": "Programming",
+      "category": "Tech"
+    }
+  },
+  {
+    "model": "core.interest",
+    "pk": 3,
+    "fields": {
+      "interest_name": "Photography",
+      "category": "Arts"
+    }
+  },
+  {
+    "model": "core.interest",
+    "pk": 4,
+    "fields": {
+      "interest_name": "Reading",
+      "category": "Hobby"
+    }
+  },
+  {
+    "model": "core.interest",
+    "pk": 5,
+    "fields": {
+      "interest_name": "Hiking",
+      "category": "Outdoor Activities"
+    }
+  }
+]
