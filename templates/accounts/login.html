@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sign In — CityConnect{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="card card-white">
+    <h2>Sign In</h2>
+
+    {% if form.non_field_errors %}
+      <div class="form-errors">
+        {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label class="form-label" for="id_username">Username</label>
+        <input type="text" name="username" id="id_username" class="form-input"
+               placeholder="your_username" value="{{ form.username.value|default:'' }}" required autofocus>
+        {% for error in form.username.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="id_password">Password</label>
+        <div class="password-wrapper">
+          <input type="password" name="password" id="id_password" class="form-input"
+                 placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required>
+          <button type="button" class="password-toggle" data-target="id_password">&#9701;&mdash;&#9701;</button>
+        </div>
+        {% for error in form.password.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Sign In &#8599;</button>
+    </form>
+
+    <p style="text-align: center; margin-top: 16px; font-size: 0.9rem;">
+      New here? <a class="link" href="{% url 'accounts:signup' %}">Create an account</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

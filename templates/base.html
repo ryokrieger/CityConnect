@@ -1,0 +1,128 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}CityConnect{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+{% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<button class="hamburger" id="hamburgerBtn">&#9776;</button>
+
+<div class="app-shell">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">City<span>Connect</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <span class="nav-group-title">Main</span>
+        <a class="nav-item{% if request.resolver_match.url_name == 'index' %} active{% endif %}" href="{% url 'accounts:index' %}" data-color="blue">
+          <span class="nav-num">01</span>
+          <span class="nav-text">Home</span>
+          <span class="nav-arrow">&#8599;</span>
+        </a>
+        <a class="nav-item{% if request.resolver_match.url_name == 'dashboard' %} active{% endif %}" href="{% url 'accounts:dashboard' %}" data-color="orange">
+          <span class="nav-num">02</span>
+          <span class="nav-text">Dashboard</span>
+          <span class="nav-arrow">&#8599;</span>
+        </a>
+        <a class="nav-item disabled" href="#" data-color="green" title="Coming soon">
+          <span class="nav-num">03</span>
+          <span class="nav-text">Explore</span>
+          <span class="nav-arrow">&#8599;</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-group-title">Community</span>
+        <a class="nav-item disabled" href="#" data-color="purple" title="Coming in Sprint 3">
+          <span class="nav-num">04</span>
+          <span class="nav-text">Groups</span>
+          <span class="nav-arrow">&#8599;</span>
+        </a>
+        <a class="nav-item disabled" href="#" data-color="yellow" title="Coming in Sprint 4">
+          <span class="nav-num">05</span>
+          <span class="nav-text">Events</span>
+          <span class="nav-arrow">&#8599;</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-group-title">Network</span>
+        <a class="nav-item disabled" href="#" data-color="blue" title="Coming in Sprint 2">
+          <span class="nav-num">06</span>
+          <span class="nav-text">Matches</span>
+          <span class="nav-arrow">&#8599;</span>
+        </a>
+        <a class="nav-item disabled" href="#" data-color="orange" title="Coming in Sprint 3">
+          <span class="nav-num">07</span>
+          <span class="nav-text">Friends</span>
+          <span class="nav-arrow">&#8599;</span>
+        </a>
+        <a class="nav-item disabled" href="#" data-color="green" title="Coming in Sprint 3">
+          <span class="nav-num">08</span>
+          <span class="nav-text">Messages</span>
+          <span class="nav-arrow">&#8599;</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-group-title">Account</span>
+        <a class="nav-item disabled" href="#" data-color="purple" title="Coming in Sprint 2">
+          <span class="nav-num">09</span>
+          <span class="nav-text">Profile</span>
+          <span class="nav-arrow">&#8599;</span>
+        </a>
+        <a class="nav-item disabled" href="#" data-color="yellow" title="Coming in Sprint 2">
+          <span class="nav-num">10</span>
+          <span class="nav-text">Settings</span>
+          <span class="nav-arrow">&#8599;</span>
+        </a>
+        <a class="nav-item disabled" href="#" data-color="blue" title="Coming soon">
+          <span class="nav-num">11</span>
+          <span class="nav-text">About</span>
+          <span class="nav-arrow">&#8599;</span>
+        </a>
+        {% if user.is_staff %}
+        <a class="nav-item disabled" href="#" data-color="orange" title="Coming in Sprint 5">
+          <span class="nav-num">12</span>
+          <span class="nav-text">Admin</span>
+          <span class="nav-arrow">&#8599;</span>
+        </a>
+        {% endif %}
+      </div>
+    </nav>
+
+    {% if user.is_authenticated %}
+      <a class="cta-btn" href="{% url 'accounts:logout' %}">Logout &#8599;</a>
+    {% else %}
+      <a class="cta-btn" href="{% url 'accounts:login' %}">Sign In &#8599;</a>
+    {% endif %}
+  </aside>
+
+  <main class="main-area">
+    <div class="view-container">
+
+      {% if messages %}
+        <div class="flash-messages">
+          {% for message in messages %}
+            <div class="flash-message flash-{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <section class="view active">
+        {% block content %}{% endblock %}
+      </section>
+
+    </div>
+  </main>
+
+</div>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

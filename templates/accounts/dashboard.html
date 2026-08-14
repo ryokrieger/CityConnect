@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard — CityConnect{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<h2>Welcome back, {{ user.username }}!</h2>
+<p>
+  {% if user.city %}
+    You're currently in <strong>{{ user.city.city_name }}</strong>
+  {% else %}
+    Add your city on your profile to start finding people nearby.
+  {% endif %}
+</p>
+
+<div class="card-grid">
+  <div class="card card-blue">
+    <div class="card-icon">&#128587;</div>
+    <h3>My Profile</h3>
+    <p>View your interests, ratings, and community stats.</p>
+    <span class="card-link disabled">Coming Soon</span>
+  </div>
+  <div class="card card-orange">
+    <div class="card-icon">&#9999;&#65039;</div>
+    <h3>Edit Profile</h3>
+    <p>Update your avatar, bio, city, and interests.</p>
+    <span class="card-link disabled">Coming Soon</span>
+  </div>
+  <div class="card card-green">
+    <div class="card-icon">&#128172;</div>
+    <h3>Find People</h3>
+    <p>Find people in your city who share your hobbies.</p>
+    <span class="card-link disabled">Coming Soon</span>
+  </div>
+  <div class="card card-purple">
+    <div class="card-icon">&#129309;</div>
+    <h3>My Friends</h3>
+    <p>Connect with friends and start chatting.</p>
+    <span class="card-link disabled">Coming Soon</span>
+  </div>
+  <div class="card card-yellow">
+    <div class="card-icon">&#128101;</div>
+    <h3>Groups</h3>
+    <p>Join interest-based groups in your area.</p>
+    <span class="card-link disabled">Coming Soon</span>
+  </div>
+  <div class="card card-white">
+    <div class="card-icon">&#128231;</div>
+    <h3>Requests</h3>
+    <p>Manage your pending friend requests.</p>
+    <span class="card-link disabled">Coming Soon</span>
+  </div>
+</div>
+{% endblock %}
