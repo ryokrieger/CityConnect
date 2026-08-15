@@ -74,13 +74,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # ---------------------------------------------------------------------------
-# Database (Neon Postgres)
+# Database — parsed from the required DATABASE_URL. DB_SSL_REQUIRE lets the
+# same settings.py work against local psql (SSL off) and Neon (SSL required)
+# without any hardcoded assumption baked into the code.
 # ---------------------------------------------------------------------------
 DATABASES = {
     'default': dj_database_url.parse(
         config('DATABASE_URL'),
         conn_max_age=600,
-        ssl_require=True,
+        ssl_require=config('DB_SSL_REQUIRE', cast=bool),
     )
 }
 
