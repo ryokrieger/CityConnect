@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}About · CityConnect{% endblock %}
+
+{% block content %}
+{% url 'accounts:signup' as signup_url %}
+<h2>About CityConnect</h2>
+<div class="split-layout">
+  <div class="split-left">
+    <p class="lead">Building warmer, more connected communities across Bangladesh.</p>
+    <p>CityConnect is a community platform designed to help neighbors in Bangladeshi cities discover each other, form meaningful friendships, and build local groups around shared interests.</p>
+    <p>Whether you're into tech, music, food, gaming, or just want to meet new people in your neighborhood — there's a place for you here.</p>
+    {% if not user.is_authenticated %}
+      <a class="btn btn-primary" href="{{ signup_url|default:'#' }}">Join Now ↗</a>
+    {% endif %}
+  </div>
+  <div class="split-right">
+    <div class="tunnel-container tunnel-container--orange" aria-hidden="true">
+      <div class="tunnel-grid"></div>
+      <div class="tunnel-block tb-blue tb-about-1"></div>
+      <div class="tunnel-block tb-green tb-about-2"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

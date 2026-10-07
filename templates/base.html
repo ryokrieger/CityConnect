@@ -1,0 +1,118 @@
+{% load static %}{% comment %}
+  Global layout: sidebar navigation, flash messages, mobile menu.
+
+  Sidebar links use `{% url ... as var %}`, which yields an empty string instead of an
+  error when a page does not exist yet, so the menu grows as each sprint adds pages.
+  URL names expected by later sprints:
+    accounts:dashboard  core:explore  groups:list  events:list
+    accounts:similar_interests  social:friends  social:requests  messaging:inbox
+    core:notifications  accounts:profile  accounts:settings  admin_panel:dashboard
+    accounts:login  accounts:signup  accounts:logout
+{% endcomment %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}CityConnect — Unique Communities{% endblock %}</title>
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/variables.css' %}">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <button class="hamburger" id="hamburgerBtn" type="button" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">☰</button>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="logo" href="{% url 'core:home' %}">City<span>Connect</span></a>
+
+      <nav class="sidebar-nav" aria-label="Main">
+        <div class="nav-group">
+          <span class="nav-group-title">Main</span>
+          {% url 'core:home' as u %}{% include "partials/_nav_item.html" with url=u view="core:home" label="Home" color="blue" %}
+          {% if user.is_authenticated %}
+            {% url 'accounts:dashboard' as u %}{% include "partials/_nav_item.html" with url=u view="accounts:dashboard" label="Dashboard" color="orange" %}
+            {% url 'core:explore' as u %}{% include "partials/_nav_item.html" with url=u view="core:explore" label="Explore" color="green" %}
+          {% endif %}
+        </div>
+
+        {% if user.is_authenticated %}
+        <div class="nav-group">
+          <span class="nav-group-title">Community</span>
+          {% url 'groups:list' as u %}{% include "partials/_nav_item.html" with url=u view="groups:list" label="Groups" color="purple" %}
+          {% url 'events:list' as u %}{% include "partials/_nav_item.html" with url=u view="events:list" label="Events" color="yellow" %}
+        </div>
+
+        <div class="nav-group">
+          <span class="nav-group-title">Network</span>
+          {% url 'accounts:similar_interests' as u %}{% include "partials/_nav_item.html" with url=u view="accounts:similar_interests" label="Matches" color="blue" %}
+          {% url 'social:friends' as u %}{% include "partials/_nav_item.html" with url=u view="social:friends" label="Friends" color="orange" %}
+          {% url 'social:requests' as u %}{% include "partials/_nav_item.html" with url=u view="social:requests" label="Requests" color="purple" %}
+          {% url 'messaging:inbox' as u %}{% include "partials/_nav_item.html" with url=u view="messaging:inbox" label="Messages" color="green" %}
+          {% url 'core:notifications' as u %}{% include "partials/_nav_item.html" with url=u view="core:notifications" label="Notifications" color="yellow" %}
+        </div>
+
+        <div class="nav-group">
+          <span class="nav-group-title">Account</span>
+          {% url 'accounts:profile' as u %}{% include "partials/_nav_item.html" with url=u view="accounts:profile" label="Profile" color="purple" %}
+          {% url 'accounts:settings' as u %}{% include "partials/_nav_item.html" with url=u view="accounts:settings" label="Settings" color="yellow" %}
+          {% if user.is_staff %}{% url 'admin_panel:dashboard' as u %}{% include "partials/_nav_item.html" with url=u view="admin_panel:dashboard" label="Admin" color="orange" %}{% endif %}
+        </div>
+        {% endif %}
+
+        <div class="nav-group">
+          <span class="nav-group-title">About</span>
+          {% url 'core:about' as u %}{% include "partials/_nav_item.html" with url=u view="core:about" label="About" color="blue" %}
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        {% if user.is_authenticated %}
+          {% url 'accounts:logout' as logout_url %}
+          {% if logout_url %}
+          <form method="post" action="{{ logout_url }}">
+            {% csrf_token %}
+            <button class="btn btn-dark btn-block" type="submit">Logout ↗</button>
+          </form>
+          {% endif %}
+        {% else %}
+          {% url 'accounts:login' as login_url %}
+          {% url 'accounts:signup' as signup_url %}
+          {% if login_url %}<a class="btn btn-dark btn-block" href="{{ login_url }}">Sign In ↗</a>{% endif %}
+        {% endif %}
+      </div>
+    </aside>
+
+    <div class="main-area">
+      <div class="page-container">
+        <main class="page{% block page_class %}{% endblock %}" id="main-content" tabindex="-1">
+          <div class="page-inner">
+            {% if messages %}
+            <ul class="messages" role="status">
+              {% for message in messages %}
+              <li class="alert alert-{{ message.tags|default:'info' }}">
+                <span>{{ message }}</span>
+                <button class="alert-dismiss" type="button" aria-label="Dismiss message">×</button>
+              </li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/layout.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

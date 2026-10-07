@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Home · CityConnect{% endblock %}
+
+{% block content %}
+{% url 'accounts:signup' as signup_url %}
+{% url 'accounts:login' as login_url %}
+{% url 'accounts:dashboard' as dashboard_url %}
+<div class="split-layout">
+  <div class="split-left">
+    <h1>Community living, redefined.</h1>
+    <p class="lead">Find neighbors who share your interests, join local groups, and build real community — one connection at a time.</p>
+    <ul class="feature-list">
+      <li>Profiles tied to your city and neighborhood</li>
+      <li>Interest-based matching</li>
+      <li>Local events &amp; meetups</li>
+      <li>Moderated community spaces</li>
+    </ul>
+    <div class="row">
+      {% if user.is_authenticated %}
+        {% if dashboard_url %}<a class="btn btn-primary" href="{{ dashboard_url }}">Go to Dashboard ↗</a>{% endif %}
+      {% else %}
+        <a class="btn btn-primary" href="{{ signup_url|default:'#' }}">Get Started ↗</a>
+        <a class="btn" href="{{ login_url|default:'#' }}">Sign In</a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="split-right">
+    <div class="tunnel-container" aria-hidden="true">
+      <div class="tunnel-grid"></div>
+      <div class="tunnel-block tb-orange tb-home-1"></div>
+      <div class="tunnel-block tb-green tb-home-2"></div>
+      <div class="tunnel-block tb-yellow tb-home-3"></div>
+      <div class="tunnel-block tb-purple tb-home-4"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

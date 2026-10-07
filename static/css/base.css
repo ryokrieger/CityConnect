@@ -1,0 +1,92 @@
+/* ==========================================================================
+   BASE — reset, typography, body
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-main);
+  background: var(--bg-cream);
+  color: var(--text-black);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  margin-bottom: var(--space-4);
+}
+h1 { font-size: 3.5rem; }
+h2 { font-size: 2.5rem; }
+h3 { font-size: 1.5rem; }
+
+p {
+  margin-bottom: var(--space-4);
+  font-weight: 400;
+}
+
+a { color: inherit; }
+
+img { max-width: 100%; display: block; }
+
+.lead {
+  font-size: 1.25rem;
+  margin-bottom: var(--space-5);
+  max-width: 500px;
+}
+
+/* Accessibility */
+:focus-visible {
+  outline: var(--border-width) solid var(--c-blue);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--space-4);
+  top: -100px;
+  z-index: 2000;
+  padding: var(--space-3) var(--space-4);
+  background: var(--text-black);
+  color: var(--bg-cream);
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+}
+.skip-link:focus { top: var(--space-4); }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Utilities */
+.text-center { text-align: center; }
+.mb-2 { margin-bottom: var(--space-4); }
+.mb-3 { margin-bottom: var(--space-5); }
+.row { display: flex; gap: var(--space-3); flex-wrap: wrap; }
+
+@media (max-width: 900px) {
+  h1 { font-size: 2.2rem; }
+  h2 { font-size: 1.8rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

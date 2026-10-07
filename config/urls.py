@@ -3,12 +3,13 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 
 urlpatterns = [
     # Django's built-in admin lives here so /admin-panel/ stays free
     # for the custom moderation panel built in Sprint 6.
     path('django-admin/', admin.site.urls),
+    path('', include('apps.core.urls')),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,9 @@
+{% comment %}
+  One sidebar link. Parameters: url (empty = page not built yet, link is skipped),
+  view (url name, used for the active state), label, color.
+{% endcomment %}{% if url %}
+<a class="nav-item{% if request.resolver_match.view_name == view %} is-active{% endif %}" href="{{ url }}" data-color="{{ color }}"{% if request.resolver_match.view_name == view %} aria-current="page"{% endif %}>
+  <span class="nav-text">{{ label }}</span>
+  <span class="nav-arrow" aria-hidden="true">↗</span>
+</a>
+{% endif %}

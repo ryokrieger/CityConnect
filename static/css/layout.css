@@ -1,0 +1,219 @@
+/* ==========================================================================
+   LAYOUT — app shell, sidebar, page area, mobile menu
+   ========================================================================== */
+.app-shell {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ---- Sidebar ------------------------------------------------------------ */
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--bg-cream);
+  border-right: var(--border-thick);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-5) var(--space-4);
+  flex-shrink: 0;
+  height: 100vh;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  z-index: 100;
+}
+
+.logo {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: var(--space-6);
+  border: var(--border-thick);
+  padding: var(--space-4);
+  text-align: center;
+  border-radius: var(--radius-md);
+  background: var(--c-yellow);
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--text-black);
+}
+.logo span { opacity: 0.4; }
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  flex: 1;
+  counter-reset: nav-item;
+}
+
+.nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+/* A group with no available links yet (pages arrive sprint by sprint) stays hidden. */
+.nav-group:not(:has(.nav-item)) { display: none; }
+
+.nav-group-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.6;
+  margin-left: var(--space-3);
+  margin-bottom: var(--space-1);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: var(--border-thick);
+  border-radius: var(--radius-md);
+  background: var(--bg-cream);
+  text-decoration: none;
+  color: var(--text-black);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  counter-increment: nav-item;
+}
+/* Numbers are generated, so they stay 01, 02, 03… as links appear. */
+.nav-item::before {
+  content: counter(nav-item, decimal-leading-zero);
+  font-size: 0.8rem;
+  opacity: 0.6;
+  font-weight: 700;
+}
+.nav-text { flex: 1; font-size: 0.95rem; }
+.nav-arrow {
+  font-size: 1.2rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+.nav-item:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-sm);
+}
+.nav-item:hover .nav-arrow { transform: rotate(45deg) translate(2px, -2px); }
+.nav-item.is-active { color: var(--white); }
+.nav-item.is-active .nav-arrow { transform: rotate(45deg); }
+
+.nav-item[data-color="blue"].is-active,   .nav-item[data-color="blue"]:hover   { background: var(--c-blue);   color: var(--white); }
+.nav-item[data-color="orange"].is-active, .nav-item[data-color="orange"]:hover { background: var(--c-orange); color: var(--white); }
+.nav-item[data-color="green"].is-active,  .nav-item[data-color="green"]:hover  { background: var(--c-green);  color: var(--white); }
+.nav-item[data-color="purple"].is-active, .nav-item[data-color="purple"]:hover { background: var(--c-purple); color: var(--white); }
+.nav-item[data-color="yellow"].is-active, .nav-item[data-color="yellow"]:hover { background: var(--c-yellow); color: var(--text-black); }
+
+.sidebar-footer { margin-top: var(--space-5); }
+.sidebar-footer form { display: block; }
+
+/* ---- Main area ---------------------------------------------------------- */
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  min-width: 0;
+}
+
+.page-container {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--bg-cream);
+  background-image:
+    linear-gradient(var(--ink-04) 2px, transparent 2px),
+    linear-gradient(90deg, var(--ink-04) 2px, transparent 2px);
+  background-size: 40px 40px;
+}
+
+/* The scrolling content area — every template's {% block content %} lives here. */
+.page {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  padding: var(--space-7);
+  animation: pageFade 0.3s ease;
+}
+.page-inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+/* Used by auth pages: content centred in the viewport (margin:auto keeps tall forms scrollable). */
+.page--centered { display: flex; }
+.page--centered .page-inner { margin: auto; width: 100%; }
+.page--centered .auth-container { margin: 0 auto; }
+@keyframes pageFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.split-layout {
+  display: flex;
+  gap: var(--space-7);
+  align-items: center;
+  min-height: calc(100% - 80px);
+}
+.split-left, .split-right { flex: 1; }
+
+.feature-list {
+  list-style: none;
+  margin-bottom: var(--space-6);
+}
+.feature-list li {
+  padding: var(--space-2) 0;
+  font-weight: 600;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.feature-list li::before {
+  content: '✦';
+  color: var(--c-blue);
+  font-size: 1.4rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-5);
+}
+
+/* ---- Mobile ------------------------------------------------------------- */
+.hamburger {
+  display: none;
+  position: fixed;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: 1001;
+  background: var(--c-yellow);
+  border: var(--border-thick);
+  border-radius: var(--radius-md);
+  width: 48px;
+  height: 48px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-black);
+}
+
+@media (max-width: 900px) {
+  .hamburger { display: flex; }
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+  .sidebar.is-open { transform: translateX(0); }
+  .page { padding: 80px 20px 40px; }
+  .split-layout { flex-direction: column; gap: var(--space-6); min-height: 0; }
+}

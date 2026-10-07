@@ -1,0 +1,53 @@
+/* ==========================================================================
+   VARIABLES — CityConnect design tokens
+   Every colour, size and effect used elsewhere comes from here.
+   ========================================================================== */
+:root {
+  /* Brand palette */
+  --bg-cream: #F5F0E8;
+  --text-black: #1A1A1A;
+  --white: #FFFFFF;
+  --c-blue: #0066FF;
+  --c-orange: #FF6B35;
+  --c-green: #00C853;
+  --c-purple: #A855F7;
+  --c-yellow: #FFB800;
+
+  /* Translucent helpers (grid lines, shadows) */
+  --ink-04: rgba(26, 26, 26, 0.04);
+  --ink-20: rgba(26, 26, 26, 0.2);
+  --white-20: rgba(255, 255, 255, 0.2);
+
+  /* Borders and radii */
+  --border-width: 3px;
+  --border-thick: var(--border-width) solid var(--text-black);
+  --border-thin: 2px solid var(--text-black);
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 8px;
+
+  /* Hard "neo-brutalist" shadows */
+  --shadow-sm: 4px 4px 0 var(--text-black);
+  --shadow-lg: 8px 8px 0 var(--text-black);
+  --shadow-soft: 8px 8px 0 var(--ink-20);
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* Layout */
+  --sidebar-width: 280px;
+  --content-max: 1100px;
+  --mobile-breakpoint: 900px;
+
+  /* Typography */
+  --font-main: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Motion */
+  --transition-fast: 0.15s ease;
+}
